@@ -213,6 +213,17 @@ button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box
 .game.short .hand{padding-top:4px}
 @media (max-height:520px){body.in-game .bar{display:none}}
 @media (max-width:380px){.badge small{display:none}.badge img{width:26px;height:26px}.chip{padding:3px 8px;font-size:12px}}
+
+/* accounts */
+.auth-tabs{margin:4px 0 14px}
+.panel .form{margin:0;text-align:left}
+.inrow{display:flex;gap:6px}.inrow input{flex:1;min-width:0}
+.panel p.err{color:var(--bad);font-size:13px;min-height:1.1em;margin:0;text-align:left}
+.panel p.hint{font-size:12px;margin:0;text-align:left}
+.acts2{display:flex;gap:8px}.acts2 .btn{flex:1}
+.pill.grey{background:#ffffff1a;color:var(--muted);font-weight:500}
+.fine a,.rules a{color:var(--brass)}
+input:disabled{opacity:.6}
 </style>
 </head>
 <body>
@@ -314,6 +325,7 @@ button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box
         <p><b>Pobjeda:</b> 61 ili više bodova (u paru zbroj para). 60–60 je neriješeno.</p>
         <p><b>Prikaz bodova:</b> uvijek, ili tek kad se špil potroši (pred zadnje ruke).</p>
       </div>
+      <p class="fine">Fotografija Splita: Ryan Matzner i Rachel Pestik, <a href="https://commons.wikimedia.org/wiki/File:Split_harbor_view.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, licenca <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane.</p>
     </section>
 
     <!-- GAME -->
@@ -496,9 +508,12 @@ if(typeof module!=='undefined')module.exports={newDeal,applyPlay,applyResolve,bo
 
 /* ================= cloud adapter (Firebase compat; tests inject window.__CLOUD) ================= */
 const FIREBASE_CONFIG=window.__FIREBASE_CONFIG||{"apiKey":"AIzaSyDxmBQmPQKTjPmnqoMmpxN64QoZy8WQqA4","authDomain":"briskula-7ec36.firebaseapp.com","projectId":"briskula-7ec36","storageBucket":"briskula-7ec36.firebasestorage.app","messagingSenderId":"827823941252","appId":"1:827823941252:web:9b21db39141b83498dc4d1"};
+// accounts are "username + password"; Firebase needs an email, so the username is turned into a private address nobody sees
+const nameKey=n=>String(n).trim().toLowerCase();
+const emailOf=n=>'u'+[...new TextEncoder().encode(nameKey(n))].map(b=>b.toString(16).padStart(2,'0')).join('')+'@igraci.briskula.app';
 const Cloud=(()=>{
   if(window.__CLOUD)return window.__CLOUD;
-  const C={ok:false,uid:null,ready:null,google:false};
+  const C={ok:false,uid:null,ready:null,google:false,registered:false};
   let db=null,auth=null;
   C.ready=new Promise(res=>{
     try{
@@ -506,7 +521,7 @@ const Cloud=(()=>{
       firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();auth=firebase.auth();
       let done=false;
       auth.onAuthStateChanged(u=>{
-        if(u){C.uid=u.uid;C.ok=true;C.google=u.providerData.some(p=>p.providerId==='google.com');C.email=u.email||null;if(!done){done=true;res(u.uid)}else C.onUser&&C.onUser()}
+        if(u){C.uid=u.uid;C.ok=true;C.registered=!u.isAnonymous;C.google=u.providerData.some(p=>p.providerId==='google.com');C.email=u.email||null;if(!done){done=true;res(u.uid)}else C.onUser&&C.onUser()}
         else auth.signInAnonymously().catch(()=>{if(!done){done=true;res(null)}});
       });
       setTimeout(()=>{if(!done){done=true;res(null)}},12000);
@@ -532,6 +547,27 @@ const Cloud=(()=>{
     const u=auth.currentUser;C.uid=u.uid;C.google=true;C.email=u.email||null;return u.uid;
   };
   C.signOut=async()=>{await auth.signOut()};
+  const bad=e=>/user-not-found|wrong-password|invalid-credential|invalid-login|invalid-email/.test(e&&e.code||'');
+  C.register=async(name,pw)=>{
+    const key=nameKey(name);
+    if(await C.get('usernames/'+key))throw {code:'taken'};
+    const cred=firebase.auth.EmailAuthProvider.credential(emailOf(name),pw);
+    const cur=auth.currentUser;let u;
+    try{u=cur&&cur.isAnonymous?(await cur.linkWithCredential(cred)).user:(await auth.createUserWithEmailAndPassword(emailOf(name),pw)).user}
+    catch(e){if(/email-already-in-use|credential-already-in-use/.test(e.code||''))throw {code:'taken'};throw e}
+    C.uid=u.uid;C.registered=true;
+    await C.set('usernames/'+key,{uid:u.uid,name:String(name).trim(),createdAt:Date.now()});
+    return u.uid;
+  };
+  C.login=async(name,pw)=>{
+    try{const r=await auth.signInWithEmailAndPassword(emailOf(name),pw);C.uid=r.user.uid;C.registered=true;return C.uid}
+    catch(e){if(bad(e))throw {code:'bad'};throw e}
+  };
+  C.logout=async()=>{
+    await auth.signOut();   // the auth listener signs in again as a new guest
+    await new Promise(r=>{const t=setInterval(()=>{const u=auth.currentUser;if(u&&u.isAnonymous){clearInterval(t);r()}},100);setTimeout(()=>{clearInterval(t);r()},10000)});
+    const u=auth.currentUser;C.uid=u?u.uid:null;C.registered=false;
+  };
   return C;
 })();
 
@@ -561,7 +597,9 @@ const levelFloor=l=>10*(l-1)*(l-1);
 
 /* ================= profile ================= */
 let P=Object.assign({name:'',avatar:null,points:0,games:0,wins:0,draws:0,tWins:0},store('brisk-profile')||{});
-if(!P.name)P.name='Igrač '+(1000+Math.floor(Math.random()*9000));
+const GUEST_WORDS=['Galeb','Ribar','Mornar','Težak','Bura','Maestral','Jugo','Fjaka','Feral','Kamenjar','Lanterna','Konoba','Pjat','Gajeta','Pasara','Bodul','Šjor','Barba','Pošip','Plavac','Lantina','Marjan','Riva','Peškafondo'];
+const randomGuestName=()=>GUEST_WORDS[Math.floor(Math.random()*GUEST_WORDS.length)]+' '+(10+Math.floor(Math.random()*990));
+if(!P.name)P.name=randomGuestName();
 function saveLocalProfile(){store('brisk-profile',P)}
 saveLocalProfile();
 const mySeatInfo=()=>({uid:Cloud.uid||null,name:P.name,avatar:P.avatar||null,level:levelOf(P.points),bot:false});
@@ -583,7 +621,7 @@ async function addStats(d){ // d: {points,games,wins,draws,tWins}
   apply(P);saveLocalProfile();renderMe();
 }
 function renderMe(){
-  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent='Razina '+levelOf(P.points);
+  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent=(Cloud.ok&&!Cloud.registered?'Gost · ':'')+'Razina '+levelOf(P.points);
 }
 
 /* ================= navigation ================= */
@@ -1216,7 +1254,7 @@ function openLead(){
     if(!list){tb.innerHTML='<tr><td colspan="6" class="n">Rang lista se ne može učitati.</td></tr>';return}
     tb.innerHTML='';
     list.forEach((p,i)=>{const tr=document.createElement('tr');if(p.id===Cloud.uid)tr.className='me';
-      tr.innerHTML='<td class="n">'+(i+1)+'</td><td><span class="who"><img class="av" alt="" src="'+avSrc(p)+'">'+esc(p.name||'Igrač')+'</span></td><td><span class="pill">'+levelOf(p.points||0)+'</span></td><td class="hide-s">'+(p.games||0)+'</td><td>'+(p.wins||0)+'</td><td><b>'+(p.points||0)+'</b></td>';
+      tr.innerHTML='<td class="n">'+(i+1)+'</td><td><span class="who"><img class="av" alt="" src="'+avSrc(p)+'">'+esc(p.name||'Igrač')+(p.registered?'':' <span class="pill grey">gost</span>')+'</span></td><td><span class="pill">'+levelOf(p.points||0)+'</span></td><td class="hide-s">'+(p.games||0)+'</td><td>'+(p.wins||0)+'</td><td><b>'+(p.points||0)+'</b></td>';
       tb.appendChild(tr)});
     if(!list.length)tb.innerHTML='<tr><td colspan="6" class="n">Još nitko nije igrao.</td></tr>';
   });
@@ -1232,9 +1270,12 @@ function openProfile(){
   $('pfStats').innerHTML=[['Partije',P.games],['Pobjede',P.wins],['Uspješnost',P.games?Math.round(100*P.wins/P.games)+'%':'—'],['Turniri',P.tWins||0]].map(([k,v])=>'<div class="stat"><b>'+v+'</b><small>'+k+'</small></div>').join('');
   const acc=$('pfAccount');
   if(!Cloud.ok)acc.innerHTML='<p class="fine" style="margin:0">Bez veze s poslužiteljem profil se sprema samo na ovom uređaju.</p>';
-  else if(Cloud.google)acc.innerHTML='<h3>Račun</h3><p class="fine" style="margin:0">Povezano s Google računom'+(Cloud.email?' ('+esc(Cloud.email)+')':'')+'. Isti profil imaš na svakom uređaju.</p>';
-  else{acc.innerHTML='<h3>Isti profil na mobitelu i laptopu</h3><p class="fine" style="margin:0 0 10px">Poveži Google račun, pa se na drugom uređaju prijavi istim računom.</p><button class="btn wide" id="pfGoogle">Poveži Google račun</button>';
-    $('pfGoogle').onclick=async()=>{try{await Cloud.signInGoogle();await syncProfileFromCloud();openProfile();toast('Google račun je povezan.')}catch(e){toast('Povezivanje nije uspjelo'+(e&&e.code?' ('+e.code+')':'')+'.')}}}
+  else if(Cloud.registered){acc.innerHTML='<h3>Račun</h3><p class="fine" style="margin:0 0 10px">Prijavljen si kao <b>'+esc(P.name)+'</b>. Bodovi i razina spremaju se na tvoj račun, pa se istim imenom i lozinkom možeš prijaviti na bilo kojem uređaju.</p><button class="btn wide" id="pfLogout">Odjava</button>';
+    $('pfLogout').onclick=logoutUser}
+  else{acc.innerHTML='<h3>Igraš kao gost</h3><p class="fine" style="margin:0 0 10px">Registriraj se i zadrži bodove koje si već skupio. Poslije se istim imenom i lozinkom prijaviš na bilo kojem uređaju.</p><div class="acts2"><button class="btn primary" id="pfReg">Registracija</button><button class="btn" id="pfLogin">Prijava</button></div>';
+    $('pfReg').onclick=()=>openAuth('register');$('pfLogin').onclick=()=>openAuth('login')}
+  $('pfName').disabled=!!(Cloud.ok&&Cloud.registered);
+  $('pfName').title=$('pfName').disabled?'Registrirani igrači igraju pod svojim korisničkim imenom.':'';
 }
 $('avFile').onchange=e=>{
   const f=e.target.files&&e.target.files[0];if(!f)return;
@@ -1244,7 +1285,7 @@ $('avFile').onchange=e=>{
 };
 $('avReset').onclick=()=>{pendingAvatar=null;$('pfAv').src=defAvatar($('pfName').value||P.name)};
 $('pfSave').onclick=async()=>{
-  const n=$('pfName').value.trim().slice(0,18);if(!n){toast('Upiši ime.');return}
+  const n=Cloud.registered?P.name:$('pfName').value.trim().slice(0,18);if(!n){toast('Upiši ime.');return}
   P.name=n;P.avatar=pendingAvatar;saveLocalProfile();renderMe();
   if(Cloud.ok){try{await Cloud.set('players/'+Cloud.uid,{name:P.name,avatar:P.avatar||null,updatedAt:Date.now()},true)}catch(e){toast('Spremljeno samo na ovom uređaju.');return}}
   toast('Profil je spremljen.');
@@ -1377,35 +1418,148 @@ function renderResume(){
   draw();resumeT=setInterval(draw,1000);
 }
 
-/* ================= Dalmatian backdrop ================= */
+/* ================= accounts: register, log in, or play as a guest ================= */
+const USER_RE=/^[A-Za-z0-9ČĆŽŠĐčćžšđ_.-]{3,15}$/;
+let authMode='guest',authFirst=false;
+function authErr(e){
+  const c=(e&&e.code)||'';
+  if(c==='taken')return 'To korisničko ime je zauzeto. Odaberi drugo.';
+  if(c==='bad')return 'Pogrešno korisničko ime ili lozinka.';
+  if(/weak-password/.test(c))return 'Lozinka mora imati barem 6 znakova.';
+  if(/too-many-requests/.test(c))return 'Previše pokušaja. Pričekaj malo pa probaj opet.';
+  if(/network/.test(c))return 'Nema veze s poslužiteljem. Provjeri internet.';
+  if(/operation-not-allowed|admin-restricted/.test(c))return 'Registracija trenutno nije dostupna.';
+  return 'Nešto nije uspjelo'+(c?' ('+c+')':'')+'. Probaj opet.';
+}
+function openAuth(mode,opts){
+  authMode=mode||'guest';authFirst=!!(opts&&opts.first);
+  const online=Cloud.ok;if(!online)authMode='guest';
+  const tabs=[['guest','Gost'],['login','Prijava'],['register','Registracija']];
+  const p=$('panel');
+  p.innerHTML='<h2>'+(authFirst?'Dobro došao!':'Račun')+'</h2>'+
+    '<p>'+(online?'Registriraj se da ti se bodovi i razina čuvaju pod tvojim imenom, ili igraj kao gost.':'Trenutno nema veze s poslužiteljem, pa možeš igrati kao gost.')+'</p>'+
+    (online?'<div class="seg auth-tabs" role="group" aria-label="Način ulaska">'+tabs.map(([k,t])=>'<button type="button" data-m="'+k+'" aria-pressed="'+(k===authMode)+'">'+t+'</button>').join('')+'</div>':'')+
+    '<form class="form" id="authForm" novalidate></form>';
+  p.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{authMode=b.dataset.m;p.querySelectorAll('[data-m]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderAuthForm()});
+  renderAuthForm();
+  $('overlay').hidden=false;
+}
+function renderAuthForm(){
+  const f=$('authForm'),m=authMode;
+  let h='';
+  if(m==='guest')h='<label class="field">Tvoje ime u igri<span class="inrow"><input id="aName" maxlength="18" autocomplete="nickname" value="'+esc(Cloud.registered?randomGuestName():P.name)+'"><button type="button" class="btn" id="aDice">Nasumično</button></span></label>';
+  else{
+    h='<label class="field">Korisničko ime<input id="aUser" maxlength="15" autocomplete="username" autocapitalize="off" spellcheck="false"></label>'+
+      '<label class="field">Lozinka<input id="aPw" type="password" autocomplete="'+(m==='login'?'current-password':'new-password')+'"></label>';
+    if(m==='register')h+='<label class="field">Ponovi lozinku<input id="aPw2" type="password" autocomplete="new-password"></label><p class="hint">3 do 15 znakova: slova, brojke, točka, crtica ili _. Lozinka barem 6 znakova.'+(Cloud.registered?'':' Bodovi koje si skupio kao gost ostaju tvoji.')+'</p>';
+  }
+  h+='<p class="err" id="aErr" role="alert"></p><button class="btn primary wide" type="submit" id="aGo">'+({guest:'Igraj kao gost',login:'Prijavi se',register:'Registriraj se'}[m])+'</button>'+
+    (authFirst?'':'<button class="btn ghost wide" type="button" id="aClose">Zatvori</button>');
+  f.innerHTML=h;
+  if($('aDice'))$('aDice').onclick=()=>{$('aName').value=randomGuestName()};
+  if($('aClose'))$('aClose').onclick=closeAuth;
+  f.onsubmit=e=>{e.preventDefault();submitAuth()};
+  const first=f.querySelector('input');if(first&&matchMedia('(pointer:fine)').matches)first.focus();
+}
+function closeAuth(){$('overlay').hidden=true;store('brisk-welcomed',1);if(CUR==='profile')openProfile()}
+async function submitAuth(){
+  const err=t=>{$('aErr').textContent=t||''},go=$('aGo');err('');
+  if(authMode==='guest'){
+    const n=$('aName').value.trim().slice(0,18);if(!n)return err('Upiši ime ili klikni Nasumično.');
+    if(Cloud.ok&&Cloud.registered){go.disabled=true;await logoutUser(true);go.disabled=false}
+    P.name=n;saveLocalProfile();renderMe();
+    if(Cloud.ok)Cloud.set('players/'+Cloud.uid,{name:n,updatedAt:Date.now()},true).catch(()=>{});
+    closeAuth();toast('Igraš kao '+n+'.');return;
+  }
+  const user=$('aUser').value.trim(),pw=$('aPw').value;
+  if(!USER_RE.test(user))return err('Korisničko ime: 3 do 15 znakova, slova, brojke, točka, crtica ili _.');
+  if(pw.length<6)return err('Lozinka mora imati barem 6 znakova.');
+  if(authMode==='register'&&pw!==$('aPw2').value)return err('Lozinke se ne podudaraju.');
+  go.disabled=true;go.textContent='Pričekaj…';
+  try{
+    if(authMode==='register'){
+      if(Cloud.registered)await logoutUser(true);
+      await Cloud.register(user,pw);
+      P.name=user;saveLocalProfile();
+      await Cloud.set('players/'+Cloud.uid,{name:user,username:user.toLowerCase(),registered:true,avatar:P.avatar||null,points:P.points||0,games:P.games||0,wins:P.wins||0,draws:P.draws||0,tWins:P.tWins||0,level:levelOf(P.points||0),createdAt:Date.now(),updatedAt:Date.now()},true);
+      renderMe();closeAuth();toast('Registracija je uspjela. Dobro došao, '+user+'!');
+    }else{
+      await Cloud.login(user,pw);
+      P=Object.assign({name:user,avatar:null,points:0,games:0,wins:0,draws:0,tWins:0},{});
+      await syncProfileFromCloud();
+      if(P.name!==user&&nameKey(P.name)!==nameKey(user)){P.name=user;saveLocalProfile();renderMe()}
+      Cloud.set('players/'+Cloud.uid,{registered:true,updatedAt:Date.now()},true).catch(()=>{});
+      closeAuth();toast('Bok, '+P.name+'!');
+    }
+  }catch(e){console.warn('auth',e);err(authErr(e));go.disabled=false;go.textContent=authMode==='register'?'Registriraj se':'Prijavi se'}
+}
+async function logoutUser(silent){
+  if(!Cloud.ok)return;
+  const old=P;
+  P={name:randomGuestName(),avatar:null,points:0,games:0,wins:0,draws:0,tWins:0};saveLocalProfile();
+  try{await Cloud.logout()}catch(e){P=old;saveLocalProfile();toast('Odjava nije uspjela.');return}
+  await syncProfileFromCloud();renderMe();
+  if(silent===true)return;
+  toast('Odjavljen si.');
+  if(CUR==='profile')openProfile();
+  openAuth('guest',{first:true});
+}
+function maybeWelcome(){
+  if(store('brisk-welcomed')||CUR!=='home'||!$('overlay').hidden)return;
+  if(Cloud.ok&&Cloud.registered){store('brisk-welcomed',1);return}
+  if(/soba=|turnir=/.test(location.hash))return;
+  openAuth('guest',{first:true});
+}
+
+/* ================= Dalmatian backdrop: a photo of Split above a wooden table ================= */
+// Photo: "Split harbor view", Ryan Matzner and Rachel Pestik, CC BY-SA 3.0 (Wikimedia Commons). Wood: Poly Haven "Wood table large", CC0.
+const BG_SRC={split:window.__BG_SPLIT||'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Split_harbor_view.jpg/1920px-Split_harbor_view.jpg',
+  wood:window.__BG_WOOD||'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Wood_table_large_diff_8k_%28JPG%29.jpg/1280px-Wood_table_large_diff_8k_%28JPG%29.jpg'};
+const BGI={};
+for(const k in BG_SRC){const i=new Image();i.decoding='async';i.onload=()=>{BGI[k]=i;drawScene()};i.src=BG_SRC[k]}
 function drawScene(){
   const cv=$('bg'),dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;
   cv.width=W*dpr;cv.height=H*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
   let seed=7;const R=()=>(seed=(seed*16807)%2147483647)/2147483647;
   const hz=Math.round(Math.max(130,Math.min(H*.27,300))),tableY=hz+Math.round(Math.max(36,H*.06));
-  let gr=g.createLinearGradient(0,0,0,hz);gr.addColorStop(0,'#1d2b52');gr.addColorStop(.45,'#5b4a7a');gr.addColorStop(.78,'#d9795a');gr.addColorStop(1,'#f4b56a');g.fillStyle=gr;g.fillRect(0,0,W,hz);
-  const sx=W*.68;gr=g.createRadialGradient(sx,hz-6,2,sx,hz-6,90);gr.addColorStop(0,'#fff1c4');gr.addColorStop(.18,'#ffd27acc');gr.addColorStop(1,'#ffd27a00');g.fillStyle=gr;g.fillRect(0,0,W,hz);
-  g.fillStyle='#ffffffaa';for(let i=0;i<40;i++){const x=R()*W,y=R()*hz*.35;g.fillRect(x,y,R()<.2?1.5:1,R()<.2?1.5:1)}
-  const island=(x0,x1,h,col)=>{g.fillStyle=col;g.beginPath();g.moveTo(x0,hz);for(let x=x0;x<=x1;x+=6){const t=(x-x0)/(x1-x0);g.lineTo(x,hz-h*Math.sin(Math.PI*t)**.7*(.85+.15*Math.sin(x*.05)))}g.lineTo(x1,hz);g.fill()};
-  island(W*.35,W*1.05,hz*.09,'#6a4f6e');island(W*.55,W*1.2,hz*.06,'#584260');island(-W*.1,W*.3,hz*.05,'#6f5470');
-  gr=g.createLinearGradient(0,hz,0,tableY);gr.addColorStop(0,'#c98a68');gr.addColorStop(.25,'#2f5f86');gr.addColorStop(1,'#123552');g.fillStyle=gr;g.fillRect(0,hz,W,tableY-hz);
-  for(let i=0;i<70;i++){const y=hz+2+R()*(tableY-hz-4),sp=12+(y-hz)*1.2,x=sx+(R()-.5)*sp*2;g.fillStyle='rgba(255,214,140,'+(0.25+R()*.5)*(1-(y-hz)/(tableY-hz))+')';g.fillRect(x,y,4+R()*14,1.2)}
-  const townW=Math.min(W*.42,360);let x=0;const stone=['#d9c9a8','#cbb894','#e2d4b6','#bfa982'];
-  while(x<townW){const w=26+R()*30,h=hz*.1+R()*hz*.13,y=hz-h+hz*.05;g.fillStyle=stone[(R()*4)|0];g.fillRect(x,y,w,hz+20-y);
-    g.fillStyle='#b4502e';g.beginPath();g.moveTo(x-3,y);g.lineTo(x+w/2,y-h*.28);g.lineTo(x+w+3,y);g.fill();
-    g.fillStyle='#3b2a1f';for(let k=0;k<2;k++)g.fillRect(x+5+k*(w-14)*.8,y+h*.25,5,8);g.fillStyle='#5f7c4a';g.fillRect(x+4,y+h*.25,2,8);x+=w-2}
-  const bx=townW*.62,bw=Math.max(18,townW*.07),bh=hz*.62,by=hz+hz*.05-bh;
-  g.fillStyle='#e6dabf';g.fillRect(bx,by,bw,bh);g.fillStyle='#d5c6a4';g.fillRect(bx-2,by+bh*.35,bw+4,3);g.fillRect(bx-2,by+bh*.62,bw+4,3);
-  g.fillStyle='#3a2c24';for(const f of [.12,.42,.7]){g.beginPath();g.ellipse(bx+bw/2,by+bh*f+6,bw*.22,7,0,Math.PI,0);g.rect(bx+bw*.28,by+bh*f+6,bw*.44,10);g.fill()}
-  g.fillStyle='#b4502e';g.beginPath();g.moveTo(bx-3,by);g.lineTo(bx+bw/2,by-bh*.22);g.lineTo(bx+bw+3,by);g.fill();
-  const cyp=(cx,h)=>{g.fillStyle='#1f2f22';g.beginPath();g.ellipse(cx,hz+hz*.05-h/2,h*.09,h/2,0,0,Math.PI*2);g.fill()};cyp(townW+14,hz*.34);cyp(townW+30,hz*.26);cyp(townW*.3,hz*.3);
-  g.fillStyle='#cdbb98';g.fillRect(0,hz+hz*.05,townW+40,6);
-  gr=g.createLinearGradient(0,tableY,0,H);gr.addColorStop(0,'#6b4426');gr.addColorStop(1,'#3b2414');g.fillStyle=gr;g.fillRect(0,tableY,W,H-tableY);
-  const plank=Math.max(56,(H-tableY)/7);
-  for(let y=tableY;y<H;y+=plank){g.fillStyle='rgba(0,0,0,.35)';g.fillRect(0,y,W,2);g.fillStyle='rgba(255,220,170,.08)';g.fillRect(0,y+2,W,1);
-    for(let k=0;k<26;k++){const gy=y+4+R()*(plank-8),amp=1+R()*3;g.strokeStyle='rgba('+(R()<.5?'30,15,5':'200,150,100')+','+(0.05+R()*.08)+')';g.lineWidth=.6+R()*1.2;g.beginPath();for(let gx=0;gx<=W;gx+=20)g.lineTo(gx,gy+Math.sin(gx*.01+k)*amp);g.stroke()}
-    if(R()<.6){const kx=R()*W,ky=y+plank*(.3+R()*.4);g.strokeStyle='rgba(30,15,5,.25)';for(let r=3;r<16;r+=3){g.beginPath();g.ellipse(kx,ky,r*2.2,r*.6,0,0,Math.PI*2);g.stroke()}}
-    g.fillStyle='rgba(0,0,0,.3)';g.fillRect(R()*W,y,2,plank)}
+  let gr;
+  if(BGI.split){   // the photo, cropped to fill the strip above the table
+    const im=BGI.split,s=Math.max(W/im.width,tableY/im.height),dw=im.width*s,dh=im.height*s;
+    g.drawImage(im,(W-dw)*.42,(tableY-dh)*.62,dw,dh);
+    gr=g.createLinearGradient(0,0,0,tableY);gr.addColorStop(0,'rgba(12,20,40,.35)');gr.addColorStop(.35,'rgba(12,20,40,.05)');gr.addColorStop(.8,'rgba(255,170,90,.08)');gr.addColorStop(1,'rgba(20,10,0,.35)');g.fillStyle=gr;g.fillRect(0,0,W,tableY);
+  }else{
+    gr=g.createLinearGradient(0,0,0,hz);gr.addColorStop(0,'#1d2b52');gr.addColorStop(.45,'#5b4a7a');gr.addColorStop(.78,'#d9795a');gr.addColorStop(1,'#f4b56a');g.fillStyle=gr;g.fillRect(0,0,W,hz);
+    const sx=W*.68;gr=g.createRadialGradient(sx,hz-6,2,sx,hz-6,90);gr.addColorStop(0,'#fff1c4');gr.addColorStop(.18,'#ffd27acc');gr.addColorStop(1,'#ffd27a00');g.fillStyle=gr;g.fillRect(0,0,W,hz);
+    g.fillStyle='#ffffffaa';for(let i=0;i<40;i++){const x=R()*W,y=R()*hz*.35;g.fillRect(x,y,R()<.2?1.5:1,R()<.2?1.5:1)}
+    const island=(x0,x1,h,col)=>{g.fillStyle=col;g.beginPath();g.moveTo(x0,hz);for(let x=x0;x<=x1;x+=6){const t=(x-x0)/(x1-x0);g.lineTo(x,hz-h*Math.sin(Math.PI*t)**.7*(.85+.15*Math.sin(x*.05)))}g.lineTo(x1,hz);g.fill()};
+    island(W*.35,W*1.05,hz*.09,'#6a4f6e');island(W*.55,W*1.2,hz*.06,'#584260');island(-W*.1,W*.3,hz*.05,'#6f5470');
+    gr=g.createLinearGradient(0,hz,0,tableY);gr.addColorStop(0,'#c98a68');gr.addColorStop(.25,'#2f5f86');gr.addColorStop(1,'#123552');g.fillStyle=gr;g.fillRect(0,hz,W,tableY-hz);
+    for(let i=0;i<70;i++){const y=hz+2+R()*(tableY-hz-4),sp=12+(y-hz)*1.2,x=sx+(R()-.5)*sp*2;g.fillStyle='rgba(255,214,140,'+(0.25+R()*.5)*(1-(y-hz)/(tableY-hz))+')';g.fillRect(x,y,4+R()*14,1.2)}
+    const townW=Math.min(W*.42,360);let x=0;const stone=['#d9c9a8','#cbb894','#e2d4b6','#bfa982'];
+    while(x<townW){const w=26+R()*30,h=hz*.1+R()*hz*.13,y=hz-h+hz*.05;g.fillStyle=stone[(R()*4)|0];g.fillRect(x,y,w,hz+20-y);
+      g.fillStyle='#b4502e';g.beginPath();g.moveTo(x-3,y);g.lineTo(x+w/2,y-h*.28);g.lineTo(x+w+3,y);g.fill();
+      g.fillStyle='#3b2a1f';for(let k=0;k<2;k++)g.fillRect(x+5+k*(w-14)*.8,y+h*.25,5,8);g.fillStyle='#5f7c4a';g.fillRect(x+4,y+h*.25,2,8);x+=w-2}
+    const bx=townW*.62,bw=Math.max(18,townW*.07),bh=hz*.62,by=hz+hz*.05-bh;
+    g.fillStyle='#e6dabf';g.fillRect(bx,by,bw,bh);g.fillStyle='#d5c6a4';g.fillRect(bx-2,by+bh*.35,bw+4,3);g.fillRect(bx-2,by+bh*.62,bw+4,3);
+    g.fillStyle='#3a2c24';for(const f of [.12,.42,.7]){g.beginPath();g.ellipse(bx+bw/2,by+bh*f+6,bw*.22,7,0,Math.PI,0);g.rect(bx+bw*.28,by+bh*f+6,bw*.44,10);g.fill()}
+    g.fillStyle='#b4502e';g.beginPath();g.moveTo(bx-3,by);g.lineTo(bx+bw/2,by-bh*.22);g.lineTo(bx+bw+3,by);g.fill();
+    const cyp=(cx,h)=>{g.fillStyle='#1f2f22';g.beginPath();g.ellipse(cx,hz+hz*.05-h/2,h*.09,h/2,0,0,Math.PI*2);g.fill()};cyp(townW+14,hz*.34);cyp(townW+30,hz*.26);cyp(townW*.3,hz*.3);
+    g.fillStyle='#cdbb98';g.fillRect(0,hz+hz*.05,townW+40,6);
+  }
+  if(BGI.wood){   // real wood planks, tiled
+    const im=BGI.wood,k=Math.max(.35,Math.min(.9,Math.max(W,H)/im.width*.8)),pat=g.createPattern(im,'repeat');
+    pat.setTransform(new DOMMatrix([k,0,0,k,W/2-im.width*k/2,tableY]));g.fillStyle=pat;g.fillRect(0,tableY,W,H-tableY);
+    g.fillStyle='rgba(60,25,5,.18)';g.fillRect(0,tableY,W,H-tableY);
+  }else{
+    gr=g.createLinearGradient(0,tableY,0,H);gr.addColorStop(0,'#6b4426');gr.addColorStop(1,'#3b2414');g.fillStyle=gr;g.fillRect(0,tableY,W,H-tableY);
+    const plank=Math.max(56,(H-tableY)/7);
+    for(let y=tableY;y<H;y+=plank){g.fillStyle='rgba(0,0,0,.35)';g.fillRect(0,y,W,2);g.fillStyle='rgba(255,220,170,.08)';g.fillRect(0,y+2,W,1);
+      for(let k=0;k<26;k++){const gy=y+4+R()*(plank-8),amp=1+R()*3;g.strokeStyle='rgba('+(R()<.5?'30,15,5':'200,150,100')+','+(0.05+R()*.08)+')';g.lineWidth=.6+R()*1.2;g.beginPath();for(let gx=0;gx<=W;gx+=20)g.lineTo(gx,gy+Math.sin(gx*.01+k)*amp);g.stroke()}
+      if(R()<.6){const kx=R()*W,ky=y+plank*(.3+R()*.4);g.strokeStyle='rgba(30,15,5,.25)';for(let r=3;r<16;r+=3){g.beginPath();g.ellipse(kx,ky,r*2.2,r*.6,0,0,Math.PI*2);g.stroke()}}
+      g.fillStyle='rgba(0,0,0,.3)';g.fillRect(R()*W,y,2,plank)}
+  }
+  // table edge: a lit rim and a shadow cast onto the table
+  gr=g.createLinearGradient(0,tableY-7,0,tableY);gr.addColorStop(0,'#3a2212');gr.addColorStop(.5,'#8a5a32');gr.addColorStop(1,'#c99a62');g.fillStyle=gr;g.fillRect(0,tableY-7,W,7);
   gr=g.createLinearGradient(0,tableY,0,tableY+24);gr.addColorStop(0,'rgba(0,0,0,.55)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,tableY,W,24);
   gr=g.createRadialGradient(W/2,(tableY+H)/2,Math.min(W,H)*.2,W/2,(tableY+H)/2,Math.max(W,H)*.75);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(1,'rgba(0,0,0,.55)');g.fillStyle=gr;g.fillRect(0,tableY,W,H-tableY);
 }
@@ -1415,11 +1569,12 @@ drawScene();renderMe();checkResume();
 $('cloudNote').textContent='Povezujem se…';
 Cloud.ready.then(async uid=>{
   const dot=$('netDot');
-  if(!uid){dot.className='net off';$('cloudNote').textContent='Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.';return}
+  if(!uid){dot.className='net off';$('cloudNote').textContent='Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.';maybeWelcome();return}
   dot.className='net on';$('cloudNote').textContent='';
   await syncProfileFromCloud();
   watchMyTournaments();
   if(CUR==='home')checkResume();
+  renderMe();maybeWelcome();
   Cloud.onUser=()=>{syncProfileFromCloud()};
   const h=location.hash;let m;
   if((m=h.match(/soba=([A-Za-z0-9]+)/)))joinRoom(m[1]);

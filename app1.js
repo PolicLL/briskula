@@ -24,7 +24,9 @@ const levelFloor=l=>10*(l-1)*(l-1);
 
 /* ================= profile ================= */
 let P=Object.assign({name:'',avatar:null,points:0,games:0,wins:0,draws:0,tWins:0},store('brisk-profile')||{});
-if(!P.name)P.name='Igrač '+(1000+Math.floor(Math.random()*9000));
+const GUEST_WORDS=['Galeb','Ribar','Mornar','Težak','Bura','Maestral','Jugo','Fjaka','Feral','Kamenjar','Lanterna','Konoba','Pjat','Gajeta','Pasara','Bodul','Šjor','Barba','Pošip','Plavac','Lantina','Marjan','Riva','Peškafondo'];
+const randomGuestName=()=>GUEST_WORDS[Math.floor(Math.random()*GUEST_WORDS.length)]+' '+(10+Math.floor(Math.random()*990));
+if(!P.name)P.name=randomGuestName();
 function saveLocalProfile(){store('brisk-profile',P)}
 saveLocalProfile();
 const mySeatInfo=()=>({uid:Cloud.uid||null,name:P.name,avatar:P.avatar||null,level:levelOf(P.points),bot:false});
@@ -46,7 +48,7 @@ async function addStats(d){ // d: {points,games,wins,draws,tWins}
   apply(P);saveLocalProfile();renderMe();
 }
 function renderMe(){
-  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent='Razina '+levelOf(P.points);
+  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent=(Cloud.ok&&!Cloud.registered?'Gost · ':'')+'Razina '+levelOf(P.points);
 }
 
 /* ================= navigation ================= */

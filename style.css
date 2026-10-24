@@ -204,3 +204,14 @@ button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box
 .game.short .hand{padding-top:4px}
 @media (max-height:520px){body.in-game .bar{display:none}}
 @media (max-width:380px){.badge small{display:none}.badge img{width:26px;height:26px}.chip{padding:3px 8px;font-size:12px}}
+
+/* accounts */
+.auth-tabs{margin:4px 0 14px}
+.panel .form{margin:0;text-align:left}
+.inrow{display:flex;gap:6px}.inrow input{flex:1;min-width:0}
+.panel p.err{color:var(--bad);font-size:13px;min-height:1.1em;margin:0;text-align:left}
+.panel p.hint{font-size:12px;margin:0;text-align:left}
+.acts2{display:flex;gap:8px}.acts2 .btn{flex:1}
+.pill.grey{background:#ffffff1a;color:var(--muted);font-weight:500}
+.fine a,.rules a{color:var(--brass)}
+input:disabled{opacity:.6}

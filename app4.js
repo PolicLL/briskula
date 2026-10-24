@@ -158,7 +158,7 @@ function openLead(){
     if(!list){tb.innerHTML='<tr><td colspan="6" class="n">Rang lista se ne može učitati.</td></tr>';return}
     tb.innerHTML='';
     list.forEach((p,i)=>{const tr=document.createElement('tr');if(p.id===Cloud.uid)tr.className='me';
-      tr.innerHTML='<td class="n">'+(i+1)+'</td><td><span class="who"><img class="av" alt="" src="'+avSrc(p)+'">'+esc(p.name||'Igrač')+'</span></td><td><span class="pill">'+levelOf(p.points||0)+'</span></td><td class="hide-s">'+(p.games||0)+'</td><td>'+(p.wins||0)+'</td><td><b>'+(p.points||0)+'</b></td>';
+      tr.innerHTML='<td class="n">'+(i+1)+'</td><td><span class="who"><img class="av" alt="" src="'+avSrc(p)+'">'+esc(p.name||'Igrač')+(p.registered?'':' <span class="pill grey">gost</span>')+'</span></td><td><span class="pill">'+levelOf(p.points||0)+'</span></td><td class="hide-s">'+(p.games||0)+'</td><td>'+(p.wins||0)+'</td><td><b>'+(p.points||0)+'</b></td>';
       tb.appendChild(tr)});
     if(!list.length)tb.innerHTML='<tr><td colspan="6" class="n">Još nitko nije igrao.</td></tr>';
   });
@@ -174,9 +174,12 @@ function openProfile(){
   $('pfStats').innerHTML=[['Partije',P.games],['Pobjede',P.wins],['Uspješnost',P.games?Math.round(100*P.wins/P.games)+'%':'—'],['Turniri',P.tWins||0]].map(([k,v])=>'<div class="stat"><b>'+v+'</b><small>'+k+'</small></div>').join('');
   const acc=$('pfAccount');
   if(!Cloud.ok)acc.innerHTML='<p class="fine" style="margin:0">Bez veze s poslužiteljem profil se sprema samo na ovom uređaju.</p>';
-  else if(Cloud.google)acc.innerHTML='<h3>Račun</h3><p class="fine" style="margin:0">Povezano s Google računom'+(Cloud.email?' ('+esc(Cloud.email)+')':'')+'. Isti profil imaš na svakom uređaju.</p>';
-  else{acc.innerHTML='<h3>Isti profil na mobitelu i laptopu</h3><p class="fine" style="margin:0 0 10px">Poveži Google račun, pa se na drugom uređaju prijavi istim računom.</p><button class="btn wide" id="pfGoogle">Poveži Google račun</button>';
-    $('pfGoogle').onclick=async()=>{try{await Cloud.signInGoogle();await syncProfileFromCloud();openProfile();toast('Google račun je povezan.')}catch(e){toast('Povezivanje nije uspjelo'+(e&&e.code?' ('+e.code+')':'')+'.')}}}
+  else if(Cloud.registered){acc.innerHTML='<h3>Račun</h3><p class="fine" style="margin:0 0 10px">Prijavljen si kao <b>'+esc(P.name)+'</b>. Bodovi i razina spremaju se na tvoj račun, pa se istim imenom i lozinkom možeš prijaviti na bilo kojem uređaju.</p><button class="btn wide" id="pfLogout">Odjava</button>';
+    $('pfLogout').onclick=logoutUser}
+  else{acc.innerHTML='<h3>Igraš kao gost</h3><p class="fine" style="margin:0 0 10px">Registriraj se i zadrži bodove koje si već skupio. Poslije se istim imenom i lozinkom prijaviš na bilo kojem uređaju.</p><div class="acts2"><button class="btn primary" id="pfReg">Registracija</button><button class="btn" id="pfLogin">Prijava</button></div>';
+    $('pfReg').onclick=()=>openAuth('register');$('pfLogin').onclick=()=>openAuth('login')}
+  $('pfName').disabled=!!(Cloud.ok&&Cloud.registered);
+  $('pfName').title=$('pfName').disabled?'Registrirani igrači igraju pod svojim korisničkim imenom.':'';
 }
 $('avFile').onchange=e=>{
   const f=e.target.files&&e.target.files[0];if(!f)return;
@@ -186,7 +189,7 @@ $('avFile').onchange=e=>{
 };
 $('avReset').onclick=()=>{pendingAvatar=null;$('pfAv').src=defAvatar($('pfName').value||P.name)};
 $('pfSave').onclick=async()=>{
-  const n=$('pfName').value.trim().slice(0,18);if(!n){toast('Upiši ime.');return}
+  const n=Cloud.registered?P.name:$('pfName').value.trim().slice(0,18);if(!n){toast('Upiši ime.');return}
   P.name=n;P.avatar=pendingAvatar;saveLocalProfile();renderMe();
   if(Cloud.ok){try{await Cloud.set('players/'+Cloud.uid,{name:P.name,avatar:P.avatar||null,updatedAt:Date.now()},true)}catch(e){toast('Spremljeno samo na ovom uređaju.');return}}
   toast('Profil je spremljen.');

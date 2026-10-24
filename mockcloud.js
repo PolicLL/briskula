@@ -1,6 +1,7 @@
 // injected before page scripts; uses exposed __m(op,args)
 window.__RETURN_MS=8000;window.__BEAT_MS=1000;window.__AWAY_MS=3000;
 window.__CARD_BASE='http://t.test/cards/';
+try{if(!/welcome/.test(location.search))localStorage.setItem('brisk-welcomed','1');else localStorage.removeItem('brisk-welcomed')}catch(e){}
 window.__CLOUD=(()=>{const C={ok:true,google:false};
  C.uid=sessionStorage.getItem('uid')||('u'+Math.random().toString(36).slice(2,8));sessionStorage.setItem('uid',C.uid);
  C.ready=Promise.resolve(C.uid);
@@ -16,4 +17,12 @@ window.__CLOUD=(()=>{const C={ok:true,google:false};
    const res=await fn(async p=>{if(wrote)throw new Error('read after write');const r=await call('get',p);reads[p]=r?r.v:0;return r?JSON.parse(r.d):null},(p,d)=>{wrote=true;writes[p]=JSON.stringify(d)});
    const ok=await call('commit',reads,writes);if(ok)return res;await new Promise(r=>setTimeout(r,30+Math.random()*60))}throw new Error('txn failed')};
  C.signInGoogle=async()=>{throw {code:'mock'}};
+ C.registered=sessionStorage.getItem('reg')==='1';
+ const key=n=>String(n).trim().toLowerCase();
+ C.register=async(n,pw)=>{if(await C.get('usernames/'+key(n)))throw {code:'taken'};if(pw.length<6)throw {code:'auth/weak-password'};
+   await call('set','auth/'+key(n),JSON.stringify({pw,uid:C.uid}),false);C.registered=true;sessionStorage.setItem('reg','1');
+   await C.set('usernames/'+key(n),{uid:C.uid,name:n.trim()});return C.uid};
+ C.login=async(n,pw)=>{const r=await call('get','auth/'+key(n));const a=r&&JSON.parse(r.d);if(!a||a.pw!==pw)throw {code:'bad'};
+   C.uid=a.uid;sessionStorage.setItem('uid',C.uid);C.registered=true;sessionStorage.setItem('reg','1');return C.uid};
+ C.logout=async()=>{C.uid='u'+Math.random().toString(36).slice(2,8);sessionStorage.setItem('uid',C.uid);C.registered=false;sessionStorage.removeItem('reg')};
  return C})();

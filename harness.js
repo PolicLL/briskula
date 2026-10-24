@@ -12,7 +12,7 @@ const html=fs.readFileSync(path.join(__dirname,'index.html'),'utf8').replace('<s
 const cardDir=process.env.CARD_DIR||'';   // optional local copy of the card images
 async function client(b,w,h,name){const ctx=await b.newContext({viewport:{width:w,height:h},deviceScaleFactor:1,hasTouch:w<600});
  await ctx.exposeFunction('__m',(op,a)=>m(op,a));
- await ctx.route(/gstatic|googleapis/,r=>r.abort());
+ await ctx.route(/gstatic|googleapis|wikimedia/,r=>r.abort());
  await ctx.route('http://t.test/**',r=>{const u=new URL(r.request().url());if(u.pathname.startsWith('/cards/')){if(!cardDir)return r.fulfill({status:404,body:''});const f=path.join(cardDir,decodeURIComponent(u.pathname.slice(7)));return r.fulfill({body:fs.readFileSync(f),contentType:'image/jpeg'})}return r.fulfill({body:html,contentType:'text/html'})});
  const p=await ctx.newPage();p.errs=[];p.on('pageerror',e=>p.errs.push(e.message));p.on('console',x=>{if(x.type()==='error'&&!/ERR_FAILED|net::|404/.test(x.text()))p.errs.push(x.text())});
  await p.goto('http://t.test/');p.name=name;return p}
