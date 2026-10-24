@@ -1,0 +1,122 @@
+<canvas id="bg" aria-hidden="true"></canvas>
+<div id="app">
+  <header class="bar">
+    <button class="icon" id="backBtn" aria-label="Natrag" hidden><svg viewBox="0 0 24 24" width="22" height="22"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="brand" id="barTitle">Briškula</div>
+    <div class="bar-right">
+      <span class="net" id="netDot" title="Veza s poslužiteljem"></span>
+      <button class="mechip" id="meChip" aria-label="Moj profil"><img id="meAv" alt=""><span><b id="meName">Igrač</b><small id="meLv">Razina 1</small></span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HOME -->
+    <section class="screen page" id="scr-home">
+      <div class="hero">
+        <h1>Briškula</h1>
+        <p>Karte na stol. Protiv botova, prijatelja ili na turniru.</p>
+      </div>
+      <div class="notice" id="resumeNotice" hidden></div>
+      <div class="menu">
+        <button class="mbtn" data-go="local"><span class="mi">♠</span><span><b>Igraj protiv botova</b><small>2, 3 ili 4 igrača, odmah</small></span></button>
+        <button class="mbtn" data-go="lobby"><span class="mi">⇄</span><span><b>Igraj online</b><small>Sobe s prijateljima, botovi popune mjesta</small></span></button>
+        <button class="mbtn" data-go="tours"><span class="mi">♛</span><span><b>Turniri</b><small>4, 8, 16 ili 32 igrača, ždrijeb</small></span></button>
+        <button class="mbtn" data-go="lead"><span class="mi">≡</span><span><b>Rang lista</b><small>Bodovi, razine i pobjede</small></span></button>
+        <button class="mbtn" data-go="rules"><span class="mi">?</span><span><b>Pravila</b><small>Kako se igra briškula</small></span></button>
+      </div>
+      <div class="notice" id="homeNotice" hidden></div>
+      <p class="fine" id="cloudNote"></p>
+    </section>
+
+    <!-- LOCAL SETUP -->
+    <section class="screen page" id="scr-local" hidden>
+      <h2>Igra protiv botova</h2>
+      <div class="form" id="localForm"></div>
+      <button class="btn primary wide" id="localStart">Podijeli karte</button>
+    </section>
+
+    <!-- LOBBY -->
+    <section class="screen page" id="scr-lobby" hidden>
+      <h2>Online sobe</h2>
+      <div class="card-box">
+        <h3>Nova soba</h3>
+        <div class="form" id="roomForm"></div>
+        <button class="btn primary wide" id="roomCreate">Otvori sobu</button>
+      </div>
+      <h3 class="sec">Otvorene sobe</h3>
+      <div class="list" id="roomList"><p class="empty">Učitavam…</p></div>
+    </section>
+
+    <!-- TOURNAMENTS -->
+    <section class="screen page" id="scr-tours" hidden>
+      <h2>Turniri</h2>
+      <div class="card-box">
+        <h3>Novi turnir</h3>
+        <div class="form" id="tourForm"></div>
+        <button class="btn primary wide" id="tourCreate">Otvori prijave</button>
+      </div>
+      <h3 class="sec">Turniri</h3>
+      <div class="list" id="tourList"><p class="empty">Učitavam…</p></div>
+    </section>
+    <section class="screen page" id="scr-tour" hidden></section>
+
+    <!-- LEADERBOARD -->
+    <section class="screen page wide-page" id="scr-lead" hidden>
+      <h2>Rang lista</h2>
+      <div class="tablewrap"><table class="lead" id="leadTable"><thead><tr><th>#</th><th>Igrač</th><th>Razina</th><th class="hide-s">Partije</th><th>Pobjede</th><th>Bodovi</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="screen page" id="scr-profile" hidden>
+      <h2>Moj profil</h2>
+      <div class="profile-top">
+        <div class="avwrap"><img id="pfAv" alt="Slika profila"><label class="btn small" for="avFile">Promijeni sliku</label><input type="file" id="avFile" accept="image/*" hidden><button class="btn small ghost" id="avReset">Bez slike</button></div>
+        <div class="pf-fields">
+          <label class="field">Ime<input id="pfName" maxlength="18" autocomplete="nickname"></label>
+          <div class="lvl"><div class="lvl-row"><b id="pfLevel">Razina 1</b><span id="pfPts">0 bodova</span></div><div class="lvl-bar"><i id="pfBar"></i></div><small id="pfNext"></small></div>
+        </div>
+      </div>
+      <div class="stats" id="pfStats"></div>
+      <button class="btn primary wide" id="pfSave">Spremi</button>
+      <div class="card-box" id="pfAccount"></div>
+      <p class="fine">Bodovi: pobjeda online 15, pobjeda protiv botova 4 do 10 (ovisno o težini), neriješeno 4, poraz 1. Pobjednik turnira dobiva 5 bodova po igraču u turniru, finalist 2.</p>
+    </section>
+
+    <!-- RULES -->
+    <section class="screen page" id="scr-rules" hidden>
+      <h2>Pravila</h2>
+      <div class="rules">
+        <p><b>Špil:</b> 40 karata, 120 bodova. Jačina: As, Trica, Kralj, Konj, Fanat, 7, 6, 5, 4, 2.</p>
+        <p><b>Bodovi:</b> As 11 · Trica 10 · Kralj 4 · Konj 3 · Fanat 2. Ostale karte 0.</p>
+        <p><b>Briškula:</b> karta ispod špila određuje adut. Ne mora se odgovarati na boju. Ruku nosi najjača karta boje koja je prva bačena, osim ako je netko bacio briškulu; tada nosi najjača briškula.</p>
+        <p><b>Vučenje:</b> tko nosi ruku vuče prvi i igra prvi. Zadnja karta iz špila je okrenuta briškula.</p>
+        <p><b>2 igrača:</b> klasično (3 karte, jedna po ruci) ili na duplo (4 karte, svaki baci dvije: ti, on, ti, on).</p>
+        <p><b>3 igrača:</b> izbacuje se dvica dinara, ostaje 39 karata. Pobjeđuje tko ima najviše bodova.</p>
+        <p><b>4 igrača:</b> 2 na 2, suigrači sjede jedan nasuprot drugome. Kad se špil potroši, suigrači vide karte jedan drugome.</p>
+        <p><b>Pobjeda:</b> 61 ili više bodova (u paru zbroj para). 60–60 je neriješeno.</p>
+        <p><b>Prikaz bodova:</b> uvijek, ili tek kad se špil potroši (pred zadnje ruke).</p>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section class="screen game" id="scr-game" hidden>
+      <div class="gbar">
+        <div class="chips" id="scoreChips"></div>
+        <div class="gbar-r"><span class="chip" id="seriesChip" hidden></span><button class="icon small" id="gMenu" aria-label="Izbornik igre"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg></button></div>
+      </div>
+      <div class="felt">
+        <div class="opps" id="opps"></div>
+        <div class="tablerow">
+          <div class="deckzone" id="deckzone"></div>
+          <div class="table" id="table"></div>
+        </div>
+      </div>
+      <div class="awaybar" id="awayBar" role="status" hidden></div>
+      <div class="status" id="status" aria-live="polite"></div>
+      <div class="handrow"><div class="hand" id="meHand"></div></div>
+    </section>
+  </main>
+</div>
+
+<div class="overlay" id="overlay" hidden><div class="panel" id="panel"></div></div>
+<div class="toast" id="toast" hidden></div>
