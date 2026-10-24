@@ -58,13 +58,13 @@ function show(name){
   if(CUR==='lobby'&&name!=='lobby')stopWatch('rooms');
   if(CUR==='lead')stopWatch('lead');
   if(CUR==='tour'&&name!=='tour')stopWatch('tour');
-  CUR=name;
+  CUR=name;document.body.classList.toggle('in-game',name==='game');
   for(const s of SCREENS)$('scr-'+s).hidden=s!==name;
   $('backBtn').hidden=name==='home';
   const titles={home:'Briškula',local:'Protiv botova',lobby:'Online',tours:'Turniri',tour:'Turnir',lead:'Rang lista',profile:'Profil',rules:'Pravila',game:'Briškula'};
   $('barTitle').textContent=titles[name];
   if(name==='lobby')openLobby();if(name==='tours')openTours();if(name==='lead')openLead();if(name==='profile')openProfile();if(name==='local')buildLocalForm();
-  if(name==='game')sizeCards();
+  if(name==='game')sizeCards(true);
   if(name==='home')checkResume();
 }
 $('backBtn').onclick=()=>{if(CUR==='tour')show('tours');else if(CUR==='game')confirmLeaveGame();else show('home')};

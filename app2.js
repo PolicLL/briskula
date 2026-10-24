@@ -122,23 +122,39 @@ function teamNames(){
 }
 
 /* ---- sizing & rendering ---- */
-function sizeCards(){
+function sizeCards(force){
+  // Fit everything on one screen: work out card sizes from the space we have, then check the result and shrink if anything still spills over.
   const scr=$('scr-game');if(scr.hidden||!G||!G.S)return;
-  const S=G.S,W=Math.min(innerWidth,920)-22,H=$('main').clientHeight||innerHeight;
-  const hs=S.hs,count=S.N*S.k;
-  const cw=Math.max(46,Math.min(120,(W-(hs-1)*8)/hs,H*.215/1.816));
-  const tw=Math.max(38,Math.min(cw*.95,(W-14-6*(count-1))/(count+1.45),H*.19/1.816));
-  const dw=tw*.8,mw=Math.max(12,Math.min(24,W*(S.N===4?.04:.055),H*.03));
-  scr.style.setProperty('--cw',cw+'px');scr.style.setProperty('--tw',tw+'px');scr.style.setProperty('--dw',dw+'px');scr.style.setProperty('--mw',mw+'px');
+  const S=G.S,cs=getComputedStyle(scr);
+  const Wa=scr.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),Ha=scr.clientHeight;
+  const key=[Wa,Ha,S.N,S.k,S.hs].join();
+  if(!force&&sizeCards.key===key)return;sizeCards.key=key;
+  const hs=S.hs,total=S.N*S.k,short=Ha<430;
+  scr.classList.toggle('short',short);
+  const mw=Math.max(9,Math.min(22,Wa*(S.N===4?.04:.055),Ha*.028));
+  const miniH=mw*1.816*(S.N===4?1.9:1);              // partner's face-up cards are bigger (4 players, last hands)
+  const fixed=(short?30:38)+4+6+40+4+6+22+(short?30:40)+(short?6:16)+8+6; // bar, badges, labels, status, gaps
+  let cw=Math.min(120,(Wa-8*(hs-1))/hs);
+  let tw=Math.min(cw*.95,(Wa-12-6*(total-1))/(total+1.4));
+  const room=(Ha-fixed-miniH)/1.816;
+  if(cw+tw>room){const f=room/(cw+tw);cw*=f;tw*=f}
+  const apply=f=>{const c=Math.floor(cw*f),t=Math.floor(tw*f);
+    scr.style.setProperty('--cw',c+'px');scr.style.setProperty('--tw',t+'px');scr.style.setProperty('--dw',Math.floor(t*.8)+'px');scr.style.setProperty('--mw',mw.toFixed(1)+'px')};
+  let f=1;apply(f);
+  for(let i=0;i<8;i++){
+    const r=scr.getBoundingClientRect(),hand=$('meHand').getBoundingClientRect(),tr=document.querySelector('.tablerow');
+    const fb=document.querySelector('.felt').getBoundingClientRect().bottom,tb=tr.getBoundingClientRect(),op=$('opps').getBoundingClientRect();
+    const over=scr.scrollWidth>scr.clientWidth+1||tr.scrollWidth>tr.clientWidth+1||hand.bottom>r.bottom+1||scr.scrollHeight>scr.clientHeight+1||tb.bottom>fb+1||tb.top<op.bottom-1;
+    if(!over)break;f*=.93;apply(f);
+  }
 }
-addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(()=>{sizeCards();drawScene()},120)});
+addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(()=>{sizeCards(true);drawScene()},120)});
 function relPos(seat){const N=G.S.N,me=Math.max(0,G.me),r=(seat-me+N)%N;if(r===0)return 'b';if(N===2)return 't';if(N===3)return r===1?'r':'l';return ['b','r','t','l'][r]}
 function faceEl(c,tag){const el=document.createElement(tag||'div');el.className='card';el.style.backgroundImage='url("'+IMG[ID[c]]+'")';el.setAttribute('aria-label',NAME[c]);el.title=NAME[c]+(PT[c]?' · '+PT[c]+' bod.':'');return el}
 function seatName(s){if(s===G.me)return 'Ti';const st=G.seats[s];return st?st.name:'—'}
 function render(){
   if(!G||!G.S)return;
   const S=G.S,N=S.N,me=Math.max(0,G.me),vis=pointsVisible(S);
-  sizeCards();
   // score chips
   const ch=$('scoreChips');ch.innerHTML='';
   const tp=teamPoints(S);
@@ -211,6 +227,7 @@ function render(){
   // animations play once; later re-renders must not replay them
   G.anim.enter=null;G.anim.drawn=new Set();
   $('status').innerHTML='<span>'+statusHTML(toPlay)+'</span>';
+  sizeCards();
 }
 function statusHTML(toPlay){
   const S=G.S;
