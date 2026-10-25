@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
 <style>/* Layout: app bar on top; menu pages are centered dark-glass panels over a painted Dalmatian dusk; the game is a one-screen table (opponents row, trick row, status, your hand). Single committed dark look. */
 :root{
-  --ink:#1b1a17; --cream:#f2e9d4; --muted:#a9bdb6; --brass:#d8a74a; --brass-soft:#a98238;
-  --glass:#0c1a26e0; --glass-2:#13283acc; --line:#d8a74a40; --teamA:#5aa7e0; --teamB:#e0705a; --good:#7fcf8f; --bad:#f0a08a;
+  --ink:#1b1a17; --cream:#f2e9d4; --muted:#a9bdb6; --acc:216 167 74;--brass:rgb(var(--acc)); --brass-soft:#a98238;
+  --glass:#0c1a26e0; --glass-2:#13283acc; --page:10 22 34; --deep:7 16 26; --panel-a:#173149; --panel-b:#0c1b2a; --toast:#0c1a26f2; --line:rgb(var(--acc)/0.25); --teamA:#5aa7e0; --teamB:#e0705a; --good:#7fcf8f; --bad:#f0a08a;
   --display:"Alegreya SC", Georgia, "Times New Roman", serif;
   --body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
   --cw:84px; --tw:76px; --dw:60px; --mw:16px;
@@ -38,9 +38,9 @@ button{font:inherit;color:inherit}
 .net.on{background:var(--good)} .net.off{background:var(--bad)}
 main{flex:1;min-height:0;position:relative}
 .screen{position:absolute;inset:0}
-.page{overflow-y:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));max-width:600px;margin:0 auto;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,#0a1622b3 0,#0a1622e6 220px,#0a1622f0 100%)}
-@media (min-width:640px){.page{border-radius:18px 18px 0 0;border:1px solid #d8a74a26;border-bottom:0}}
-#scr-home{background:linear-gradient(180deg,#0a162200 0,#0a162280 160px,#0a1622e6 340px)}
+.page{overflow-y:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));max-width:600px;margin:0 auto;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,rgb(var(--page)/.7) 0,rgb(var(--page)/.9) 220px,rgb(var(--page)/.94) 100%)}
+@media (min-width:640px){.page{border-radius:18px 18px 0 0;border:1px solid rgb(var(--acc)/0.15);border-bottom:0}}
+#scr-home{background:linear-gradient(180deg,rgb(var(--page)/0) 0,rgb(var(--page)/.5) 160px,rgb(var(--page)/.9) 340px)}
 .wide-page{max-width:760px}
 .page h2{font-family:var(--display);font-size:28px;color:var(--brass);margin:6px 0 12px;text-shadow:0 1px 3px #000c}
 .page h3{margin:0 0 10px;font-size:16px}
@@ -52,10 +52,10 @@ main{flex:1;min-height:0;position:relative}
 @media (min-width:620px){.menu{grid-template-columns:1fr 1fr}.menu .mbtn:first-child{grid-column:1/-1}}
 .mbtn{display:flex;align-items:center;gap:14px;text-align:left;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--glass);cursor:pointer;transition:transform .15s,border-color .15s}
 .mbtn:hover,.mbtn:focus-visible{transform:translateY(-2px);border-color:var(--brass)}
-.mbtn .mi{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#d8a74a22;color:var(--brass);font-size:22px;font-family:var(--display)}
+.mbtn .mi{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgb(var(--acc)/0.13);color:var(--brass);font-size:22px;font-family:var(--display)}
 .mbtn b{display:block;font-size:17px}
 .mbtn small{color:var(--muted);font-size:13px}
-.notice{margin-top:14px;padding:12px 14px;border-radius:12px;background:#d8a74a26;border:1px solid var(--brass);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.notice{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgb(var(--acc)/0.15);border:1px solid var(--brass);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .fine{color:var(--muted);font-size:12px;margin-top:16px;text-shadow:0 1px 2px #000c}
 .card-box{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
 .form{display:grid;gap:12px;margin-bottom:12px}
@@ -64,9 +64,9 @@ main{flex:1;min-height:0;position:relative}
 .seg button{flex:1 1 auto;min-width:56px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:#ffffff08;cursor:pointer;font-size:14px}
 .seg button[aria-pressed="true"]{background:var(--brass);color:var(--ink);border-color:var(--brass);font-weight:700}
 .field{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)}
-input[type=text],input:not([type]),.field input{font:inherit;font-size:16px;color:var(--cream);background:#06111bcc;border:1px solid #d8a74a66;border-radius:10px;padding:10px 12px;min-width:0;width:100%}
+input[type=text],input:not([type]),.field input{font:inherit;font-size:16px;color:var(--cream);background:rgb(var(--deep)/.8);border:1px solid rgb(var(--acc)/0.40);border-radius:10px;padding:10px 12px;min-width:0;width:100%}
 input:focus-visible,button:focus-visible,select:focus-visible,label.btn:focus-within{outline:2px solid var(--brass);outline-offset:2px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;color:var(--cream);background:var(--glass-2);border:1px solid #d8a74a66;border-radius:10px;padding:9px 14px;cursor:pointer;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;color:var(--cream);background:var(--glass-2);border:1px solid rgb(var(--acc)/0.40);border-radius:10px;padding:9px 14px;cursor:pointer;text-decoration:none}
 .btn.primary{background:var(--brass);color:var(--ink);border-color:var(--brass);font-weight:700}
 .btn.ghost{background:transparent}
 .btn.small{padding:6px 10px;font-size:13px}
@@ -79,13 +79,13 @@ input:focus-visible,button:focus-visible,select:focus-visible,label.btn:focus-wi
 .row small{color:var(--muted)}
 p.empty{color:var(--muted);text-align:center;padding:14px;background:var(--glass);border-radius:12px;margin:0}
 .av{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none;background:#234}
-.pill{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:#d8a74a2e;color:var(--brass);font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.pill{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:rgb(var(--acc)/0.18);color:var(--brass);font-weight:700;letter-spacing:.03em;white-space:nowrap}
 .pill.blue{background:#5aa7e033;color:var(--teamA)} .pill.red{background:#e0705a33;color:var(--teamB)} .pill.green{background:#7fcf8f2e;color:var(--good)}
 .tablewrap{overflow-x:auto;background:var(--glass);border:1px solid var(--line);border-radius:14px}
 table.lead{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 .lead th,.lead td{padding:9px 10px;text-align:left;border-bottom:1px solid #ffffff12;white-space:nowrap}
 .lead th{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
-.lead td.n{color:var(--muted)} .lead tr.me td{background:#d8a74a1f}
+.lead td.n{color:var(--muted)} .lead tr.me td{background:rgb(var(--acc)/0.12)}
 .lead .who{display:flex;align-items:center;gap:8px;max-width:42vw;overflow:hidden;text-overflow:ellipsis}
 @media (max-width:480px){.hide-s{display:none}}
 .profile-top{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
@@ -131,7 +131,7 @@ table.lead{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums
 .badge .bt{display:flex;flex-direction:column;line-height:1.1;min-width:0}
 .badge b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .badge small{font-size:11px;color:var(--muted);white-space:nowrap}
-.opp.turn .badge{border-color:var(--brass);box-shadow:0 0 0 2px #d8a74a66,0 0 18px #d8a74a55}
+.opp.turn .badge{border-color:var(--brass);box-shadow:0 0 0 2px rgb(var(--acc)/0.40),0 0 18px rgb(var(--acc)/0.33)}
 .opp.tA .badge{border-left:3px solid var(--teamA)} .opp.tB .badge{border-left:3px solid var(--teamB)}
 .minis{display:flex;justify-content:center;min-height:calc(var(--mw)*1.816)}
 .mini{width:var(--mw);height:calc(var(--mw)*1.816);border-radius:3px;margin-left:calc(var(--mw)*-.3);flex:none;box-shadow:-2px 2px 4px #0009}
@@ -152,10 +152,10 @@ table.lead{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums
 .slot .ph{display:none;width:var(--tw);height:calc(var(--tw)*1.816);border-radius:calc(var(--tw)*.07);border:1.5px dashed #f2e9d440;background:#00000018}
 .slot.empty .ph{display:block}
 .slot.empty .who{opacity:.45}
-.slot.next .ph{border-color:#d8a74a99;background:#d8a74a14}
+.slot.next .ph{border-color:rgb(var(--acc)/0.60);background:rgb(var(--acc)/0.08)}
 .slot .card{z-index:2}
 .slot .who{font-size:11px;letter-spacing:.02em;color:var(--cream);max-width:var(--tw);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px #000}
-.slot.win .card{box-shadow:0 0 0 3px var(--brass),0 0 22px #d8a74a88}
+.slot.win .card{box-shadow:0 0 0 3px var(--brass),0 0 22px rgb(var(--acc)/0.53)}
 .card{width:var(--cw);height:calc(var(--cw)*1.816);border-radius:calc(var(--cw)*.07);background:#fff center/cover no-repeat;box-shadow:0 1px 0 #ffffff40 inset,0 6px 14px #0008,0 1px 2px #0009;flex:none;position:relative}
 .back,.mini{background:repeating-conic-gradient(#c8261f 0 25%,#f4ecd9 0 50%) 0 0/8px 8px;border:2px solid #f4ecd9}
 .mini{background-size:5px 5px;border-width:1.5px}
@@ -167,7 +167,7 @@ table.lead{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums
 button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
 .hand.active button.card:hover,.hand.active button.card:focus-visible{transform:translateY(-10px);box-shadow:0 0 0 2px var(--brass),0 14px 22px #000a}
 .hand:not(.active) button.card{cursor:default;filter:saturate(.8) brightness(.88)}
-.hand.active{filter:drop-shadow(0 0 10px #d8a74a44)}
+.hand.active{filter:drop-shadow(0 0 10px rgb(var(--acc)/0.27))}
 .card.trumpcard::after{content:"";position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--brass);box-shadow:0 0 0 2px #fff}
 @keyframes fromB{from{transform:translateY(120px) scale(.9);opacity:0}}
 @keyframes fromT{from{transform:translateY(-120px) scale(.9);opacity:0}}
@@ -183,8 +183,8 @@ button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box
 @media (prefers-reduced-motion:reduce){.e-b,.e-t,.e-l,.e-r,.drawn{animation:none}.c-b .card,.c-t .card,.c-l .card,.c-r .card{transition:none}button.card{transition:none}}
 
 /* room waiting + overlays */
-.overlay{position:fixed;inset:0;background:#07101acc;display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
-.panel{background:linear-gradient(170deg,#173149,#0c1b2a);border:1px solid var(--brass-soft);border-radius:16px;padding:20px;max-width:420px;width:100%;max-height:92%;overflow:auto;box-shadow:0 20px 50px #000c}
+.overlay{position:fixed;inset:0;background:rgb(var(--deep)/.8);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
+.panel{background:linear-gradient(170deg,var(--panel-a),var(--panel-b));border:1px solid var(--brass-soft);border-radius:16px;padding:20px;max-width:420px;width:100%;max-height:92%;overflow:auto;box-shadow:0 20px 50px #000c}
 .panel h2{font-family:var(--display);font-size:30px;margin:0 0 6px;color:var(--brass);text-align:center;text-wrap:balance}
 .panel .final{font-family:var(--display);font-size:40px;font-variant-numeric:tabular-nums;margin:4px 0;text-align:center}
 .panel .final span{color:var(--muted);font-size:20px}
@@ -195,7 +195,7 @@ button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box
 .seatrow .grow{flex:1;min-width:0}
 .seatrow .grow b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .seatrow .grow small{color:var(--muted)}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#0c1a26f2;border:1px solid var(--brass-soft);padding:10px 16px;border-radius:12px;z-index:30;max-width:90vw;text-align:center;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--toast);border:1px solid var(--brass-soft);padding:10px 16px;border-radius:12px;z-index:30;max-width:90vw;text-align:center;font-size:14px}
 .thinking::after{content:"";display:inline-block;width:1.2em;text-align:left;animation:dots 1s steps(4) infinite}
 @keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 
@@ -224,6 +224,23 @@ button.card{border:0;padding:0;cursor:pointer;transition:transform .18s ease,box
 .pill.grey{background:#ffffff1a;color:var(--muted);font-weight:500}
 .fine a,.rules a{color:var(--brass)}
 input:disabled{opacity:.6}
+
+/* themes: Split (default, above) and Zadar sunset */
+:root[data-theme="zadar"]{--acc:242 153 74;--brass-soft:#b5612e;--glass:#2a1018e0;--glass-2:#3b1722cc;--page:34 12 22;--deep:24 8 16;--panel-a:#4a1a2a;--panel-b:#200a14;--toast:#2a1018f2;--muted:#d6b3a8;--cream:#fbeee2}
+.theme-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.theme-pick button{position:relative;border:2px solid transparent;border-radius:12px;padding:0;overflow:hidden;cursor:pointer;background:#000;aspect-ratio:16/10}
+.theme-pick button img{width:100%;height:100%;object-fit:cover;display:block}
+.theme-pick button span{position:absolute;left:0;right:0;bottom:0;padding:4px 8px;background:linear-gradient(transparent,#000c);font-weight:700;text-align:left}
+.theme-pick button[aria-pressed="true"]{border-color:var(--brass);box-shadow:0 0 0 2px rgb(var(--acc)/.4)}
+.avpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px;margin-bottom:12px}
+.avpick button{border:2px solid transparent;border-radius:50%;padding:0;background:none;cursor:pointer;aspect-ratio:1}
+.avpick button img{width:100%;height:100%;border-radius:50%;display:block}
+.avpick button[aria-pressed="true"]{border-color:var(--brass);box-shadow:0 0 0 2px rgb(var(--acc)/.45)}
+.online{display:inline-flex;align-items:center;gap:7px;margin:10px 0 0;padding:4px 12px 4px 10px;border-radius:999px;background:var(--glass);border:1px solid var(--line);font-size:13px}
+.online i{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgb(127 207 143/.25)}
+.langs{display:flex;gap:6px;justify-content:center;margin-top:14px}
+.langs button{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--glass);cursor:pointer}
+.langs button[aria-pressed="true"]{background:var(--brass);color:var(--ink);border-color:var(--brass);font-weight:700}
 </style>
 </head>
 <body>
@@ -244,6 +261,7 @@ input:disabled{opacity:.6}
       <div class="hero">
         <h1>Briškula</h1>
         <p>Karte na stol. Protiv botova, prijatelja ili na turniru.</p>
+        <p class="online" id="onlineNow" hidden><i></i><span></span></p>
       </div>
       <div class="notice" id="resumeNotice" hidden></div>
       <div class="menu">
@@ -254,6 +272,7 @@ input:disabled{opacity:.6}
         <button class="mbtn" data-go="rules"><span class="mi">?</span><span><b>Pravila</b><small>Kako se igra briškula</small></span></button>
       </div>
       <div class="notice" id="homeNotice" hidden></div>
+      <div class="langs" id="homeLangs" role="group" aria-label="Jezik"></div>
       <p class="fine" id="cloudNote"></p>
     </section>
 
@@ -305,9 +324,12 @@ input:disabled{opacity:.6}
           <div class="lvl"><div class="lvl-row"><b id="pfLevel">Razina 1</b><span id="pfPts">0 bodova</span></div><div class="lvl-bar"><i id="pfBar"></i></div><small id="pfNext"></small></div>
         </div>
       </div>
+      <p class="fine" style="margin:0 0 8px">Ili odaberi lika:</p>
+      <div class="avpick" id="avPick" role="group" aria-label="Odaberi lika"></div>
       <div class="stats" id="pfStats"></div>
       <button class="btn primary wide" id="pfSave">Spremi</button>
       <div class="card-box" id="pfAccount"></div>
+      <div class="card-box" id="pfSettings"></div>
       <p class="fine">Bodovi: pobjeda online 15, pobjeda protiv botova 4 do 10 (ovisno o težini), neriješeno 4, poraz 1. Pobjednik turnira dobiva 5 bodova po igraču u turniru, finalist 2.</p>
     </section>
 
@@ -325,7 +347,7 @@ input:disabled{opacity:.6}
         <p><b>Pobjeda:</b> 61 ili više bodova (u paru zbroj para). 60–60 je neriješeno.</p>
         <p><b>Prikaz bodova:</b> uvijek, ili tek kad se špil potroši (pred zadnje ruke).</p>
       </div>
-      <p class="fine">Fotografija Splita: Ryan Matzner i Rachel Pestik, <a href="https://commons.wikimedia.org/wiki/File:Split_harbor_view.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, licenca <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane.</p>
+      <p class="fine">Fotografija Splita: Ryan Matzner i Rachel Pestik, <a href="https://commons.wikimedia.org/wiki/File:Split_harbor_view.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, licenca <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. <span>Fotografija Zadra: PJL,</span> <a href="https://commons.wikimedia.org/wiki/File:Sunset_in_Zadar_2.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener">CC BY 2.5</a><span>. Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane. Likovi: nacrtani za ovu igru.</span></p>
     </section>
 
     <!-- GAME -->
@@ -506,6 +528,56 @@ function botChoose(S,seat,diff){
 }
 if(typeof module!=='undefined')module.exports={newDeal,applyPlay,applyResolve,botChoose,heur,seatResult,teamPoints,PT,SUIT,ALL,seatToPlay,winIdx,trickWinner,revealActive};
 
+/* ================= languages: Croatian (source), English, Italian =================
+   TR(s) translates a UI string; strings with markup are translated piece by piece (text between tags, plus aria-label/title). */
+const LANGS=[['hr','Hrvatski'],['en','English'],['it','Italiano']];
+let LANG=(()=>{try{const s=localStorage.getItem('brisk-lang');if(s&&LANGS.some(l=>l[0]===s))return s}catch(e){}return /^it/i.test(navigator.language||'')?'it':'hr'})();
+const I18N={"Protiv botova":["Vs bots","Contro i bot"],"Online":["Online","Online"],"Turniri":["Tournaments","Tornei"],"Turnir":["Tournament","Torneo"],"Rang lista":["Leaderboard","Classifica"],"Profil":["Profile","Profilo"],"Pravila":["Rules","Regole"],"Gost ·":["Guest ·","Ospite ·"],"Razina":["Level","Livello"],"Razina 1":["Level 1","Livello 1"],"Profil je dostupan izvan igre.":["The profile is available outside the game.","Il profilo è disponibile fuori dalla partita."],"Online značajke trenutno nisu dostupne. Provjeri internet.":["Online features are unavailable right now. Check your connection.","Le funzioni online non sono disponibili. Controlla la connessione."],"Broj igrača":["Players","Giocatori"],"4 (2 na 2)":["4 (2 vs 2)","4 (2 contro 2)"],"Način (2 igrača)":["Mode (2 players)","Modalità (2 giocatori)"],"Na duplo":["Double","Doppia"],"Klasično":["Classic","Classica"],"Prikaz bodova":["Show points","Mostra punti"],"Uvijek":["Always","Sempre"],"Tek pred kraj":["Only near the end","Solo alla fine"],"Botovi":["Bots","Bot"],"Lagani":["Easy","Facili"],"Srednji":["Medium","Medi"],"Jaki":["Strong","Forti"],"lagan":["easy","facile"],"srednji":["medium","medio"],"jak":["strong","forte"],"Pobjeda!":["You win!","Vittoria!"],"Neriješeno":["Draw","Pareggio"],"Poraz":["You lose","Sconfitta"],"je napustio igru.":["left the game.","ha abbandonato la partita."],"bodova na rang listi":["points on the leaderboard","punti in classifica"],"Meč do":["Match to","Partita a"],"pobjede":["wins","vittorie"],"Meč je tvoj!":["You won the match!","La sfida è tua!"],"Meč je gotov":["Match over","Sfida finita"],"Sljedeća partija":["Next game","Prossima partita"],"Na turnir":["To the tournament","Al torneo"],"Nova partija":["New game","Nuova partita"],"Izbornik":["Menu","Menu"],"Mi":["Us","Noi"],"Vi":["Them","Voi"],"Ti":["You","Tu"],"Meč":["Match","Sfida"],"(do":["(to","(a"],"Partner ·":["Partner ·","Compagno ·"],"Bot,":["Bot,","Bot,"],"Briškula:":["Trump:","Briscola:"],"· briškula":["· trump","· briscola"],"bod.":["pts","pt"],"Čeka se početak igre.":["Waiting for the game to start.","In attesa che la partita inizi."],"Partija je gotova.":["The game is over.","La partita è finita."],"Partner (":["Partner (","Compagno ("],"Nosiš ti":["You take it","Prendi tu"],"nosi":["takes it","prende"],"Ti si nosio":["You took it","Hai preso tu"],"je nosio":["took it","ha preso"],"Briškula je":["Trump is","La briscola è"],"Špil je prazan, partneri vide karte.":["The deck is empty, partners see each other's cards.","Il mazzo è finito, i compagni vedono le carte."],"Špil je prazan.":["The deck is empty.","Il mazzo è finito."],"baca":["plays","gioca"],"Tvoj potez.":["Your turn.","Tocca a te."],"Ti igraš prvi.":["You lead.","Inizi tu."],"razmišlja":["is thinking","sta pensando"],"Čeka se":["Waiting for","In attesa di"],"Igra":["Game","Partita"],"Kopiraj poveznicu sobe":["Copy room link","Copia link della stanza"],"Napusti sobu":["Leave room","Lascia la stanza"],"Izađi u izbornik":["Back to menu","Torna al menu"],"Nastavi igru":["Continue game","Continua la partita"],"Natrag na igru":["Back to the game","Torna alla partita"],"1 pobjede":["1 win","1 vittoria"],"2 pobjede":["2 wins","2 vittorie"],"3 pobjede":["3 wins","3 vittorie"],"Sobe se ne mogu učitati.":["Rooms can't be loaded.","Impossibile caricare le stanze."],"Nema otvorenih soba. Otvori svoju i pošalji poveznicu.":["No open rooms. Open one and send the link.","Nessuna stanza aperta. Aprine una e invia il link."],"igrača":["players","giocatori"],"· na duplo":["· double","· doppia"],"· klasično":["· classic","· classica"],"· do":["· to","· a"],"Uđi":["Enter","Entra"],"Pridruži se":["Join","Unisciti"],"– soba":["– room","– stanza"],"Soba se ne može otvoriti. Pokušaj ponovno.":["The room can't be opened. Try again.","Impossibile aprire la stanza. Riprova."],"Ta soba više ne postoji.":["That room no longer exists.","Questa stanza non esiste più."],"Soba je puna.":["The room is full.","La stanza è piena."],"Igra u toj sobi je već počela.":["The game in that room has already started.","La partita in quella stanza è già iniziata."],"Ne mogu ući u sobu. Pokušaj ponovno.":["Can't enter the room. Try again.","Impossibile entrare nella stanza. Riprova."],"Soba je zatvorena.":["The room is closed.","La stanza è chiusa."],", na duplo":[", double",", doppia"],", klasično":[", classic",", classica"],", 2 na 2 (suigrači su mjesta 1 i 3, te 2 i 4)":[", 2 vs 2 (partners are seats 1 and 3, and 2 and 4)",", 2 contro 2 (compagni: posti 1 e 3, 2 e 4)"],", meč do":[", match to",", sfida a"],"(ti)":["(you)","(tu)"],"Domaćin":["Host","Host"],"Igrač":["Player","Giocatore"],"Ukloni":["Remove","Rimuovi"],"Slobodno mjesto":["Free seat","Posto libero"],"Sjedni":["Sit here","Siediti"],"Bot":["Bot","Bot"],"Kopiraj poveznicu za prijatelje":["Copy link for friends","Copia link per gli amici"],"Kreni":["Start","Inizia"],"Popuni botovima i kreni":["Fill with bots and start","Completa con bot e inizia"],"Čeka se da domaćin pokrene igru.":["Waiting for the host to start the game.","In attesa che l'host avvii la partita."],"Poveznica je kopirana. Pošalji je prijateljima.":["Link copied. Send it to your friends.","Link copiato. Invialo ai tuoi amici."],"Kopiraj poveznicu:":["Copy the link:","Copia il link:"],"Promjena nije spremljena.":["The change wasn't saved.","La modifica non è stata salvata."],"Igra se ne može pokrenuti.":["The game can't be started.","Impossibile avviare la partita."],"Imaš 1 minutu da se vratiš u igru.":["You have 1 minute to get back into the game.","Hai 1 minuto per tornare in partita."],"Finale":["Final","Finale"],"Polufinale":["Semi-final","Semifinale"],"Četvrtfinale":["Quarter-final","Quarti di finale"],"Osmina finala":["Round of 16","Ottavi di finale"],"Šesnaestina finala":["Round of 32","Sedicesimi di finale"],"Kolo":["Round","Turno"],"Naziv turnira":["Tournament name","Nome del torneo"],"Način":["Mode","Modalità"],"Turniri se ne mogu učitati.":["Tournaments can't be loaded.","Impossibile caricare i tornei."],"Još nema turnira. Otvori prvi.":["No tournaments yet. Open the first one.","Ancora nessun torneo. Aprine uno."],"Prijave":["Sign-ups","Iscrizioni"],"U tijeku":["In progress","In corso"],"Završen":["Finished","Concluso"],"igrača ·":["players ·","giocatori ·"],"na duplo":["double","doppia"],"klasično":["classic","classica"],"· meč do":["· match to","· sfida a"],"· prvak:":["· champion:","· campione:"],"Otvori":["Open","Apri"],"Turnir se ne može otvoriti.":["The tournament can't be opened.","Impossibile aprire il torneo."],"Učitavam…":["Loading…","Caricamento…"],"Turnir ne postoji.":["The tournament doesn't exist.","Il torneo non esiste."],"pobjede · prvak dobiva":["wins · the champion gets","vittorie · il campione riceve"],"Prvak:":["Champion:","Campione:"],"(to si ti!)":["(that's you!)","(sei tu!)"],"Prijavljeni (":["Signed up (","Iscritti ("],"Prazna mjesta popunit će botovi kad organizator pokrene turnir.":["Bots will fill the empty places when the organiser starts the tournament.","I bot occuperanno i posti liberi quando l'organizzatore avvia il torneo."],"Prijavi se":["Sign up","Iscriviti"],"Odjavi se":["Withdraw","Ritirati"],"Pokreni turnir":["Start tournament","Avvia torneo"],"(botovi popune":["(bots fill","(i bot completano"],"Kopiraj poveznicu turnira":["Copy tournament link","Copia link del torneo"],"Tvoj meč je spreman.":["Your match is ready.","La tua sfida è pronta."],"Igraj":["Play","Gioca"],"Ždrijeb":["Draw","Tabellone"],"Poveznica turnira je kopirana.":["Tournament link copied.","Link del torneo copiato."],"Turnir je popunjen.":["The tournament is full.","Il torneo è al completo."],"Prijave su zatvorene.":["Sign-ups are closed.","Le iscrizioni sono chiuse."],"Pokušaj ponovno.":["Try again.","Riprova."],"Turnir se ne može pokrenuti.":["The tournament can't be started.","Impossibile avviare il torneo."],"Osvojio si turnir!":["You won the tournament!","Hai vinto il torneo!"],"Finale!":["Final!","Finale!"],"Turnir „":["Tournament “","Torneo “"],"tvoj meč je spreman.":["your match is ready.","la tua sfida è pronta."],"Rang lista se ne može učitati.":["The leaderboard can't be loaded.","Impossibile caricare la classifica."],"Još nitko nije igrao.":["Nobody has played yet.","Nessuno ha ancora giocato."],"Još":["Another","Ancora"],"do razine":["to level","al livello"],"bodova":["points","punti"],"0 bodova":["0 points","0 punti"],"Partije":["Games","Partite"],"Pobjede":["Wins","Vittorie"],"Uspješnost":["Win rate","Percentuale"],"gost":["guest","ospite"],"Bez veze s poslužiteljem profil se sprema samo na ovom uređaju.":["Without a server connection the profile is saved only on this device.","Senza connessione il profilo è salvato solo su questo dispositivo."],"Račun":["Account","Account"],"Prijavljen si kao":["You are logged in as","Hai effettuato l'accesso come"],". Bodovi i razina spremaju se na tvoj račun, pa se istim imenom i lozinkom možeš prijaviti na bilo kojem uređaju.":[". Points and level are saved to your account, so you can log in with the same name and password on any device.",". Punti e livello sono salvati nel tuo account: puoi accedere con lo stesso nome e password da qualsiasi dispositivo."],"Odjava":["Log out","Esci"],"Igraš kao gost":["You're playing as a guest","Stai giocando come ospite"],"Registriraj se i zadrži bodove koje si već skupio. Poslije se istim imenom i lozinkom prijaviš na bilo kojem uređaju.":["Sign up and keep the points you've earned. Then log in with the same name and password on any device.","Registrati e tieni i punti già guadagnati. Poi accedi con lo stesso nome e password da qualsiasi dispositivo."],"Registracija":["Sign up","Registrazione"],"Prijava":["Log in","Accedi"],"Registrirani igrači igraju pod svojim korisničkim imenom.":["Registered players play under their username.","I giocatori registrati giocano con il loro nome utente."],"Ta slika se ne može učitati.":["That image can't be loaded.","Impossibile caricare l'immagine."],"Upiši ime.":["Enter a name.","Inserisci un nome."],"Spremljeno samo na ovom uređaju.":["Saved on this device only.","Salvato solo su questo dispositivo."],"Profil je spremljen.":["Profile saved.","Profilo salvato."],"Povezujem se…":["Connecting…","Connessione…"],"Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.":["Online play, tournaments and the leaderboard are unavailable right now. Playing against bots works offline.","Gioco online, tornei e classifica non sono disponibili. Contro i bot si gioca anche offline."],"je izašao iz igre. Ima još":["left the game. They have","ha lasciato la partita. Ha ancora"],"da se vrati":["to come back","per tornare"],", inače vaš par gubi.":[", otherwise your team loses.",", altrimenti la vostra coppia perde."],", inače pobjeđujete.":[", otherwise you win.",", altrimenti vincete voi."],"Nedovršena partija protiv botova se računa kao poraz.":["An unfinished game against bots counts as a loss.","Una partita incompiuta contro i bot conta come sconfitta."],"Nisi se vratio u igru na vrijeme, pa se računa kao poraz.":["You didn't return in time, so it counts as a loss.","Non sei tornato in tempo, quindi conta come sconfitta."],"Nedovršena igra":["Unfinished game","Partita in sospeso"],"protiv botova":["against bots","contro i bot"],"Vrati se za":["Return within","Torna entro"],"ili gubiš partiju.":["or you lose the game.","o perdi la partita."],"To korisničko ime je zauzeto. Odaberi drugo.":["That username is taken. Choose another.","Questo nome utente è già in uso. Scegline un altro."],"Pogrešno korisničko ime ili lozinka.":["Wrong username or password.","Nome utente o password errati."],"Lozinka mora imati barem 6 znakova.":["The password needs at least 6 characters.","La password deve avere almeno 6 caratteri."],"Previše pokušaja. Pričekaj malo pa probaj opet.":["Too many attempts. Wait a moment and try again.","Troppi tentativi. Aspetta un po' e riprova."],"Nema veze s poslužiteljem. Provjeri internet.":["No server connection. Check your internet.","Nessuna connessione al server. Controlla internet."],"Registracija trenutno nije dostupna.":["Sign-up isn't available right now.","La registrazione non è disponibile al momento."],"Nešto nije uspjelo":["Something went wrong","Qualcosa è andato storto"],". Probaj opet.":[". Try again.",". Riprova."],"Gost":["Guest","Ospite"],"Dobro došao!":["Welcome!","Benvenuto!"],"Registriraj se da ti se bodovi i razina čuvaju pod tvojim imenom, ili igraj kao gost.":["Sign up to keep your points and level under your name, or play as a guest.","Registrati per salvare punti e livello con il tuo nome, oppure gioca come ospite."],"Trenutno nema veze s poslužiteljem, pa možeš igrati kao gost.":["There's no server connection right now, so you can play as a guest.","Al momento non c'è connessione al server, puoi giocare come ospite."],"Način ulaska":["How to enter","Modalità di accesso"],"Tvoje ime u igri":["Your name in the game","Il tuo nome in gioco"],"Nasumično":["Random","Casuale"],"Korisničko ime":["Username","Nome utente"],"Lozinka":["Password","Password"],"Ponovi lozinku":["Repeat password","Ripeti password"],"3 do 15 znakova: slova, brojke, točka, crtica ili _. Lozinka barem 6 znakova.":["3 to 15 characters: letters, digits, dot, dash or _. Password at least 6 characters.","Da 3 a 15 caratteri: lettere, numeri, punto, trattino o _. Password di almeno 6 caratteri."],"Bodovi koje si skupio kao gost ostaju tvoji.":["Points you earned as a guest stay yours.","I punti guadagnati come ospite restano tuoi."],"Igraj kao gost":["Play as guest","Gioca come ospite"],"Registriraj se":["Sign up","Registrati"],"Zatvori":["Close","Chiudi"],"Upiši ime ili klikni Nasumično.":["Enter a name or tap Random.","Inserisci un nome o tocca Casuale."],"Igraš kao":["You're playing as","Stai giocando come"],"Korisničko ime: 3 do 15 znakova, slova, brojke, točka, crtica ili _.":["Username: 3 to 15 characters, letters, digits, dot, dash or _.","Nome utente: da 3 a 15 caratteri, lettere, numeri, punto, trattino o _."],"Lozinke se ne podudaraju.":["The passwords don't match.","Le password non coincidono."],"Pričekaj…":["Please wait…","Attendi…"],"Registracija je uspjela. Dobro došao,":["You're signed up. Welcome,","Registrazione completata. Benvenuto,"],"Bok,":["Hi,","Ciao,"],"Odjava nije uspjela.":["Logging out failed.","Uscita non riuscita."],"Odjavljen si.":["You're logged out.","Sei uscito."],"Natrag":["Back","Indietro"],"Veza s poslužiteljem":["Server connection","Connessione al server"],"Moj profil":["My profile","Il mio profilo"],"Karte na stol. Protiv botova, prijatelja ili na turniru.":["Cards on the table. Against bots, friends or in a tournament.","Carte in tavola. Contro i bot, gli amici o in torneo."],"Igraj protiv botova":["Play vs bots","Gioca contro i bot"],"2, 3 ili 4 igrača, odmah":["2, 3 or 4 players, right away","2, 3 o 4 giocatori, subito"],"Igraj online":["Play online","Gioca online"],"Sobe s prijateljima, botovi popune mjesta":["Rooms with friends, bots fill the seats","Stanze con amici, i bot completano i posti"],"4, 8, 16 ili 32 igrača, ždrijeb":["4, 8, 16 or 32 players, bracket","4, 8, 16 o 32 giocatori, tabellone"],"Bodovi, razine i pobjede":["Points, levels and wins","Punti, livelli e vittorie"],"Kako se igra briškula":["How to play briškula","Come si gioca a briscola"],"Igra protiv botova":["Game vs bots","Partita contro i bot"],"Podijeli karte":["Deal the cards","Distribuisci le carte"],"Online sobe":["Online rooms","Stanze online"],"Nova soba":["New room","Nuova stanza"],"Otvori sobu":["Open room","Apri stanza"],"Otvorene sobe":["Open rooms","Stanze aperte"],"Novi turnir":["New tournament","Nuovo torneo"],"Otvori prijave":["Open sign-ups","Apri iscrizioni"],"Bodovi":["Points","Punti"],"Slika profila":["Profile picture","Immagine del profilo"],"Promijeni sliku":["Change picture","Cambia immagine"],"Bez slike":["No picture","Nessuna immagine"],"Ime":["Name","Nome"],"Spremi":["Save","Salva"],"Bodovi: pobjeda online 15, pobjeda protiv botova 4 do 10 (ovisno o težini), neriješeno 4, poraz 1. Pobjednik turnira dobiva 5 bodova po igraču u turniru, finalist 2.":["Points: online win 15, win against bots 4 to 10 (depending on difficulty), draw 4, loss 1. A tournament winner gets 5 points per player in the tournament, the finalist 2.","Punti: vittoria online 15, vittoria contro i bot da 4 a 10 (secondo la difficoltà), pareggio 4, sconfitta 1. Il vincitore di un torneo riceve 5 punti per giocatore, il finalista 2."],"Špil:":["Deck:","Mazzo:"],"40 karata, 120 bodova. Jačina: As, Trica, Kralj, Konj, Fanat, 7, 6, 5, 4, 2.":["40 cards, 120 points. Ranking: Ace, Three, King, Knight, Jack, 7, 6, 5, 4, 2.","40 carte, 120 punti. Ordine: Asso, Tre, Re, Cavallo, Fante, 7, 6, 5, 4, 2."],"Bodovi:":["Points:","Punti:"],"As 11 · Trica 10 · Kralj 4 · Konj 3 · Fanat 2. Ostale karte 0.":["Ace 11 · Three 10 · King 4 · Knight 3 · Jack 2. Other cards 0.","Asso 11 · Tre 10 · Re 4 · Cavallo 3 · Fante 2. Le altre carte 0."],"karta ispod špila određuje adut. Ne mora se odgovarati na boju. Ruku nosi najjača karta boje koja je prva bačena, osim ako je netko bacio briškulu; tada nosi najjača briškula.":["the card under the deck sets the trump suit. You don't have to follow suit. The trick goes to the highest card of the suit led, unless someone played a trump; then the highest trump wins.","la carta sotto il mazzo indica la briscola. Non è obbligatorio rispondere al seme. La mano va alla carta più alta del seme giocato per primo, a meno che qualcuno non abbia giocato una briscola; allora vince la briscola più alta."],"Vučenje:":["Drawing:","Pesca:"],"tko nosi ruku vuče prvi i igra prvi. Zadnja karta iz špila je okrenuta briškula.":["whoever takes the trick draws first and leads. The last card of the deck is the face-up trump.","chi prende la mano pesca per primo e gioca per primo. L'ultima carta del mazzo è la briscola scoperta."],"2 igrača:":["2 players:","2 giocatori:"],"klasično (3 karte, jedna po ruci) ili na duplo (4 karte, svaki baci dvije: ti, on, ti, on).":["classic (3 cards, one per trick) or double (4 cards, each plays two: you, them, you, them).","classica (3 carte, una per mano) o doppia (4 carte, ognuno ne gioca due: tu, lui, tu, lui)."],"3 igrača:":["3 players:","3 giocatori:"],"izbacuje se dvica dinara, ostaje 39 karata. Pobjeđuje tko ima najviše bodova.":["the two of coins is removed, leaving 39 cards. Most points wins.","si toglie il due di denari, restano 39 carte. Vince chi ha più punti."],"4 igrača:":["4 players:","4 giocatori:"],"2 na 2, suigrači sjede jedan nasuprot drugome. Kad se špil potroši, suigrači vide karte jedan drugome.":["2 vs 2, partners sit opposite each other. When the deck runs out, partners see each other's cards.","2 contro 2, i compagni siedono uno di fronte all'altro. Finito il mazzo, i compagni si vedono le carte."],"Pobjeda:":["Win:","Vittoria:"],"61 ili više bodova (u paru zbroj para). 60–60 je neriješeno.":["61 or more points (pairs add their points together). 60–60 is a draw.","61 punti o più (in coppia si sommano i punti). 60–60 è pareggio."],"Prikaz bodova:":["Showing points:","Punti visibili:"],"uvijek, ili tek kad se špil potroši (pred zadnje ruke).":["always, or only once the deck is empty (before the last tricks).","sempre, o solo quando il mazzo è finito (prima delle ultime mani)."],"Fotografija Splita: Ryan Matzner i Rachel Pestik,":["Photo of Split: Ryan Matzner and Rachel Pestik,","Foto di Spalato: Ryan Matzner e Rachel Pestik,"],", licenca":[", licence",", licenza"],". Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane.":[". Table texture: Poly Haven (CC0). Cards: Modiano Trevisane.",". Texture del tavolo: Poly Haven (CC0). Carte: Modiano Trevisane."],"Izbornik igre":["Game menu","Menu di gioco"],"Trenutno online:":["Online now:","Online ora:"],"Jezik":["Language","Lingua"],"Tema":["Theme","Tema"],"Postavke":["Settings","Impostazioni"],"Odaberi lika":["Pick a character","Scegli un personaggio"],"Ili odaberi lika:":["Or pick a character:","Oppure scegli un personaggio:"],"Split":["Split","Spalato"],"Zadar":["Zadar","Zara"],"Magarac":["Donkey","Asino"],"Galeb":["Seagull","Gabbiano"],"Hobotnica":["Octopus","Polpo"],"Mačka":["Cat","Gatto"],"Dupin":["Dolphin","Delfino"],"Cvrčak":["Cicada","Cicala"],"Maslina":["Olive","Oliva"],"Gajeta":["Fishing boat","Gozzo"],"Svjetionik":["Lighthouse","Faro"],"Riba":["Fish","Pesce"],"Ribar":["Fisherman","Pescatore"],"Nona":["Granny","Nonna"],"Fotografija Zadra: PJL,":["Photo of Zadar: PJL,","Foto di Zara: PJL,"],". Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane. Likovi: nacrtani za ovu igru.":[". Table texture: Poly Haven (CC0). Cards: Modiano Trevisane. Characters: drawn for this game.",". Texture del tavolo: Poly Haven (CC0). Carte: Modiano Trevisane. Personaggi: disegnati per questo gioco."]};
+function trf(s){
+  if(LANG==='hr')return s;
+  const k=s.trim(),e=I18N[k];if(!e)return s;
+  return s.slice(0,s.indexOf(k))+e[LANG==='en'?0:1]+s.slice(s.indexOf(k)+k.length);
+}
+function TR(s){
+  if(LANG==='hr'||s==null)return s;
+  s=String(s);
+  if(!/[<>"]/.test(s))return trf(s);
+  return s.replace(/((?:aria-label|title|placeholder|alt)=")([^"]*)(")/g,(m,a,v,b)=>a+trf(v)+b).replace(/(^|>)([^<>]+)(?=<|$)/g,(m,a,t)=>a+trf(t));
+}
+function setLang(l){try{localStorage.setItem('brisk-lang',l)}catch(e){}location.reload()}
+// card names
+if(LANG!=='hr'){
+  const SU={en:['Swords','Cups','Coins','Batons'],it:['Spade','Coppe','Denari','Bastoni']}[LANG];
+  const RN={en:{1:'Ace',3:'Three',12:'King',11:'Knight',10:'Jack',7:'Seven',6:'Six',5:'Five',4:'Four',2:'Two'},it:{1:'Asso',3:'Tre',12:'Re',11:'Cavallo',10:'Fante',7:'Sette',6:'Sei',5:'Cinque',4:'Quattro',2:'Due'}}[LANG];
+  for(let s=0;s<4;s++){SUIT_N[s]=SU[s];for(let i=0;i<10;i++){const r=RANKS[i];NAME[s*10+i]=RN[r]+(LANG==='en'?' of ':' di ')+SU[s]}}
+}
+// the static page
+(function(){
+  document.documentElement.lang=LANG;
+  if(LANG==='hr')return;
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);const nodes=[];while(w.nextNode())nodes.push(w.currentNode);
+  for(const n of nodes){if(n.parentNode&&/SCRIPT|STYLE/.test(n.parentNode.nodeName))continue;const t=trf(n.nodeValue);if(t!==n.nodeValue)n.nodeValue=t}
+  for(const el of document.body.querySelectorAll('[aria-label],[title],[alt],[placeholder]'))for(const a of ['aria-label','title','alt','placeholder']){const v=el.getAttribute(a);if(v){const t=trf(v);if(t!==v)el.setAttribute(a,t)}}
+})();
+
+/* ================= ready-made Dalmatian profile pictures (drawn as SVG, stored as "av:<id>") ================= */
+const AVATARS=[
+ ['magarac','Magarac','#7fb3c9','<ellipse cx="22" cy="18" rx="5" ry="15" fill="#8a8580" transform="rotate(-18 22 18)"/><ellipse cx="42" cy="18" rx="5" ry="15" fill="#8a8580" transform="rotate(18 42 18)"/><ellipse cx="22" cy="18" rx="2.4" ry="10" fill="#5e5955" transform="rotate(-18 22 18)"/><ellipse cx="42" cy="18" rx="2.4" ry="10" fill="#5e5955" transform="rotate(18 42 18)"/><ellipse cx="32" cy="38" rx="15" ry="18" fill="#9b9690"/><ellipse cx="32" cy="48" rx="11" ry="9" fill="#e9e4dc"/><circle cx="26" cy="33" r="2.6" fill="#222"/><circle cx="38" cy="33" r="2.6" fill="#222"/><ellipse cx="28" cy="48" rx="1.6" ry="2.2" fill="#555"/><ellipse cx="36" cy="48" rx="1.6" ry="2.2" fill="#555"/><path d="M27 21q5-6 10 0" fill="#3f3b38"/>'],
+ ['galeb','Galeb','#9fd0ea','<path d="M0 54q8-4 16 0t16 0 16 0 16 0v10H0z" fill="#2e7fb0"/><ellipse cx="28" cy="44" rx="18" ry="11" fill="#fff"/><path d="M12 42q12-12 30-4-10 10-30 4z" fill="#a9b4bd"/><path d="M10 44l-8-4 4 8z" fill="#5d6770"/><circle cx="40" cy="28" r="10" fill="#fff"/><path d="M48 28l12 3-12 3z" fill="#f2c230"/><circle cx="56" cy="32" r="1.4" fill="#d33"/><circle cx="43" cy="26" r="1.9" fill="#222"/>'],
+ ['hobotnica','Hobotnica','#3c7fa8','<path d="M14 40q-2 14 6 16M22 42q-2 12 4 16M32 44v14M42 42q2 12-4 16M50 40q2 14-6 16" stroke="#e0784e" stroke-width="5" stroke-linecap="round" fill="none"/><ellipse cx="32" cy="28" rx="18" ry="17" fill="#e98a5c"/><circle cx="25" cy="28" r="4" fill="#fff"/><circle cx="39" cy="28" r="4" fill="#fff"/><circle cx="25.5" cy="29" r="2" fill="#222"/><circle cx="39.5" cy="29" r="2" fill="#222"/><circle cx="26" cy="17" r="2" fill="#f7b08c"/><circle cx="36" cy="14" r="1.5" fill="#f7b08c"/><path d="M28 36q4 3 8 0" stroke="#a24d2c" stroke-width="2" fill="none"/>'],
+ ['macka','Mačka','#e7c27a','<path d="M14 12l8 16-12 4zM50 12l-8 16 12 4z" fill="#d97a2b"/><ellipse cx="32" cy="38" rx="20" ry="18" fill="#e8913d"/><path d="M32 22v8M24 23l3 7M40 23l-3 7" stroke="#b35f1c" stroke-width="2.5"/><ellipse cx="24" cy="38" rx="3.5" ry="4.5" fill="#3b6d2b"/><ellipse cx="40" cy="38" rx="3.5" ry="4.5" fill="#3b6d2b"/><ellipse cx="24" cy="38" rx="1.2" ry="3.6" fill="#111"/><ellipse cx="40" cy="38" rx="1.2" ry="3.6" fill="#111"/><path d="M30 45h4l-2 2.5z" fill="#c4426a"/><path d="M32 47.5q-3 4-6 1M32 47.5q3 4 6 1M12 44h10M12 48l10-2M52 44H42M52 48l-10-2" stroke="#5a3a1c" stroke-width="1.2" fill="none"/>'],
+ ['dupin','Dupin','#1f6f9f','<path d="M0 50q8-5 16 0t16 0 16 0 16 0v14H0z" fill="#3fa3d1"/><path d="M10 40q8-26 36-22 8 2 10 8-6 0-8 2l-2 6q-6-4-14 0-10 4-14 12z" fill="#8fb7c9"/><path d="M28 18l4-8 4 9z" fill="#7aa3b6"/><path d="M14 40q10-10 30-8" stroke="#dfeef4" stroke-width="3" fill="none"/><circle cx="46" cy="24" r="1.8" fill="#123"/><path d="M8 42l-4-6 8 2z" fill="#7aa3b6"/>'],
+ ['cvrcak','Cvrčak','#cbd88f','<ellipse cx="22" cy="40" rx="8" ry="18" fill="#c9e6e6" opacity=".85" transform="rotate(20 22 40)"/><ellipse cx="42" cy="40" rx="8" ry="18" fill="#c9e6e6" opacity=".85" transform="rotate(-20 42 40)"/><ellipse cx="32" cy="38" rx="8" ry="16" fill="#5b6b2e"/><ellipse cx="32" cy="20" rx="11" ry="7" fill="#46561f"/><circle cx="23" cy="19" r="3.4" fill="#2a2a2a"/><circle cx="41" cy="19" r="3.4" fill="#2a2a2a"/><circle cx="22" cy="18" r="1" fill="#fff"/><circle cx="40" cy="18" r="1" fill="#fff"/><path d="M29 30h6M28 36h8M29 42h6" stroke="#3b4719" stroke-width="2"/>'],
+ ['maslina','Maslina','#e9e2c6','<path d="M10 54Q30 40 54 10" stroke="#6b5233" stroke-width="3" fill="none"/><ellipse cx="22" cy="40" rx="10" ry="3.6" fill="#6f8f4a" transform="rotate(-50 22 40)"/><ellipse cx="34" cy="26" rx="10" ry="3.6" fill="#7fa257" transform="rotate(-60 34 26)"/><ellipse cx="30" cy="42" rx="10" ry="3.6" fill="#6f8f4a" transform="rotate(10 30 42)"/><ellipse cx="44" cy="22" rx="9" ry="3.4" fill="#86a95f" transform="rotate(5 44 22)"/><ellipse cx="24" cy="30" rx="9" ry="3.4" fill="#86a95f" transform="rotate(-100 24 30)"/><ellipse cx="38" cy="38" rx="4.5" ry="6" fill="#3d3550"/><ellipse cx="46" cy="32" rx="4" ry="5.4" fill="#4e7a2c"/><circle cx="37" cy="36" r="1.3" fill="#fff" opacity=".6"/>'],
+ ['gajeta','Gajeta','#f2b66b','<circle cx="46" cy="18" r="8" fill="#fff3c4"/><path d="M0 48q8-4 16 0t16 0 16 0 16 0v16H0z" fill="#2e7fb0"/><path d="M8 42h48l-6 9H14z" fill="#8b4a22"/><path d="M8 42h48" stroke="#f2e2c0" stroke-width="2"/><path d="M30 8v34" stroke="#5a3a1c" stroke-width="2"/><path d="M31 10l18 26H31z" fill="#c2412d"/><path d="M29 14L16 38h13z" fill="#e6d3a8"/>'],
+ ['svjetionik','Svjetionik','#2c4a7a','<path d="M14 30L4 22v16zM50 30l10-8v16z" fill="#fff6b0" opacity=".7"/><path d="M0 52q8-4 16 0t16 0 16 0 16 0v12H0z" fill="#1d5f8a"/><path d="M22 52l4-30h12l4 30z" fill="#f4f1ea"/><path d="M23.5 42h17l.8 6h-18.6zM25 30h14l.6 5H24.4z" fill="#c8362b"/><rect x="25" y="16" width="14" height="7" fill="#fff6b0"/><path d="M23 16h18l-9-7z" fill="#c8362b"/><rect x="18" y="50" width="28" height="4" fill="#9a8f80"/>'],
+ ['riba','Riba','#2a8fb8','<path d="M8 32q16-18 38-6l12-8-4 14 4 14-12-8Q24 50 8 32z" fill="#4f7fa8"/><path d="M8 32q16 12 38 6-22 8-38-6z" fill="#cfe0ea"/><path d="M24 22q6 10 0 20" stroke="#3a6488" stroke-width="2" fill="none"/><circle cx="16" cy="29" r="3.2" fill="#fff"/><circle cx="15.5" cy="29" r="1.7" fill="#111"/><path d="M30 26l4-6 6 4" fill="#3a6488"/><circle cx="50" cy="12" r="2" fill="#bfe6f5"/><circle cx="54" cy="6" r="1.4" fill="#bfe6f5"/>'],
+ ['ribar','Ribar','#7fa3b8','<rect x="16" y="52" width="32" height="12" rx="4" fill="#24466e"/><path d="M16 56h32" stroke="#f1f1f1" stroke-width="3"/><ellipse cx="32" cy="36" rx="14" ry="16" fill="#e8b48d"/><path d="M16 26q16-16 32 0v-3q-16-12-32 0z" fill="#1f3550"/><rect x="15" y="24" width="34" height="5" rx="2" fill="#2b4a6e"/><circle cx="26" cy="35" r="2" fill="#222"/><circle cx="38" cy="35" r="2" fill="#222"/><path d="M22 44q5-4 10-1 5-3 10 1-5 3-10 1-5 2-10-1z" fill="#6b4a33"/><ellipse cx="32" cy="40" rx="2.5" ry="2" fill="#d79a73"/>'],
+ ['nona','Nona','#c9a4c9','<ellipse cx="32" cy="38" rx="13" ry="15" fill="#efc7a6"/><path d="M14 40q-2-26 18-28 20 2 18 28-4-14-18-16-14 2-18 16z" fill="#2b2b33"/><path d="M14 40q2 14 10 18l-4 6h24l-4-6q8-4 10-18-4 10-18 12-14-2-18-12z" fill="#2b2b33"/><circle cx="27" cy="38" r="4" fill="none" stroke="#6b5a4a" stroke-width="1.5"/><circle cx="37" cy="38" r="4" fill="none" stroke="#6b5a4a" stroke-width="1.5"/><path d="M31 38h2" stroke="#6b5a4a" stroke-width="1.5"/><circle cx="27" cy="38" r="1.3" fill="#222"/><circle cx="37" cy="38" r="1.3" fill="#222"/><path d="M28 46q4 3 8 0" stroke="#a5654a" stroke-width="1.6" fill="none"/>'],
+];
+const AV_URL={};
+for(const [id,,bg,body] of AVATARS)AV_URL['av:'+id]='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="'+bg+'"/>'+body+'</svg>');
+
 /* ================= cloud adapter (Firebase compat; tests inject window.__CLOUD) ================= */
 const FIREBASE_CONFIG=window.__FIREBASE_CONFIG||{"apiKey":"AIzaSyDxmBQmPQKTjPmnqoMmpxN64QoZy8WQqA4","authDomain":"briskula-7ec36.firebaseapp.com","projectId":"briskula-7ec36","storageBucket":"briskula-7ec36.firebasestorage.app","messagingSenderId":"827823941252","appId":"1:827823941252:web:9b21db39141b83498dc4d1"};
 // accounts are "username + password"; Firebase needs an email, so the username is turned into a private address nobody sees
@@ -535,6 +607,7 @@ const Cloud=(()=>{
   C.watch=(p,cb)=>ref(p).onSnapshot(s=>cb(s.exists?s.data():null),()=>cb(undefined));
   C.watchQuery=(c,q,cb)=>{let x=db.collection(c);if(q.where)x=x.where(...q.where);if(q.orderBy)x=x.orderBy(...q.orderBy);if(q.limit)x=x.limit(q.limit);
     return x.onSnapshot(s=>cb(s.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>cb(null))};
+  C.query=async(c,q)=>{let x=db.collection(c);if(q.where)x=x.where(...q.where);if(q.limit)x=x.limit(q.limit);const s=await x.get();return s.docs.map(d=>Object.assign({id:d.id},d.data()))};
   // fn(get,set) — all gets before sets; return value passed through
   C.txn=fn=>db.runTransaction(t=>fn(async p=>{const s=await t.get(ref(p));return s.exists?s.data():null},(p,d)=>t.set(ref(p),d)));
   C.signInGoogle=async()=>{
@@ -582,7 +655,7 @@ const IMG=(()=>{const F={S:'Spadi',C:'Kupe',D:'Dinari',B:'Bati'},R={1:'As',10:'F
   for(const s in F)for(const r of [1,2,3,4,5,6,7,10,11,12])o[s+r]=(window.__CARD_BASE||CARD_BASE)+F[s]+'/'+(R[r]||r)+F[s]+'.jpg';
   setTimeout(()=>{for(const k in o){const i=new Image();i.src=o[k]}},300);return o})();
 const BOT_NAMES=['Ante','Mate','Jure','Šime','Frane','Duje','Roko','Ive','Stipe','Toni','Luce','Kate','Zlata','Ivka','Bepo','Nediljko','Marin','Tonći','Jakov','Paško','Vinko','Lovre','Dinko','Mile','Krste','Bariša','Jozo','Grgo','Petar','Dane','Nikša','Joško'];
-const DIFF_N={easy:'lagan',normal:'srednji',hard:'jak'};
+const DIFF_N={easy:TR('lagan'),normal:TR('srednji'),hard:TR('jak')};
 function hashCol(s){let h=0;for(const ch of String(s))h=(h*31+ch.charCodeAt(0))|0;const hues=[200,12,140,35,265,330,170,55];return 'hsl('+hues[Math.abs(h)%hues.length]+' 45% 42%)'}
 function defAvatar(name,bot){
   const ini=bot?'B':(String(name||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?');
@@ -591,15 +664,15 @@ function defAvatar(name,bot){
     '<text x="32" y="41" font-family="Georgia,serif" font-size="26" font-weight="700" fill="#f2e9d4" text-anchor="middle">'+esc(ini)+'</text>')+'</svg>';
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
-const avSrc=p=>(p&&p.avatar)||defAvatar(p&&p.name,p&&p.bot);
+const avSrc=p=>(p&&p.avatar&&(AV_URL[p.avatar]||p.avatar))||defAvatar(p&&p.name,p&&p.bot);
 const levelOf=pts=>Math.floor(Math.sqrt(Math.max(0,pts)/10))+1;
 const levelFloor=l=>10*(l-1)*(l-1);
 
 /* ================= profile ================= */
 let P=Object.assign({name:'',avatar:null,points:0,games:0,wins:0,draws:0,tWins:0},store('brisk-profile')||{});
-const GUEST_WORDS=['Galeb','Ribar','Mornar','Težak','Bura','Maestral','Jugo','Fjaka','Feral','Kamenjar','Lanterna','Konoba','Pjat','Gajeta','Pasara','Bodul','Šjor','Barba','Pošip','Plavac','Lantina','Marjan','Riva','Peškafondo'];
+const GUEST_WORDS=[TR('Galeb'),TR('Ribar'),'Mornar','Težak','Bura','Maestral','Jugo','Fjaka','Feral','Kamenjar','Lanterna','Konoba','Pjat',TR('Gajeta'),'Pasara','Bodul','Šjor','Barba','Pošip','Plavac','Lantina','Marjan','Riva','Peškafondo'];
 const randomGuestName=()=>GUEST_WORDS[Math.floor(Math.random()*GUEST_WORDS.length)]+' '+(10+Math.floor(Math.random()*990));
-if(!P.name)P.name=randomGuestName();
+if(!P.name){P.name=randomGuestName();if(!P.avatar)P.avatar='av:'+AVATARS[(Math.random()*AVATARS.length)|0][0]}
 function saveLocalProfile(){store('brisk-profile',P)}
 saveLocalProfile();
 const mySeatInfo=()=>({uid:Cloud.uid||null,name:P.name,avatar:P.avatar||null,level:levelOf(P.points),bot:false});
@@ -621,7 +694,7 @@ async function addStats(d){ // d: {points,games,wins,draws,tWins}
   apply(P);saveLocalProfile();renderMe();
 }
 function renderMe(){
-  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent=(Cloud.ok&&!Cloud.registered?'Gost · ':'')+'Razina '+levelOf(P.points);
+  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent=(Cloud.ok&&!Cloud.registered?TR('Gost · '):'')+TR('Razina ')+levelOf(P.points);
 }
 
 /* ================= navigation ================= */
@@ -636,15 +709,15 @@ function show(name){
   CUR=name;document.body.classList.toggle('in-game',name==='game');
   for(const s of SCREENS)$('scr-'+s).hidden=s!==name;
   $('backBtn').hidden=name==='home';
-  const titles={home:'Briškula',local:'Protiv botova',lobby:'Online',tours:'Turniri',tour:'Turnir',lead:'Rang lista',profile:'Profil',rules:'Pravila',game:'Briškula'};
+  const titles={home:'Briškula',local:TR('Protiv botova'),lobby:TR('Online'),tours:TR('Turniri'),tour:TR('Turnir'),lead:TR('Rang lista'),profile:TR('Profil'),rules:TR('Pravila'),game:'Briškula'};
   $('barTitle').textContent=titles[name];
   if(name==='lobby')openLobby();if(name==='tours')openTours();if(name==='lead')openLead();if(name==='profile')openProfile();if(name==='local')buildLocalForm();
   if(name==='game')sizeCards(true);
   if(name==='home')checkResume();
 }
 $('backBtn').onclick=()=>{if(CUR==='tour')show('tours');else if(CUR==='game')confirmLeaveGame();else show('home')};
-$('meChip').onclick=()=>{if(CUR==='game')return toast('Profil je dostupan izvan igre.');show('profile')};
-document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;if(['lobby','tours','lead'].includes(g)&&!Cloud.ok){toast('Online značajke trenutno nisu dostupne. Provjeri internet.');return}show(g)});
+$('meChip').onclick=()=>{if(CUR==='game')return toast(TR('Profil je dostupan izvan igre.'));show('profile')};
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;if(['lobby','tours','lead'].includes(g)&&!Cloud.ok){toast(TR('Online značajke trenutno nisu dostupne. Provjeri internet.'));return}show(g)});
 
 /* segmented controls */
 function seg(container,key,label,opts,state,onchange){
@@ -656,9 +729,9 @@ function seg(container,key,label,opts,state,onchange){
 }
 function gameOptionsForm(el,st,extra){
   el.innerHTML='';
-  seg(el,'N','Broj igrača',[[2,'2'],[3,'3'],[4,'4 (2 na 2)']],st,()=>{dup.hidden=st.N!==2});
-  const dup=seg(el,'duplo','Način (2 igrača)',[[true,'Na duplo'],[false,'Klasično']],st);dup.hidden=st.N!==2;
-  seg(el,'show','Prikaz bodova',[['always','Uvijek'],['end','Tek pred kraj']],st);
+  seg(el,'N',TR('Broj igrača'),[[2,'2'],[3,'3'],[4,TR('4 (2 na 2)')]],st,()=>{dup.hidden=st.N!==2});
+  const dup=seg(el,'duplo',TR('Način (2 igrača)'),[[true,TR('Na duplo')],[false,TR('Klasično')]],st);dup.hidden=st.N!==2;
+  seg(el,'show',TR('Prikaz bodova'),[['always',TR('Uvijek')],['end',TR('Tek pred kraj')]],st);
   if(extra)extra(el);
 }
 
@@ -670,7 +743,7 @@ const gClear=()=>{gTimers.forEach(clearTimeout);gTimers=[]};
 
 /* ---- local games ---- */
 let localCfg=Object.assign({N:2,duplo:true,show:'always',diff:'hard'},store('brisk-localcfg')||{});
-function buildLocalForm(){gameOptionsForm($('localForm'),localCfg,el=>seg(el,'diff','Botovi',[['easy','Lagani'],['normal','Srednji'],['hard','Jaki']],localCfg))}
+function buildLocalForm(){gameOptionsForm($('localForm'),localCfg,el=>seg(el,'diff',TR('Botovi'),[['easy',TR('Lagani')],['normal',TR('Srednji')],['hard',TR('Jaki')]],localCfg))}
 $('localStart').onclick=()=>{store('brisk-localcfg',localCfg);startLocal(localCfg)};
 function botSeat(i,diff){const used=new Set();let n;do{n=BOT_NAMES[(Math.random()*BOT_NAMES.length)|0]}while(used.has(n));return {uid:null,name:n,avatar:null,bot:true,diff:diff||'hard',level:null}}
 function startLocal(cfg){
@@ -756,24 +829,24 @@ function onGameOver(){
 }
 function showGameEnd(r,award){
   const S=G.S,tp=teamPoints(S),me=G.me;
-  let title=r===1?'Pobjeda!':r===.5?'Neriješeno':'Poraz';
+  let title=r===1?TR('Pobjeda!'):r===.5?TR('Neriješeno'):TR('Poraz');
   let line;
   if(S.N===4){const mt=me%2;line=tp[mt]+' <span>–</span> '+tp[1-mt]}
   else if(S.N===2)line=tp[me]+' <span>–</span> '+tp[1-me];
   else line=S.pts.map((p,i)=>(i===me?'<b>'+p+'</b>':p)).join(' <span>·</span> ');
-  let sub=(S.forfeit!=null?esc(seatName(S.forfeit))+' je napustio igru. ':'')+(award?'+'+award+' bodova na rang listi':'');
+  let sub=(S.forfeit!=null?esc(seatName(S.forfeit))+TR(' je napustio igru. '):'')+(award?'+'+award+TR(' bodova na rang listi'):'');
   const R=G.R,online=G.mode==='online';
   let seriesHtml='';
   if(online&&R){
     const tw=R.wins||[],names=teamNames();
-    seriesHtml='<p>Meč do '+R.target+' '+(R.target===1?'pobjede':'pobjede')+': '+names.map((n,i)=>esc(n)+' '+(tw[i]||0)).join(' · ')+'</p>';
-    if(R.status==='done'){const wt=(R.wins||[]).findIndex(x=>x>=R.target);title=wt===(S.N===4?me%2:me)?'Meč je tvoj!':'Meč je gotov';}
+    seriesHtml=TR('<p>Meč do ')+R.target+' '+(R.target===1?TR('pobjede'):TR('pobjede'))+': '+names.map((n,i)=>esc(n)+' '+(tw[i]||0)).join(' · ')+'</p>';
+    if(R.status==='done'){const wt=(R.wins||[]).findIndex(x=>x>=R.target);title=wt===(S.N===4?me%2:me)?TR('Meč je tvoj!'):TR('Meč je gotov');}
   }
   $('panel').innerHTML='<h2>'+title+'</h2><div class="final">'+line+'</div>'+(sub?'<p>'+sub+'</p>':'')+seriesHtml+
     '<div class="acts">'+
-    (online?(R&&R.status==='playing'?'<button class="btn primary" id="endNext">Sljedeća partija</button>':'')+(R&&R.tour?'<button class="btn" id="endTour">Na turnir</button>':'')
-            :'<button class="btn primary" id="endNext">Nova partija</button>')+
-    '<button class="btn" id="endMenu">Izbornik</button></div>';
+    (online?(R&&R.status==='playing'?TR('<button class="btn primary" id="endNext">Sljedeća partija</button>'):'')+(R&&R.tour?TR('<button class="btn" id="endTour">Na turnir</button>'):'')
+            :TR('<button class="btn primary" id="endNext">Nova partija</button>'))+
+    TR('<button class="btn" id="endMenu">Izbornik</button></div>');
   $('overlay').hidden=false;
   const n=$('endNext');if(n){n.onclick=()=>{if(online)nextGameOnline();else{$('overlay').hidden=true;setState(newDeal(G.cfg,(G.S.starter+1)%G.S.N,1))}};n.focus()}
   const t=$('endTour');if(t)t.onclick=()=>{const tid=G.R.tour.tid;show('tour');openTour(tid)};
@@ -781,8 +854,8 @@ function showGameEnd(r,award){
 }
 function teamNames(){
   const S=G.S||{N:G.R?G.R.N:2},me=Math.max(0,G.me);
-  if(S.N===4)return me%2===0?['Mi','Vi']:['Vi','Mi'];
-  return G.seats.map((s,i)=>i===G.me?'Ti':(s?s.name:'—'));
+  if(S.N===4)return me%2===0?[TR('Mi'),TR('Vi')]:[TR('Vi'),TR('Mi')];
+  return G.seats.map((s,i)=>i===G.me?TR('Ti'):(s?s.name:'—'));
 }
 
 /* ---- sizing & rendering ---- */
@@ -814,8 +887,8 @@ function sizeCards(force){
 }
 addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(()=>{sizeCards(true);drawScene()},120)});
 function relPos(seat){const N=G.S.N,me=Math.max(0,G.me),r=(seat-me+N)%N;if(r===0)return 'b';if(N===2)return 't';if(N===3)return r===1?'r':'l';return ['b','r','t','l'][r]}
-function faceEl(c,tag){const el=document.createElement(tag||'div');el.className='card';el.style.backgroundImage='url("'+IMG[ID[c]]+'")';el.setAttribute('aria-label',NAME[c]);el.title=NAME[c]+(PT[c]?' · '+PT[c]+' bod.':'');return el}
-function seatName(s){if(s===G.me)return 'Ti';const st=G.seats[s];return st?st.name:'—'}
+function faceEl(c,tag){const el=document.createElement(tag||'div');el.className='card';el.style.backgroundImage='url("'+IMG[ID[c]]+'")';el.setAttribute('aria-label',NAME[c]);el.title=NAME[c]+(PT[c]?' · '+PT[c]+TR(' bod.'):'');return el}
+function seatName(s){if(s===G.me)return TR('Ti');const st=G.seats[s];return st?st.name:'—'}
 function render(){
   if(!G||!G.S)return;
   const S=G.S,N=S.N,me=Math.max(0,G.me),vis=pointsVisible(S);
@@ -823,10 +896,10 @@ function render(){
   const ch=$('scoreChips');ch.innerHTML='';
   const tp=teamPoints(S);
   const mk=(label,val,cls)=>{const c=document.createElement('span');c.className='chip '+(cls||'');c.innerHTML=esc(label)+' <b>'+(vis?val:'?')+'</b>';ch.appendChild(c)};
-  if(N===4){const mt=me%2;mk('Mi',tp[mt],mt?'tB':'tA');mk('Vi',tp[1-mt],mt?'tA':'tB')}
-  else for(let i=0;i<N;i++){const s=(me+i)%N;mk(i===0?'Ti':seatName(s),S.pts[s])}
+  if(N===4){const mt=me%2;mk(TR('Mi'),tp[mt],mt?'tB':'tA');mk(TR('Vi'),tp[1-mt],mt?'tA':'tB')}
+  else for(let i=0;i<N;i++){const s=(me+i)%N;mk(i===0?TR('Ti'):seatName(s),S.pts[s])}
   const sc=$('seriesChip');
-  if(G.mode==='online'&&G.R&&G.R.target>1){sc.hidden=false;sc.textContent='Meč '+(G.R.wins||[]).join('–')+' (do '+G.R.target+')'}else sc.hidden=true;
+  if(G.mode==='online'&&G.R&&G.R.target>1){sc.hidden=false;sc.textContent=TR('Meč ')+(G.R.wins||[]).join('–')+TR(' (do ')+G.R.target+')'}else sc.hidden=true;
   // opponents row
   const op=$('opps');op.innerHTML='';op.className='opps n'+N;
   const order=N===2?[(me+1)%2]:N===3?[(me+2)%3,(me+1)%3]:[(me+3)%4,(me+2)%4,(me+1)%4];
@@ -835,7 +908,7 @@ function render(){
     const st=G.seats[s]||{name:'—'},d=document.createElement('div');
     d.className='opp'+(s===toPlay?' turn':'')+(N===4?(s%2===me%2?' tA':' tB'):'');
     const partner=N===4&&s===(me+2)%4;
-    const sub=(partner?'Partner · ':'')+(st.bot?'Bot, '+(DIFF_N[st.diff]||''):(st.level?'Razina '+st.level:''))+(vis&&N!==4?' · '+S.pts[s]+' b.':'');
+    const sub=(partner?TR('Partner · '):'')+(st.bot?TR('Bot, ')+(DIFF_N[st.diff]||''):(st.level?TR('Razina ')+st.level:''))+(vis&&N!==4?' · '+S.pts[s]+' b.':'');
     d.innerHTML='<div class="badge"><img alt="" src="'+avSrc(st)+'"><span class="bt"><b>'+esc(st.name||'—')+'</b><small>'+esc(sub)+'</small></span></div><div class="minis"></div>';
     const mi=d.querySelector('.minis');
     const showFaces=partner&&revealActive(S)&&G.me>=0;
@@ -850,7 +923,7 @@ function render(){
       for(let i=0;i<layers;i++){const b=document.createElement('div');b.className='card back';b.style.transform='translate('+(-i*1.5)+'px,'+(-i*1.5)+'px)';st.appendChild(b)}dz.appendChild(st)}
     const n=document.createElement('div');n.className='deck-count';n.textContent=S.deck.length;dz.appendChild(n);
   }
-  const lab=document.createElement('div');lab.className='trump-label';lab.innerHTML='Briškula: <b>'+SUIT_N[S.ts]+'</b>';dz.appendChild(lab);
+  const lab=document.createElement('div');lab.className='trump-label';lab.innerHTML=TR('Briškula: <b>')+SUIT_N[S.ts]+'</b>';dz.appendChild(lab);
   // table: one fixed slot per card of the trick, so nothing shifts when a card lands
   const tb=$('table'),total=S.N*S.k;
   if(tb.dataset.n!==String(total)){tb.innerHTML='';tb.dataset.n=total;
@@ -883,7 +956,7 @@ function render(){
   want.forEach((c,i)=>{
     let b=have.get(String(c));
     if(!b){b=faceEl(c,'button');b.type='button';b.dataset.c=c;b.onclick=()=>humanPlay(c);
-      if(SUIT[c]===S.ts){b.classList.add('trumpcard');b.title+=' · briškula'}
+      if(SUIT[c]===S.ts){b.classList.add('trumpcard');b.title+=TR(' · briškula')}
       if(G.anim.drawn.has(c))b.classList.add('drawn')}
     b.disabled=!canPlay;
     if(mh.children[i]!==b)mh.insertBefore(b,mh.children[i]||null);
@@ -895,28 +968,28 @@ function render(){
 }
 function statusHTML(toPlay){
   const S=G.S;
-  if(G.mode==='online'&&G.R&&G.R.status==='lobby')return 'Čeka se početak igre.';
-  if(S.phase==='over')return 'Partija je gotova.';
+  if(G.mode==='online'&&G.R&&G.R.status==='lobby')return TR('Čeka se početak igre.');
+  if(S.phase==='over')return TR('Partija je gotova.');
   const T=S.table.map(x=>x.c);
-  const who=s=>s===G.me?'Ti':(S.N===4&&G.me>=0&&s===(G.me+2)%4?'Partner ('+esc(seatName(s))+')':esc(seatName(s)));
-  if(S.phase==='resolve'){const w=trickWinner(S);return (w===G.me?'Nosiš ti':who(w)+' nosi')+' <em>+'+sumPts(T)+'</em>'}
+  const who=s=>s===G.me?TR('Ti'):(S.N===4&&G.me>=0&&s===(G.me+2)%4?TR('Partner (')+esc(seatName(s))+')':esc(seatName(s)));
+  if(S.phase==='resolve'){const w=trickWinner(S);return (w===G.me?TR('Nosiš ti'):who(w)+TR(' nosi'))+' <em>+'+sumPts(T)+'</em>'}
   let s='';
   if(!S.table.length){
-    if(S.last)s+=(S.last.w===G.me?'Ti si nosio':who(S.last.w)+' je nosio')+' <em>+'+S.last.pts+'</em>. ';
-    else s+='Briškula je <em>'+SUIT_N[S.ts]+'</em>. ';
-    if(S.last&&!S.deck.length&&S.hands[toPlay]&&S.hands[toPlay].length===S.hs)s+=(S.N===4?'Špil je prazan, partneri vide karte. ':'Špil je prazan. ');
+    if(S.last)s+=(S.last.w===G.me?TR('Ti si nosio'):who(S.last.w)+TR(' je nosio'))+' <em>+'+S.last.pts+'</em>. ';
+    else s+=TR('Briškula je <em>')+SUIT_N[S.ts]+'</em>. ';
+    if(S.last&&!S.deck.length&&S.hands[toPlay]&&S.hands[toPlay].length===S.hs)s+=(S.N===4?TR('Špil je prazan, partneri vide karte. '):TR('Špil je prazan. '));
   }else{
-    const l=S.table[S.table.length-1];if(l.p!==G.me)s+=who(l.p)+' baca <em>'+NAME[l.c]+'</em>. ';
+    const l=S.table[S.table.length-1];if(l.p!==G.me)s+=who(l.p)+TR(' baca <em>')+NAME[l.c]+'</em>. ';
   }
-  if(toPlay===G.me)s+=S.table.length?'Tvoj potez.':'Ti igraš prvi.';
-  else{const st=G.seats[toPlay];s+=st&&st.bot?'<span class="thinking">'+esc(st.name)+' razmišlja</span>':'Čeka se '+who(toPlay)+'…'}
+  if(toPlay===G.me)s+=S.table.length?TR('Tvoj potez.'):TR('Ti igraš prvi.');
+  else{const st=G.seats[toPlay];s+=st&&st.bot?'<span class="thinking">'+esc(st.name)+TR(' razmišlja</span>'):TR('Čeka se ')+who(toPlay)+'…'}
   return s;
 }
 $('gMenu').onclick=()=>{
   const online=G&&G.mode==='online';
-  $('panel').innerHTML='<h2>Igra</h2><div class="acts">'+
-    (online?'<button class="btn" id="gmLink">Kopiraj poveznicu sobe</button>':'<button class="btn" id="gmNew">Nova partija</button>')+
-    '<button class="btn" id="gmRules">Pravila</button><button class="btn" id="gmLeave">'+(online?'Napusti sobu':'Izađi u izbornik')+'</button><button class="btn primary" id="gmClose">Nastavi igru</button></div>';
+  $('panel').innerHTML=TR('<h2>Igra</h2><div class="acts">')+
+    (online?TR('<button class="btn" id="gmLink">Kopiraj poveznicu sobe</button>'):TR('<button class="btn" id="gmNew">Nova partija</button>'))+
+    TR('<button class="btn" id="gmRules">Pravila</button><button class="btn" id="gmLeave">')+(online?TR('Napusti sobu'):TR('Izađi u izbornik'))+TR('</button><button class="btn primary" id="gmClose">Nastavi igru</button></div>');
   $('overlay').hidden=false;
   $('gmClose').onclick=()=>{$('overlay').hidden=true};
   $('gmRules').onclick=()=>{$('overlay').hidden=true;showRulesPanel()};
@@ -924,7 +997,7 @@ $('gMenu').onclick=()=>{
   if($('gmLink'))$('gmLink').onclick=()=>copyRoomLink();
   $('gmLeave').onclick=()=>{$('overlay').hidden=true;online?leaveRoom():show('home')};
 };
-function showRulesPanel(){$('panel').innerHTML='<h2>Pravila</h2>'+$('scr-rules').querySelector('.rules').outerHTML+'<div class="acts"><button class="btn primary" id="rpClose">Natrag na igru</button></div>';$('overlay').hidden=false;$('rpClose').onclick=()=>{$('overlay').hidden=true}}
+function showRulesPanel(){$('panel').innerHTML=TR('<h2>Pravila</h2>')+$('scr-rules').querySelector('.rules').outerHTML+TR('<div class="acts"><button class="btn primary" id="rpClose">Natrag na igru</button></div>');$('overlay').hidden=false;$('rpClose').onclick=()=>{$('overlay').hidden=true}}
 function confirmLeaveGame(){if(G&&G.mode==='online')$('gMenu').click();else show('home')}
 function leaveGameView(){if(G&&G.mode==='local')saveLocalGame(true);gClear();stopWatch('room');clearInterval(window.__wd);G=null;$('overlay').hidden=true;$('meHand').innerHTML='';$('table').innerHTML='';$('table').dataset.n=''}
 
@@ -932,20 +1005,20 @@ function leaveGameView(){if(G&&G.mode==='local')saveLocalGame(true);gClear();sto
 let roomCfg=Object.assign({N:2,duplo:true,show:'always',target:1},store('brisk-roomcfg')||{});
 const nTeams=N=>N===4?2:N;
 function openLobby(){
-  gameOptionsForm($('roomForm'),roomCfg,el=>seg(el,'target','Meč do',[[1,'1 pobjede'],[2,'2 pobjede'],[3,'3 pobjede']],roomCfg));
+  gameOptionsForm($('roomForm'),roomCfg,el=>seg(el,'target',TR('Meč do'),[[1,TR('1 pobjede')],[2,TR('2 pobjede')],[3,TR('3 pobjede')]],roomCfg));
   stopWatch('rooms');
   unsubs.rooms=Cloud.watchQuery('rooms',{where:['status','==','lobby'],limit:60},list=>{
     const el=$('roomList');
-    if(!list){el.innerHTML='<p class="empty">Sobe se ne mogu učitati.</p>';return}
+    if(!list){el.innerHTML=TR('<p class="empty">Sobe se ne mogu učitati.</p>');return}
     const now=Date.now();list=list.filter(r=>now-(r.updatedAt||0)<3*3600e3).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
-    if(!list.length){el.innerHTML='<p class="empty">Nema otvorenih soba. Otvori svoju i pošalji poveznicu.</p>';return}
+    if(!list.length){el.innerHTML=TR('<p class="empty">Nema otvorenih soba. Otvori svoju i pošalji poveznicu.</p>');return}
     el.innerHTML='';
     for(const r of list){
       const filled=r.seats.filter(Boolean).length,host=r.seats.find(s=>s&&s.uid===r.hostUid)||r.seats.find(Boolean)||{};
       const mine=r.seats.some(s=>s&&s.uid===Cloud.uid);
       const row=document.createElement('div');row.className='row';
-      row.innerHTML='<img class="av" alt="" src="'+avSrc(host)+'"><div class="grow"><b>'+esc(r.name)+'</b><small>'+r.N+' igrača'+(r.N===2?(r.duplo?' · na duplo':' · klasično'):'')+(r.target>1?' · do '+r.target+' pobjede':'')+'</small></div><span class="pill">'+filled+'/'+r.N+'</span>';
-      const b=document.createElement('button');b.className='btn small primary';b.textContent=mine?'Uđi':'Pridruži se';b.disabled=!mine&&filled>=r.N;b.onclick=()=>joinRoom(r.id);
+      row.innerHTML='<img class="av" alt="" src="'+avSrc(host)+'"><div class="grow"><b>'+esc(r.name)+'</b><small>'+r.N+TR(' igrača')+(r.N===2?(r.duplo?TR(' · na duplo'):TR(' · klasično')):'')+(r.target>1?TR(' · do ')+r.target+TR(' pobjede'):'')+'</small></div><span class="pill">'+filled+'/'+r.N+'</span>';
+      const b=document.createElement('button');b.className='btn small primary';b.textContent=mine?TR('Uđi'):TR('Pridruži se');b.disabled=!mine&&filled>=r.N;b.onclick=()=>joinRoom(r.id);
       row.appendChild(b);el.appendChild(row);
     }
   });
@@ -954,9 +1027,9 @@ $('roomCreate').onclick=async()=>{
   store('brisk-roomcfg',roomCfg);
   const id=Cloud.newId('rooms'),N=roomCfg.N;
   const seats=Array(N).fill(null);seats[0]=mySeatInfo();
-  const R={name:P.name+' – soba',N,duplo:N===2?!!roomCfg.duplo:false,show:roomCfg.show,target:roomCfg.target,status:'lobby',hostUid:Cloud.uid,seats,
+  const R={name:P.name+TR(' – soba'),N,duplo:N===2?!!roomCfg.duplo:false,show:roomCfg.show,target:roomCfg.target,status:'lobby',hostUid:Cloud.uid,seats,
     wins:Array(nTeams(N)).fill(0),Sj:null,tour:null,createdAt:Date.now(),updatedAt:Date.now()};
-  try{await Cloud.set('rooms/'+id,R);openRoom(id)}catch(e){toast('Soba se ne može otvoriti. Pokušaj ponovno.')}
+  try{await Cloud.set('rooms/'+id,R);openRoom(id)}catch(e){toast(TR('Soba se ne može otvoriti. Pokušaj ponovno.'))}
 };
 async function joinRoom(id){
   try{
@@ -968,8 +1041,8 @@ async function joinRoom(id){
       R.seats[i]=mySeatInfo();R.updatedAt=Date.now();set('rooms/'+id,R);return 'in';
     });
     if(ok==='in')openRoom(id);
-    else toast(ok==='gone'?'Ta soba više ne postoji.':ok==='full'?'Soba je puna.':'Igra u toj sobi je već počela.');
-  }catch(e){toast('Ne mogu ući u sobu. Pokušaj ponovno.')}
+    else toast(ok==='gone'?TR('Ta soba više ne postoji.'):ok==='full'?TR('Soba je puna.'):TR('Igra u toj sobi je već počela.'));
+  }catch(e){toast(TR('Ne mogu ući u sobu. Pokušaj ponovno.'))}
 }
 function openRoom(id){
   gClear();stopWatch('room');
@@ -987,11 +1060,11 @@ function openRoom(id){
 function onRoom(R){
   if(!G||G.mode!=='online')return;
   if(R===undefined)return;
-  if(!R){toast('Soba je zatvorena.');show('lobby');return}
+  if(!R){toast(TR('Soba je zatvorena.'));show('lobby');return}
   const prevStatus=G.R&&G.R.status;
   G.R=R;G.seats=R.seats.map(s=>s||null);G.me=R.seats.findIndex(s=>s&&s.uid===Cloud.uid);
   if(R.status==='lobby'){gClear();G.S=null;renderWaiting();return}
-  if(R.status==='closed'){endBeat(true);toast('Soba je zatvorena.');show('lobby');return}
+  if(R.status==='closed'){endBeat(true);toast(TR('Soba je zatvorena.'));show('lobby');return}
   if(R.status==='playing'&&G.me>=0)startBeat(G.roomId);
   if(R.status==='done'&&startBeat.room===G.roomId)endBeat(true);
   const pk=R.seats.map(s=>s&&!s.bot?s.uid:'').join(',');if(pk!==G.presKey){G.presKey=pk;watchPresence()}
@@ -1006,17 +1079,17 @@ function onRoom(R){
 function renderWaiting(){
   const R=G.R,host=R.hostUid===Cloud.uid;
   G.waitingShown=true;
-  let h='<h2>'+esc(R.name)+'</h2><p>'+R.N+' igrača'+(R.N===2?(R.duplo?', na duplo':', klasično'):'')+(R.N===4?', 2 na 2 (suigrači su mjesta 1 i 3, te 2 i 4)':'')+(R.target>1?', meč do '+R.target+' pobjede':'')+'</p><div class="seats">';
+  let h='<h2>'+esc(R.name)+'</h2><p>'+R.N+TR(' igrača')+(R.N===2?(R.duplo?TR(', na duplo'):TR(', klasično')):'')+(R.N===4?TR(', 2 na 2 (suigrači su mjesta 1 i 3, te 2 i 4)'):'')+(R.target>1?TR(', meč do ')+R.target+TR(' pobjede'):'')+'</p><div class="seats">';
   R.seats.forEach((s,i)=>{
     h+='<div class="seatrow"><span class="pill'+(R.N===4?(i%2?' red':' blue'):'')+'">'+(i+1)+'</span>';
-    if(s)h+='<img class="av" alt="" src="'+avSrc(s)+'"><div class="grow"><b>'+esc(s.name)+(s.uid===Cloud.uid?' (ti)':'')+'</b><small>'+(s.bot?'Bot, '+DIFF_N[s.diff||'hard']:s.uid===R.hostUid?'Domaćin':'Igrač')+'</small></div>'+(host&&s.bot?'<button class="btn small" data-rm="'+i+'">Ukloni</button>':'');
-    else h+='<div class="grow"><small>Slobodno mjesto</small></div><button class="btn small ghost" data-mv="'+i+'">Sjedni</button>'+(host?'<button class="btn small" data-bot="'+i+'">Bot</button>':'');
+    if(s)h+='<img class="av" alt="" src="'+avSrc(s)+'"><div class="grow"><b>'+esc(s.name)+(s.uid===Cloud.uid?TR(' (ti)'):'')+'</b><small>'+(s.bot?TR('Bot, ')+DIFF_N[s.diff||'hard']:s.uid===R.hostUid?TR('Domaćin'):TR('Igrač'))+'</small></div>'+(host&&s.bot?'<button class="btn small" data-rm="'+i+TR('">Ukloni</button>'):'');
+    else h+=TR('<div class="grow"><small>Slobodno mjesto</small></div><button class="btn small ghost" data-mv="')+i+TR('">Sjedni</button>')+(host?'<button class="btn small" data-bot="'+i+TR('">Bot</button>'):'');
     h+='</div>';
   });
   const full=R.seats.every(Boolean);
-  h+='</div><div class="acts"><button class="btn" id="wLink">Kopiraj poveznicu za prijatelje</button>'+
-    (host?'<button class="btn primary" id="wStart" '+(full?'':'disabled')+'>Kreni</button>'+(!full?'<button class="btn primary" id="wFill">Popuni botovima i kreni</button>':''):'<p>Čeka se da domaćin pokrene igru.</p>')+
-    '<button class="btn ghost" id="wLeave">Napusti sobu</button></div>';
+  h+=TR('</div><div class="acts"><button class="btn" id="wLink">Kopiraj poveznicu za prijatelje</button>')+
+    (host?'<button class="btn primary" id="wStart" '+(full?'':'disabled')+TR('>Kreni</button>')+(!full?TR('<button class="btn primary" id="wFill">Popuni botovima i kreni</button>'):''):TR('<p>Čeka se da domaćin pokrene igru.</p>'))+
+    TR('<button class="btn ghost" id="wLeave">Napusti sobu</button></div>');
   $('panel').innerHTML=h;$('overlay').hidden=false;
   $('wLink').onclick=copyRoomLink;$('wLeave').onclick=leaveRoom;
   if($('wStart'))$('wStart').onclick=()=>startRoom(false);
@@ -1024,12 +1097,12 @@ function renderWaiting(){
   $('panel').querySelectorAll('[data-bot]').forEach(b=>b.onclick=()=>roomSeat(+b.dataset.bot,'bot'));
   $('panel').querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>roomSeat(+b.dataset.mv,'move'));
   $('panel').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>roomSeat(+b.dataset.rm,null));
-  $('status').textContent='Čeka se početak igre.';$('opps').innerHTML='';$('table').innerHTML='';$('meHand').innerHTML='';$('deckzone').innerHTML='';$('scoreChips').innerHTML='';
+  $('status').textContent=TR('Čeka se početak igre.');$('opps').innerHTML='';$('table').innerHTML='';$('meHand').innerHTML='';$('deckzone').innerHTML='';$('scoreChips').innerHTML='';
 }
 function copyRoomLink(){
   const url=location.origin+location.pathname+'#soba='+G.roomId;
-  const done=()=>toast('Poveznica je kopirana. Pošalji je prijateljima.');
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(done,()=>prompt('Kopiraj poveznicu:',url));else prompt('Kopiraj poveznicu:',url);
+  const done=()=>toast(TR('Poveznica je kopirana. Pošalji je prijateljima.'));
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(done,()=>prompt(TR('Kopiraj poveznicu:'),url));else prompt(TR('Kopiraj poveznicu:'),url);
 }
 async function roomSeat(i,what){
   const used=new Set(G.R.seats.filter(Boolean).map(s=>s.name));const name=shuffle(BOT_NAMES.filter(n=>!used.has(n)))[0];
@@ -1037,7 +1110,7 @@ async function roomSeat(i,what){
     if(what==='bot'&&!R.seats[i])R.seats[i]={uid:null,name,avatar:null,bot:true,diff:'hard',level:null};
     if(what===null&&R.seats[i]&&R.seats[i].bot)R.seats[i]=null;
     if(what==='move'&&!R.seats[i]){const j=R.seats.findIndex(s=>s&&s.uid===Cloud.uid);if(j>=0){R.seats[i]=R.seats[j];R.seats[j]=null}}
-    R.updatedAt=Date.now();set('rooms/'+G.roomId,R)}).catch(()=>toast('Promjena nije spremljena.'));
+    R.updatedAt=Date.now();set('rooms/'+G.roomId,R)}).catch(()=>toast(TR('Promjena nije spremljena.')));
 }
 async function startRoom(fill){
   await Cloud.txn(async(get,set)=>{const R=await get('rooms/'+G.roomId);if(!R||R.status!=='lobby')return;
@@ -1046,7 +1119,7 @@ async function startRoom(fill){
     if(!R.seats.every(Boolean))return;
     const old=R.Sj?JSON.parse(R.Sj):null;
     R.Sj=JSON.stringify(newDeal({N:R.N,duplo:R.duplo,show:R.show},(Math.random()*R.N)|0,old?old.rev+1:1));
-    R.status='playing';R.updatedAt=Date.now();set('rooms/'+G.roomId,R)}).catch(()=>toast('Igra se ne može pokrenuti.'));
+    R.status='playing';R.updatedAt=Date.now();set('rooms/'+G.roomId,R)}).catch(()=>toast(TR('Igra se ne može pokrenuti.')));
 }
 async function commitOnline(nS){
   const base=G.S,id=G.roomId;G.pending=true;render();
@@ -1091,37 +1164,37 @@ async function leaveRoom(){
   const playing=G&&G.R&&G.R.status==='playing'&&G.S&&G.S.phase!=='over';
   endBeat(!playing);
   try{history.replaceState(null,'',location.pathname)}catch(e){}
-  if(playing){show('home');toast('Imaš 1 minutu da se vratiš u igru.')}else show(G&&G.R&&G.R.tour?'tours':'lobby');
+  if(playing){show('home');toast(TR('Imaš 1 minutu da se vratiš u igru.'))}else show(G&&G.R&&G.R.tour?'tours':'lobby');
 }
 
 /* ================= tournaments ================= */
 let tourCfg=Object.assign({size:8,target:1,duplo:true},store('brisk-tourcfg')||{});
-const ROUND_N=n=>({2:'Finale',4:'Polufinale',8:'Četvrtfinale',16:'Osmina finala',32:'Šesnaestina finala'}[n]||'Kolo');
+const ROUND_N=n=>({2:TR('Finale'),4:TR('Polufinale'),8:TR('Četvrtfinale'),16:TR('Osmina finala'),32:TR('Šesnaestina finala')}[n]||TR('Kolo'));
 function openTours(){
-  const f=$('tourForm');f.innerHTML='<label class="field">Naziv turnira<input id="tName" maxlength="32" placeholder="npr. Kup Konobe"></label>';
-  seg(f,'size','Broj igrača',[[4,'4'],[8,'8'],[16,'16'],[32,'32']],tourCfg);
-  seg(f,'target','Meč do',[[1,'1 pobjede'],[2,'2 pobjede'],[3,'3 pobjede']],tourCfg);
-  seg(f,'duplo','Način',[[true,'Na duplo'],[false,'Klasično']],tourCfg);
+  const f=$('tourForm');f.innerHTML=TR('<label class="field">Naziv turnira<input id="tName" maxlength="32" placeholder="npr. Kup Konobe"></label>');
+  seg(f,'size',TR('Broj igrača'),[[4,'4'],[8,'8'],[16,'16'],[32,'32']],tourCfg);
+  seg(f,'target',TR('Meč do'),[[1,TR('1 pobjede')],[2,TR('2 pobjede')],[3,TR('3 pobjede')]],tourCfg);
+  seg(f,'duplo',TR('Način'),[[true,TR('Na duplo')],[false,TR('Klasično')]],tourCfg);
   stopWatch('tours');
   unsubs.tours=Cloud.watchQuery('tournaments',{orderBy:['createdAt','desc'],limit:30},list=>{
-    const el=$('tourList');if(!list){el.innerHTML='<p class="empty">Turniri se ne mogu učitati.</p>';return}
-    if(!list.length){el.innerHTML='<p class="empty">Još nema turnira. Otvori prvi.</p>';return}
+    const el=$('tourList');if(!list){el.innerHTML=TR('<p class="empty">Turniri se ne mogu učitati.</p>');return}
+    if(!list.length){el.innerHTML=TR('<p class="empty">Još nema turnira. Otvori prvi.</p>');return}
     el.innerHTML='';
     for(const T of list){
       const row=document.createElement('div');row.className='row';
-      const st=T.status==='signup'?'<span class="pill green">Prijave '+T.entrants.length+'/'+T.size+'</span>':T.status==='running'?'<span class="pill">U tijeku</span>':'<span class="pill blue">Završen</span>';
-      row.innerHTML='<div class="grow"><b>'+esc(T.name)+'</b><small>'+T.size+' igrača · '+(T.duplo?'na duplo':'klasično')+' · meč do '+T.target+(T.status==='done'&&T.champion!=null?' · prvak: '+esc(T.entrants[T.champion].name):'')+'</small></div>'+st;
-      const b=document.createElement('button');b.className='btn small';b.textContent='Otvori';b.onclick=()=>{show('tour');openTour(T.id)};row.appendChild(b);el.appendChild(row);
+      const st=T.status==='signup'?TR('<span class="pill green">Prijave ')+T.entrants.length+'/'+T.size+'</span>':T.status==='running'?TR('<span class="pill">U tijeku</span>'):TR('<span class="pill blue">Završen</span>');
+      row.innerHTML='<div class="grow"><b>'+esc(T.name)+'</b><small>'+T.size+TR(' igrača · ')+(T.duplo?TR('na duplo'):TR('klasično'))+TR(' · meč do ')+T.target+(T.status==='done'&&T.champion!=null?TR(' · prvak: ')+esc(T.entrants[T.champion].name):'')+'</small></div>'+st;
+      const b=document.createElement('button');b.className='btn small';b.textContent=TR('Otvori');b.onclick=()=>{show('tour');openTour(T.id)};row.appendChild(b);el.appendChild(row);
     }
   });
 }
 $('tourCreate').onclick=async()=>{
   store('brisk-tourcfg',tourCfg);
-  const name=($('tName').value.trim()||('Turnir '+P.name)).slice(0,32);
+  const name=($('tName').value.trim()||(TR('Turnir ')+P.name)).slice(0,32);
   const id=Cloud.newId('tournaments');
   const T={name,size:tourCfg.size,target:tourCfg.target,duplo:tourCfg.duplo,status:'signup',createdBy:Cloud.uid,createdAt:Date.now(),
     entrants:[Object.assign(mySeatInfo(),{bot:false})],matches:[],round:0,champion:null,awarded:{}};
-  try{await Cloud.set('tournaments/'+id,T);show('tour');openTour(id)}catch(e){toast('Turnir se ne može otvoriti.')}
+  try{await Cloud.set('tournaments/'+id,T);show('tour');openTour(id)}catch(e){toast(TR('Turnir se ne može otvoriti.'))}
 };
 function seatFromEntrant(e){return e.bot?{uid:null,name:e.name,avatar:null,bot:true,diff:e.diff||'hard',level:null}:{uid:e.uid,name:e.name,avatar:e.avatar||null,level:e.level||1,bot:false}}
 function simulateSeries(target,duplo){ // bot vs bot: play real (fast) games
@@ -1163,34 +1236,34 @@ function tourRecord(T,tid,mi,winSeat,score){ // called inside a transaction with
 }
 let TOUR=null;
 function openTour(tid){
-  stopWatch('tour');$('scr-tour').innerHTML='<p class="empty">Učitavam…</p>';
-  unsubs.tour=Cloud.watch('tournaments/'+tid,T=>{if(T===undefined)return;if(!T){$('scr-tour').innerHTML='<p class="empty">Turnir ne postoji.</p>';return}TOUR=Object.assign({id:tid},T);renderTour();maybeAward()});
+  stopWatch('tour');$('scr-tour').innerHTML=TR('<p class="empty">Učitavam…</p>');
+  unsubs.tour=Cloud.watch('tournaments/'+tid,T=>{if(T===undefined)return;if(!T){$('scr-tour').innerHTML=TR('<p class="empty">Turnir ne postoji.</p>');return}TOUR=Object.assign({id:tid},T);renderTour();maybeAward()});
 }
 function renderTour(){
   const T=TOUR,el=$('scr-tour'),me=Cloud.uid;
   const myIdx=T.entrants.findIndex(e=>e.uid===me);
-  let h='<h2>'+esc(T.name)+'</h2><p class="fine" style="margin-top:-6px">'+T.size+' igrača · '+(T.duplo?'na duplo':'klasično')+' · meč do '+T.target+' pobjede · prvak dobiva '+T.size*5+' bodova</p>';
-  if(T.status==='done'&&T.champion!=null){const c=T.entrants[T.champion];h+='<div class="notice"><span><b>Prvak: '+esc(c.name)+'</b>'+(c.uid===me?' (to si ti!)':'')+'</span></div>'}
+  let h='<h2>'+esc(T.name)+'</h2><p class="fine" style="margin-top:-6px">'+T.size+TR(' igrača · ')+(T.duplo?TR('na duplo'):TR('klasično'))+TR(' · meč do ')+T.target+TR(' pobjede · prvak dobiva ')+T.size*5+TR(' bodova</p>');
+  if(T.status==='done'&&T.champion!=null){const c=T.entrants[T.champion];h+=TR('<div class="notice"><span><b>Prvak: ')+esc(c.name)+'</b>'+(c.uid===me?TR(' (to si ti!)'):'')+'</span></div>'}
   if(T.status==='signup'){
-    h+='<div class="card-box"><h3>Prijavljeni ('+T.entrants.length+'/'+T.size+')</h3><div class="list">';
-    T.entrants.forEach(e=>{h+='<div class="row"><img class="av" alt="" src="'+avSrc(e)+'"><div class="grow"><b>'+esc(e.name)+(e.uid===me?' (ti)':'')+'</b><small>Razina '+(e.level||1)+'</small></div></div>'});
-    h+='</div><p class="fine">Prazna mjesta popunit će botovi kad organizator pokrene turnir.</p><div class="acts" style="display:grid;gap:8px">';
-    if(myIdx<0&&T.entrants.length<T.size)h+='<button class="btn primary" id="tJoin">Prijavi se</button>';
-    if(myIdx>=0&&T.createdBy!==me)h+='<button class="btn" id="tLeave">Odjavi se</button>';
-    if(T.createdBy===me)h+='<button class="btn primary" id="tStart">Pokreni turnir'+(T.entrants.length<T.size?' (botovi popune '+(T.size-T.entrants.length)+')':'')+'</button>';
-    h+='<button class="btn" id="tLink">Kopiraj poveznicu turnira</button></div></div>';
+    h+=TR('<div class="card-box"><h3>Prijavljeni (')+T.entrants.length+'/'+T.size+')</h3><div class="list">';
+    T.entrants.forEach(e=>{h+='<div class="row"><img class="av" alt="" src="'+avSrc(e)+'"><div class="grow"><b>'+esc(e.name)+(e.uid===me?TR(' (ti)'):'')+TR('</b><small>Razina ')+(e.level||1)+'</small></div></div>'});
+    h+=TR('</div><p class="fine">Prazna mjesta popunit će botovi kad organizator pokrene turnir.</p><div class="acts" style="display:grid;gap:8px">');
+    if(myIdx<0&&T.entrants.length<T.size)h+=TR('<button class="btn primary" id="tJoin">Prijavi se</button>');
+    if(myIdx>=0&&T.createdBy!==me)h+=TR('<button class="btn" id="tLeave">Odjavi se</button>');
+    if(T.createdBy===me)h+=TR('<button class="btn primary" id="tStart">Pokreni turnir')+(T.entrants.length<T.size?TR(' (botovi popune ')+(T.size-T.entrants.length)+')':'')+'</button>';
+    h+=TR('<button class="btn" id="tLink">Kopiraj poveznicu turnira</button></div></div>');
   }
   if(T.matches.length){
     const mine=T.matches.find(m=>m.r===T.round&&m.w==null&&m.room&&(T.entrants[m.a].uid===me||T.entrants[m.b].uid===me));
-    if(mine&&T.status==='running')h+='<div class="notice"><span><b>Tvoj meč je spreman.</b> '+esc(ROUND_N(T.size>>T.round))+'</span><button class="btn primary small" id="tPlay">Igraj</button></div>';
-    h+='<h3 class="sec">Ždrijeb</h3><div class="bracket">';
+    if(mine&&T.status==='running')h+=TR('<div class="notice"><span><b>Tvoj meč je spreman.</b> ')+esc(ROUND_N(T.size>>T.round))+TR('</span><button class="btn primary small" id="tPlay">Igraj</button></div>');
+    h+=TR('<h3 class="sec">Ždrijeb</h3><div class="bracket">');
     const rounds=Math.log2(T.size);
     for(let r=0;r<rounds;r++){
       const ms=T.matches.filter(m=>m.r===r);
       h+='<div class="round"><h4>'+ROUND_N(T.size>>r)+'</h4>';
       if(!ms.length){for(let i=0;i<(T.size>>(r+1));i++)h+='<div class="match"><div class="p"><span>—</span></div><div class="p"><span>—</span></div></div>'}
       for(const m of ms){const A=T.entrants[m.a],B=T.entrants[m.b],my=A.uid===me||B.uid===me;
-        const pl=(E,idx,si)=>'<div class="p'+(m.w===idx?' w':'')+'"><span>'+esc(E.name)+(E.uid===me?' (ti)':'')+'</span><span>'+(m.score?m.score[si]:(m.room&&m.w==null?'•':''))+'</span></div>';
+        const pl=(E,idx,si)=>'<div class="p'+(m.w===idx?' w':'')+'"><span>'+esc(E.name)+(E.uid===me?TR(' (ti)'):'')+'</span><span>'+(m.score?m.score[si]:(m.room&&m.w==null?'•':''))+'</span></div>';
         h+='<div class="match'+(my?' mine':'')+'">'+pl(A,m.a,0)+pl(B,m.b,1)+'</div>'}
       h+='</div>';
     }
@@ -1199,7 +1272,7 @@ function renderTour(){
   el.innerHTML=h;
   const on=(id,fn)=>{const b=$(id);if(b)b.onclick=fn};
   on('tJoin',()=>tourSignup(true));on('tLeave',()=>tourSignup(false));on('tStart',tourStart);
-  on('tLink',()=>{const url=location.origin+location.pathname+'#turnir='+T.id;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast('Poveznica turnira je kopirana.'),()=>prompt('Kopiraj poveznicu:',url))});
+  on('tLink',()=>{const url=location.origin+location.pathname+'#turnir='+T.id;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast(TR('Poveznica turnira je kopirana.')),()=>prompt(TR('Kopiraj poveznicu:'),url))});
   on('tPlay',()=>{const m=T.matches.find(m=>m.r===T.round&&m.w==null&&m.room&&(T.entrants[m.a].uid===me||T.entrants[m.b].uid===me));if(m)openRoom(m.room)});
 }
 async function tourSignup(join){
@@ -1209,7 +1282,7 @@ async function tourSignup(join){
     if(join){if(i>=0)return 'ok';if(T.entrants.length>=T.size)return 'full';T.entrants.push(Object.assign(mySeatInfo(),{bot:false}))}
     else{if(i<0)return 'ok';T.entrants.splice(i,1)}
     set('tournaments/'+tid,T);return 'ok'}).catch(()=>'err');
-  if(res!=='ok')toast(res==='full'?'Turnir je popunjen.':res==='closed'?'Prijave su zatvorene.':'Pokušaj ponovno.');
+  if(res!=='ok')toast(res==='full'?TR('Turnir je popunjen.'):res==='closed'?TR('Prijave su zatvorene.'):TR('Pokušaj ponovno.'));
 }
 async function tourStart(){
   const tid=TOUR.id;
@@ -1221,7 +1294,7 @@ async function tourStart(){
     T.round=0;T.status='running';
     const rooms=tourAdvance(T,tid);
     set('tournaments/'+tid,T);for(const r of rooms)set('rooms/'+r.id,r.data);
-  }).catch(e=>{console.warn(e);toast('Turnir se ne može pokrenuti.')});
+  }).catch(e=>{console.warn(e);toast(TR('Turnir se ne može pokrenuti.'))});
 }
 async function maybeAward(){
   const T=TOUR;if(!T||T.status!=='done'||T.champion==null||!Cloud.uid)return;
@@ -1233,7 +1306,7 @@ async function maybeAward(){
     if(!T2||(T2.awarded||{})[Cloud.uid])return false;T2.awarded=Object.assign({},T2.awarded,{[Cloud.uid]:true});
     pl.points=(pl.points||0)+pts;pl.tWins=(pl.tWins||0)+tw;pl.level=levelOf(pl.points);pl.name=P.name;pl.updatedAt=Date.now();
     set('tournaments/'+T.id,T2);set('players/'+Cloud.uid,pl);return true}).catch(()=>false);
-  if(ok){P.points+=pts;P.tWins=(P.tWins||0)+tw;saveLocalProfile();renderMe();toast((tw?'Osvojio si turnir! ':'Finale! ')+'+'+pts+' bodova')}
+  if(ok){P.points+=pts;P.tWins=(P.tWins||0)+tw;saveLocalProfile();renderMe();toast((tw?TR('Osvojio si turnir! '):TR('Finale! '))+'+'+pts+TR(' bodova'))}
 }
 function watchMyTournaments(){
   stopWatch('mytours');
@@ -1241,7 +1314,7 @@ function watchMyTournaments(){
     const n=$('homeNotice');if(!list){n.hidden=true;return}
     const me=Cloud.uid;const hit=list.find(T=>T.matches.some(m=>m.r===T.round&&m.w==null&&m.room&&(T.entrants[m.a].uid===me||T.entrants[m.b].uid===me)));
     if(!hit){n.hidden=true;return}
-    n.hidden=false;n.innerHTML='<span><b>Turnir „'+esc(hit.name)+'“:</b> tvoj meč je spreman.</span><button class="btn primary small" id="hnGo">Otvori</button>';
+    n.hidden=false;n.innerHTML=TR('<span><b>Turnir „')+esc(hit.name)+TR('“:</b> tvoj meč je spreman.</span><button class="btn primary small" id="hnGo">Otvori</button>');
     $('hnGo').onclick=()=>{show('tour');openTour(hit.id)};
   });
 }
@@ -1249,14 +1322,14 @@ function watchMyTournaments(){
 /* ================= leaderboard ================= */
 function openLead(){
   stopWatch('lead');
-  const tb=$('leadTable').querySelector('tbody');tb.innerHTML='<tr><td colspan="6" class="n">Učitavam…</td></tr>';
+  const tb=$('leadTable').querySelector('tbody');tb.innerHTML=TR('<tr><td colspan="6" class="n">Učitavam…</td></tr>');
   unsubs.lead=Cloud.watchQuery('players',{orderBy:['points','desc'],limit:100},list=>{
-    if(!list){tb.innerHTML='<tr><td colspan="6" class="n">Rang lista se ne može učitati.</td></tr>';return}
+    if(!list){tb.innerHTML=TR('<tr><td colspan="6" class="n">Rang lista se ne može učitati.</td></tr>');return}
     tb.innerHTML='';
     list.forEach((p,i)=>{const tr=document.createElement('tr');if(p.id===Cloud.uid)tr.className='me';
-      tr.innerHTML='<td class="n">'+(i+1)+'</td><td><span class="who"><img class="av" alt="" src="'+avSrc(p)+'">'+esc(p.name||'Igrač')+(p.registered?'':' <span class="pill grey">gost</span>')+'</span></td><td><span class="pill">'+levelOf(p.points||0)+'</span></td><td class="hide-s">'+(p.games||0)+'</td><td>'+(p.wins||0)+'</td><td><b>'+(p.points||0)+'</b></td>';
+      tr.innerHTML='<td class="n">'+(i+1)+'</td><td><span class="who"><img class="av" alt="" src="'+avSrc(p)+'">'+esc(p.name||TR('Igrač'))+(p.registered?'':TR(' <span class="pill grey">gost</span>'))+'</span></td><td><span class="pill">'+levelOf(p.points||0)+'</span></td><td class="hide-s">'+(p.games||0)+'</td><td>'+(p.wins||0)+'</td><td><b>'+(p.points||0)+'</b></td>';
       tb.appendChild(tr)});
-    if(!list.length)tb.innerHTML='<tr><td colspan="6" class="n">Još nitko nije igrao.</td></tr>';
+    if(!list.length)tb.innerHTML=TR('<tr><td colspan="6" class="n">Još nitko nije igrao.</td></tr>');
   });
 }
 
@@ -1266,29 +1339,30 @@ function openProfile(){
   pendingAvatar=P.avatar||null;
   $('pfAv').src=avSrc(P);$('pfName').value=P.name;
   const l=levelOf(P.points),a=levelFloor(l),b=levelFloor(l+1);
-  $('pfLevel').textContent='Razina '+l;$('pfPts').textContent=P.points+' bodova';$('pfBar').style.width=Math.round(100*(P.points-a)/(b-a))+'%';$('pfNext').textContent='Još '+(b-P.points)+' do razine '+(l+1);
-  $('pfStats').innerHTML=[['Partije',P.games],['Pobjede',P.wins],['Uspješnost',P.games?Math.round(100*P.wins/P.games)+'%':'—'],['Turniri',P.tWins||0]].map(([k,v])=>'<div class="stat"><b>'+v+'</b><small>'+k+'</small></div>').join('');
+  $('pfLevel').textContent=TR('Razina ')+l;$('pfPts').textContent=P.points+TR(' bodova');$('pfBar').style.width=Math.round(100*(P.points-a)/(b-a))+'%';$('pfNext').textContent=TR('Još ')+(b-P.points)+TR(' do razine ')+(l+1);
+  $('pfStats').innerHTML=[[TR('Partije'),P.games],[TR('Pobjede'),P.wins],[TR('Uspješnost'),P.games?Math.round(100*P.wins/P.games)+'%':'—'],[TR('Turniri'),P.tWins||0]].map(([k,v])=>'<div class="stat"><b>'+v+'</b><small>'+k+'</small></div>').join('');
   const acc=$('pfAccount');
-  if(!Cloud.ok)acc.innerHTML='<p class="fine" style="margin:0">Bez veze s poslužiteljem profil se sprema samo na ovom uređaju.</p>';
-  else if(Cloud.registered){acc.innerHTML='<h3>Račun</h3><p class="fine" style="margin:0 0 10px">Prijavljen si kao <b>'+esc(P.name)+'</b>. Bodovi i razina spremaju se na tvoj račun, pa se istim imenom i lozinkom možeš prijaviti na bilo kojem uređaju.</p><button class="btn wide" id="pfLogout">Odjava</button>';
+  if(!Cloud.ok)acc.innerHTML=TR('<p class="fine" style="margin:0">Bez veze s poslužiteljem profil se sprema samo na ovom uređaju.</p>');
+  else if(Cloud.registered){acc.innerHTML=TR('<h3>Račun</h3><p class="fine" style="margin:0 0 10px">Prijavljen si kao <b>')+esc(P.name)+TR('</b>. Bodovi i razina spremaju se na tvoj račun, pa se istim imenom i lozinkom možeš prijaviti na bilo kojem uređaju.</p><button class="btn wide" id="pfLogout">Odjava</button>');
     $('pfLogout').onclick=logoutUser}
-  else{acc.innerHTML='<h3>Igraš kao gost</h3><p class="fine" style="margin:0 0 10px">Registriraj se i zadrži bodove koje si već skupio. Poslije se istim imenom i lozinkom prijaviš na bilo kojem uređaju.</p><div class="acts2"><button class="btn primary" id="pfReg">Registracija</button><button class="btn" id="pfLogin">Prijava</button></div>';
+  else{acc.innerHTML=TR('<h3>Igraš kao gost</h3><p class="fine" style="margin:0 0 10px">Registriraj se i zadrži bodove koje si već skupio. Poslije se istim imenom i lozinkom prijaviš na bilo kojem uređaju.</p><div class="acts2"><button class="btn primary" id="pfReg">Registracija</button><button class="btn" id="pfLogin">Prijava</button></div>');
     $('pfReg').onclick=()=>openAuth('register');$('pfLogin').onclick=()=>openAuth('login')}
   $('pfName').disabled=!!(Cloud.ok&&Cloud.registered);
-  $('pfName').title=$('pfName').disabled?'Registrirani igrači igraju pod svojim korisničkim imenom.':'';
+  $('pfName').title=$('pfName').disabled?TR('Registrirani igrači igraju pod svojim korisničkim imenom.'):'';
+  renderAvPick();renderSettings();
 }
 $('avFile').onchange=e=>{
   const f=e.target.files&&e.target.files[0];if(!f)return;
   const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=c.height=112;const x=c.getContext('2d');const s=Math.min(img.width,img.height);
     x.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,112,112);pendingAvatar=c.toDataURL('image/jpeg',.82);$('pfAv').src=pendingAvatar;URL.revokeObjectURL(img.src)};
-  img.onerror=()=>toast('Ta slika se ne može učitati.');img.src=URL.createObjectURL(f);e.target.value='';
+  img.onerror=()=>toast(TR('Ta slika se ne može učitati.'));img.src=URL.createObjectURL(f);e.target.value='';
 };
-$('avReset').onclick=()=>{pendingAvatar=null;$('pfAv').src=defAvatar($('pfName').value||P.name)};
+$('avReset').onclick=()=>{pendingAvatar=null;$('pfAv').src=defAvatar($('pfName').value||P.name);renderAvPick()};
 $('pfSave').onclick=async()=>{
-  const n=Cloud.registered?P.name:$('pfName').value.trim().slice(0,18);if(!n){toast('Upiši ime.');return}
+  const n=Cloud.registered?P.name:$('pfName').value.trim().slice(0,18);if(!n){toast(TR('Upiši ime.'));return}
   P.name=n;P.avatar=pendingAvatar;saveLocalProfile();renderMe();
-  if(Cloud.ok){try{await Cloud.set('players/'+Cloud.uid,{name:P.name,avatar:P.avatar||null,updatedAt:Date.now()},true)}catch(e){toast('Spremljeno samo na ovom uređaju.');return}}
-  toast('Profil je spremljen.');
+  if(Cloud.ok){try{await Cloud.set('players/'+Cloud.uid,{name:P.name,avatar:P.avatar||null,updatedAt:Date.now()},true)}catch(e){toast(TR('Spremljeno samo na ovom uređaju.'));return}}
+  toast(TR('Profil je spremljen.'));
 };
 
 /* ================= leaving a game and coming back (1 minute to return) ================= */
@@ -1340,7 +1414,7 @@ setInterval(()=>{
   const x=a.sort((p,q)=>p.left-q.left)[0];
   const mine=G.S.N===4&&x.seat%2===G.me%2;
   bar.hidden=false;
-  bar.innerHTML='<b>'+esc(x.name)+'</b> je izašao iz igre. Ima još <b class="cd">'+fmtLeft(x.left)+'</b> da se vrati'+(mine?', inače vaš par gubi.':', inače pobjeđujete.');
+  bar.innerHTML='<b>'+esc(x.name)+TR('</b> je izašao iz igre. Ima još <b class="cd">')+fmtLeft(x.left)+TR('</b> da se vrati')+(mine?TR(', inače vaš par gubi.'):TR(', inače pobjeđujete.'));
   if(x.left<=0&&!G.forfeitSent){G.forfeitSent=true;forfeitSeat(x.seat)}
 },1000);
 async function forfeitSeat(seat){
@@ -1380,7 +1454,7 @@ async function checkResume(){
   if(L&&L.S&&L.S.phase!=='over'){
     const left=RETURN_MS-(Date.now()-L.ts);
     if(left>0)resumeInfo={kind:'local',L,deadline:L.ts+RETURN_MS};
-    else{store('brisk-localgame',null);addStats({points:1,games:1,wins:0,draws:0});toast('Nedovršena partija protiv botova se računa kao poraz.')}
+    else{store('brisk-localgame',null);addStats({points:1,games:1,wins:0,draws:0});toast(TR('Nedovršena partija protiv botova se računa kao poraz.'))}
   }
   if(!resumeInfo&&Cloud.ok){
     try{
@@ -1394,9 +1468,9 @@ async function checkResume(){
           if(left>0)resumeInfo={kind:'online',id:me.activeRoom,name:R.name,deadline:since+RETURN_MS};
           else{const humans=R.seats.filter((s,i)=>s&&!s.bot&&i!==seat).length;
             if(!humans){G={mode:'online',roomId:me.activeRoom,R,S,seats:R.seats,me:seat};await forfeitSeat(seat);G=null}
-            Cloud.set('players/'+Cloud.uid,{activeRoom:null},true).catch(()=>{});toast('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.')}
+            Cloud.set('players/'+Cloud.uid,{activeRoom:null},true).catch(()=>{});toast(TR('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.'))}
         }else if(!R||R.status!=='playing'){
-          if(S&&S.forfeit===seat){const done=store('brisk-counted')||[];if(!done.includes(S.gid)){done.push(S.gid);store('brisk-counted',done.slice(-80));addStats({points:0,games:1,wins:0,draws:0});toast('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.')}}
+          if(S&&S.forfeit===seat){const done=store('brisk-counted')||[];if(!done.includes(S.gid)){done.push(S.gid);store('brisk-counted',done.slice(-80));addStats({points:0,games:1,wins:0,draws:0});toast(TR('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.'))}}
           Cloud.set('players/'+Cloud.uid,{activeRoom:null},true).catch(()=>{});
         }
       }
@@ -1412,7 +1486,7 @@ function renderResume(){
     const left=resumeInfo.deadline-Date.now();
     if(left<=0){el.hidden=true;clearInterval(resumeT);const r=resumeInfo;resumeInfo=null;if(r.kind==='local'){store('brisk-localgame',null);addStats({points:1,games:1,wins:0,draws:0})}return}
     el.hidden=false;
-    el.innerHTML='<span><b>Nedovršena igra'+(resumeInfo.kind==='online'?': '+esc(resumeInfo.name):' protiv botova')+'</b><br><small>Vrati se za <b class="cd">'+fmtLeft(left)+'</b> ili gubiš partiju.</small></span><button class="btn primary small" id="resumeGo">Nastavi igru</button>';
+    el.innerHTML=TR('<span><b>Nedovršena igra')+(resumeInfo.kind==='online'?': '+esc(resumeInfo.name):TR(' protiv botova'))+TR('</b><br><small>Vrati se za <b class="cd">')+fmtLeft(left)+TR('</b> ili gubiš partiju.</small></span><button class="btn primary small" id="resumeGo">Nastavi igru</button>');
     $('resumeGo').onclick=()=>{const r=resumeInfo;resumeInfo=null;clearInterval(resumeT);el.hidden=true;if(r.kind==='local')resumeLocal(r.L);else openRoom(r.id)};
   };
   draw();resumeT=setInterval(draw,1000);
@@ -1423,22 +1497,22 @@ const USER_RE=/^[A-Za-z0-9ČĆŽŠĐčćžšđ_.-]{3,15}$/;
 let authMode='guest',authFirst=false;
 function authErr(e){
   const c=(e&&e.code)||'';
-  if(c==='taken')return 'To korisničko ime je zauzeto. Odaberi drugo.';
-  if(c==='bad')return 'Pogrešno korisničko ime ili lozinka.';
-  if(/weak-password/.test(c))return 'Lozinka mora imati barem 6 znakova.';
-  if(/too-many-requests/.test(c))return 'Previše pokušaja. Pričekaj malo pa probaj opet.';
-  if(/network/.test(c))return 'Nema veze s poslužiteljem. Provjeri internet.';
-  if(/operation-not-allowed|admin-restricted/.test(c))return 'Registracija trenutno nije dostupna.';
-  return 'Nešto nije uspjelo'+(c?' ('+c+')':'')+'. Probaj opet.';
+  if(c==='taken')return TR('To korisničko ime je zauzeto. Odaberi drugo.');
+  if(c==='bad')return TR('Pogrešno korisničko ime ili lozinka.');
+  if(/weak-password/.test(c))return TR('Lozinka mora imati barem 6 znakova.');
+  if(/too-many-requests/.test(c))return TR('Previše pokušaja. Pričekaj malo pa probaj opet.');
+  if(/network/.test(c))return TR('Nema veze s poslužiteljem. Provjeri internet.');
+  if(/operation-not-allowed|admin-restricted/.test(c))return TR('Registracija trenutno nije dostupna.');
+  return TR('Nešto nije uspjelo')+(c?' ('+c+')':'')+TR('. Probaj opet.');
 }
 function openAuth(mode,opts){
   authMode=mode||'guest';authFirst=!!(opts&&opts.first);
   const online=Cloud.ok;if(!online)authMode='guest';
-  const tabs=[['guest','Gost'],['login','Prijava'],['register','Registracija']];
+  const tabs=[['guest',TR('Gost')],['login',TR('Prijava')],['register',TR('Registracija')]];
   const p=$('panel');
-  p.innerHTML='<h2>'+(authFirst?'Dobro došao!':'Račun')+'</h2>'+
-    '<p>'+(online?'Registriraj se da ti se bodovi i razina čuvaju pod tvojim imenom, ili igraj kao gost.':'Trenutno nema veze s poslužiteljem, pa možeš igrati kao gost.')+'</p>'+
-    (online?'<div class="seg auth-tabs" role="group" aria-label="Način ulaska">'+tabs.map(([k,t])=>'<button type="button" data-m="'+k+'" aria-pressed="'+(k===authMode)+'">'+t+'</button>').join('')+'</div>':'')+
+  p.innerHTML='<h2>'+(authFirst?TR('Dobro došao!'):TR('Račun'))+'</h2>'+
+    '<p>'+(online?TR('Registriraj se da ti se bodovi i razina čuvaju pod tvojim imenom, ili igraj kao gost.'):TR('Trenutno nema veze s poslužiteljem, pa možeš igrati kao gost.'))+'</p>'+
+    (online?TR('<div class="seg auth-tabs" role="group" aria-label="Način ulaska">')+tabs.map(([k,t])=>'<button type="button" data-m="'+k+'" aria-pressed="'+(k===authMode)+'">'+t+'</button>').join('')+'</div>':'')+
     '<form class="form" id="authForm" novalidate></form>';
   p.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{authMode=b.dataset.m;p.querySelectorAll('[data-m]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderAuthForm()});
   renderAuthForm();
@@ -1447,14 +1521,14 @@ function openAuth(mode,opts){
 function renderAuthForm(){
   const f=$('authForm'),m=authMode;
   let h='';
-  if(m==='guest')h='<label class="field">Tvoje ime u igri<span class="inrow"><input id="aName" maxlength="18" autocomplete="nickname" value="'+esc(Cloud.registered?randomGuestName():P.name)+'"><button type="button" class="btn" id="aDice">Nasumično</button></span></label>';
+  if(m==='guest')h=TR('<label class="field">Tvoje ime u igri<span class="inrow"><input id="aName" maxlength="18" autocomplete="nickname" value="')+esc(Cloud.registered?randomGuestName():P.name)+TR('"><button type="button" class="btn" id="aDice">Nasumično</button></span></label>');
   else{
-    h='<label class="field">Korisničko ime<input id="aUser" maxlength="15" autocomplete="username" autocapitalize="off" spellcheck="false"></label>'+
-      '<label class="field">Lozinka<input id="aPw" type="password" autocomplete="'+(m==='login'?'current-password':'new-password')+'"></label>';
-    if(m==='register')h+='<label class="field">Ponovi lozinku<input id="aPw2" type="password" autocomplete="new-password"></label><p class="hint">3 do 15 znakova: slova, brojke, točka, crtica ili _. Lozinka barem 6 znakova.'+(Cloud.registered?'':' Bodovi koje si skupio kao gost ostaju tvoji.')+'</p>';
+    h=TR('<label class="field">Korisničko ime<input id="aUser" maxlength="15" autocomplete="username" autocapitalize="off" spellcheck="false"></label>')+
+      TR('<label class="field">Lozinka<input id="aPw" type="password" autocomplete="')+(m==='login'?'current-password':'new-password')+'"></label>';
+    if(m==='register')h+=TR('<label class="field">Ponovi lozinku<input id="aPw2" type="password" autocomplete="new-password"></label><p class="hint">3 do 15 znakova: slova, brojke, točka, crtica ili _. Lozinka barem 6 znakova.')+(Cloud.registered?'':TR(' Bodovi koje si skupio kao gost ostaju tvoji.'))+'</p>';
   }
-  h+='<p class="err" id="aErr" role="alert"></p><button class="btn primary wide" type="submit" id="aGo">'+({guest:'Igraj kao gost',login:'Prijavi se',register:'Registriraj se'}[m])+'</button>'+
-    (authFirst?'':'<button class="btn ghost wide" type="button" id="aClose">Zatvori</button>');
+  h+='<p class="err" id="aErr" role="alert"></p><button class="btn primary wide" type="submit" id="aGo">'+({guest:TR('Igraj kao gost'),login:TR('Prijavi se'),register:TR('Registriraj se')}[m])+'</button>'+
+    (authFirst?'':TR('<button class="btn ghost wide" type="button" id="aClose">Zatvori</button>'));
   f.innerHTML=h;
   if($('aDice'))$('aDice').onclick=()=>{$('aName').value=randomGuestName()};
   if($('aClose'))$('aClose').onclick=closeAuth;
@@ -1465,42 +1539,42 @@ function closeAuth(){$('overlay').hidden=true;store('brisk-welcomed',1);if(CUR==
 async function submitAuth(){
   const err=t=>{$('aErr').textContent=t||''},go=$('aGo');err('');
   if(authMode==='guest'){
-    const n=$('aName').value.trim().slice(0,18);if(!n)return err('Upiši ime ili klikni Nasumično.');
+    const n=$('aName').value.trim().slice(0,18);if(!n)return err(TR('Upiši ime ili klikni Nasumično.'));
     if(Cloud.ok&&Cloud.registered){go.disabled=true;await logoutUser(true);go.disabled=false}
     P.name=n;saveLocalProfile();renderMe();
     if(Cloud.ok)Cloud.set('players/'+Cloud.uid,{name:n,updatedAt:Date.now()},true).catch(()=>{});
-    closeAuth();toast('Igraš kao '+n+'.');return;
+    closeAuth();toast(TR('Igraš kao ')+n+'.');return;
   }
   const user=$('aUser').value.trim(),pw=$('aPw').value;
-  if(!USER_RE.test(user))return err('Korisničko ime: 3 do 15 znakova, slova, brojke, točka, crtica ili _.');
-  if(pw.length<6)return err('Lozinka mora imati barem 6 znakova.');
-  if(authMode==='register'&&pw!==$('aPw2').value)return err('Lozinke se ne podudaraju.');
-  go.disabled=true;go.textContent='Pričekaj…';
+  if(!USER_RE.test(user))return err(TR('Korisničko ime: 3 do 15 znakova, slova, brojke, točka, crtica ili _.'));
+  if(pw.length<6)return err(TR('Lozinka mora imati barem 6 znakova.'));
+  if(authMode==='register'&&pw!==$('aPw2').value)return err(TR('Lozinke se ne podudaraju.'));
+  go.disabled=true;go.textContent=TR('Pričekaj…');
   try{
     if(authMode==='register'){
       if(Cloud.registered)await logoutUser(true);
       await Cloud.register(user,pw);
       P.name=user;saveLocalProfile();
       await Cloud.set('players/'+Cloud.uid,{name:user,username:user.toLowerCase(),registered:true,avatar:P.avatar||null,points:P.points||0,games:P.games||0,wins:P.wins||0,draws:P.draws||0,tWins:P.tWins||0,level:levelOf(P.points||0),createdAt:Date.now(),updatedAt:Date.now()},true);
-      renderMe();closeAuth();toast('Registracija je uspjela. Dobro došao, '+user+'!');
+      renderMe();closeAuth();toast(TR('Registracija je uspjela. Dobro došao, ')+user+'!');
     }else{
       await Cloud.login(user,pw);
       P=Object.assign({name:user,avatar:null,points:0,games:0,wins:0,draws:0,tWins:0},{});
       await syncProfileFromCloud();
       if(P.name!==user&&nameKey(P.name)!==nameKey(user)){P.name=user;saveLocalProfile();renderMe()}
       Cloud.set('players/'+Cloud.uid,{registered:true,updatedAt:Date.now()},true).catch(()=>{});
-      closeAuth();toast('Bok, '+P.name+'!');
+      closeAuth();toast(TR('Bok, ')+P.name+'!');
     }
-  }catch(e){console.warn('auth',e);err(authErr(e));go.disabled=false;go.textContent=authMode==='register'?'Registriraj se':'Prijavi se'}
+  }catch(e){console.warn('auth',e);err(authErr(e));go.disabled=false;go.textContent=authMode==='register'?TR('Registriraj se'):TR('Prijavi se')}
 }
 async function logoutUser(silent){
   if(!Cloud.ok)return;
   const old=P;
   P={name:randomGuestName(),avatar:null,points:0,games:0,wins:0,draws:0,tWins:0};saveLocalProfile();
-  try{await Cloud.logout()}catch(e){P=old;saveLocalProfile();toast('Odjava nije uspjela.');return}
+  try{await Cloud.logout()}catch(e){P=old;saveLocalProfile();toast(TR('Odjava nije uspjela.'));return}
   await syncProfileFromCloud();renderMe();
   if(silent===true)return;
-  toast('Odjavljen si.');
+  toast(TR('Odjavljen si.'));
   if(CUR==='profile')openProfile();
   openAuth('guest',{first:true});
 }
@@ -1511,12 +1585,75 @@ function maybeWelcome(){
   openAuth('guest',{first:true});
 }
 
-/* ================= Dalmatian backdrop: a photo of Split above a wooden table ================= */
-// Photo: "Split harbor view", Ryan Matzner and Rachel Pestik, CC BY-SA 3.0 (Wikimedia Commons). Wood: Poly Haven "Wood table large", CC0.
-const BG_SRC={split:window.__BG_SPLIT||'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Split_harbor_view.jpg/1920px-Split_harbor_view.jpg',
-  wood:window.__BG_WOOD||'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Wood_table_large_diff_8k_%28JPG%29.jpg/1280px-Wood_table_large_diff_8k_%28JPG%29.jpg'};
+/* ================= settings: language, theme, ready-made characters, players online ================= */
+function langButtons(el){
+  el.innerHTML='';
+  for(const [k,n] of LANGS){const b=document.createElement('button');b.type='button';b.textContent=n;b.lang=k;b.setAttribute('aria-pressed',String(k===LANG));
+    b.onclick=()=>{if(k!==LANG)setLang(k)};el.appendChild(b)}
+}
+langButtons($('homeLangs'));
+function renderSettings(){
+  const el=$('pfSettings');
+  el.innerHTML='<h3>'+TR('Postavke')+'</h3><div class="seg-label">'+TR('Jezik')+'</div><div class="seg" id="setLang" role="group" aria-label="'+TR('Jezik')+'"></div>'+
+    '<div class="seg-label" style="margin-top:12px">'+TR('Tema')+'</div><div class="theme-pick" id="setTheme" role="group" aria-label="'+TR('Tema')+'"></div>';
+  langButtons($('setLang'));
+  const tp=$('setTheme');
+  for(const k of Object.keys(THEMES)){
+    const b=document.createElement('button');b.type='button';b.setAttribute('aria-pressed',String(k===THEME));
+    b.innerHTML='<img alt="" loading="lazy" src="'+THEMES[k].thumb+'"><span>'+esc(TR(k==='split'?'Split':'Zadar'))+'</span>';
+    b.onclick=()=>{applyTheme(k);[...tp.children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)))};
+    tp.appendChild(b);
+  }
+}
+function renderAvPick(){
+  const el=$('avPick');el.innerHTML='';
+  for(const [id,name] of AVATARS){
+    const v='av:'+id,b=document.createElement('button');b.type='button';b.title=TR(name);b.setAttribute('aria-label',TR(name));
+    b.setAttribute('aria-pressed',String(pendingAvatar===v));
+    b.innerHTML='<img alt="" src="'+AV_URL[v]+'">';
+    b.onclick=()=>{pendingAvatar=v;$('pfAv').src=AV_URL[v];[...el.children].forEach(x=>x.setAttribute('aria-pressed',String(x===b)))};
+    el.appendChild(b);
+  }
+}
+
+/* players online: everyone with the page open marks "seen" once a minute */
+const SEEN_MS=window.__SEEN_MS||60000,ONLINE_WINDOW=window.__ONLINE_WINDOW||150000;
+let presenceT=null;
+function markSeen(){if(Cloud.ok&&document.visibilityState!=='hidden')Cloud.set('players/'+Cloud.uid,{seen:Date.now()},true).catch(()=>{})}
+async function refreshOnline(){
+  if(!Cloud.ok)return;
+  try{
+    const l=await Cloud.query('players',{where:['seen','>',Date.now()-ONLINE_WINDOW],limit:500});
+    const n=Math.max(1,l.length),el=$('onlineNow');
+    el.querySelector('span').textContent=TR('Trenutno online:')+' '+n;el.hidden=false;
+  }catch(e){console.warn('online',e)}
+}
+function startPresence(){
+  if(presenceT||!Cloud.ok)return;
+  markSeen();setTimeout(refreshOnline,800);
+  presenceT=setInterval(()=>{markSeen();refreshOnline()},SEEN_MS);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){markSeen();refreshOnline()}});
+}
+
+/* ================= Dalmatian backdrop: a photo above a wooden table; the photo and colours follow the theme ================= */
+// Split: "Split harbor view", Ryan Matzner and Rachel Pestik, CC BY-SA 3.0. Zadar: "Sunset in Zadar 2", PJL, CC BY 2.5 (both Wikimedia Commons).
+// Wood: Poly Haven "Wood table large", CC0.
+const WM='https://upload.wikimedia.org/wikipedia/commons/thumb/';
+const THEMES={
+  split:{photo:WM+'b/bd/Split_harbor_view.jpg/1920px-Split_harbor_view.jpg',thumb:WM+'b/bd/Split_harbor_view.jpg/500px-Split_harbor_view.jpg',fx:.42,fy:.62,meta:'#1d2b52',wood:'rgba(60,25,5,.18)'},
+  zadar:{photo:WM+'5/5a/Sunset_in_Zadar_2.jpg/1920px-Sunset_in_Zadar_2.jpg',thumb:WM+'5/5a/Sunset_in_Zadar_2.jpg/500px-Sunset_in_Zadar_2.jpg',fx:.55,fy:.5,meta:'#4a1a2a',wood:'rgba(80,20,10,.3)'}};
+let THEME=store('brisk-theme');if(!THEMES[THEME])THEME='split';
 const BGI={};
-for(const k in BG_SRC){const i=new Image();i.decoding='async';i.onload=()=>{BGI[k]=i;drawScene()};i.src=BG_SRC[k]}
+function loadThemePhoto(){const t=THEME,i=new Image();i.decoding='async';i.onload=()=>{if(THEME===t){BGI.split=i;drawScene()}};i.src=window.__BG_PHOTO||THEMES[t].photo}
+function applyTheme(t){
+  if(!THEMES[t])t='split';THEME=t;store('brisk-theme',t);
+  document.documentElement.dataset.theme=t;
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=THEMES[t].meta;
+  BGI.split=null;drawScene();loadThemePhoto();
+}
+document.documentElement.dataset.theme=THEME;
+{const i=new Image();i.decoding='async';i.onload=()=>{BGI.wood=i;drawScene()};i.src=window.__BG_WOOD||'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Wood_table_large_diff_8k_%28JPG%29.jpg/1280px-Wood_table_large_diff_8k_%28JPG%29.jpg'}
+loadThemePhoto();
 function drawScene(){
   const cv=$('bg'),dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;
   cv.width=W*dpr;cv.height=H*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
@@ -1525,7 +1662,7 @@ function drawScene(){
   let gr;
   if(BGI.split){   // the photo, cropped to fill the strip above the table
     const im=BGI.split,s=Math.max(W/im.width,tableY/im.height),dw=im.width*s,dh=im.height*s;
-    g.drawImage(im,(W-dw)*.42,(tableY-dh)*.62,dw,dh);
+    const th=THEMES[THEME];g.drawImage(im,(W-dw)*th.fx,(tableY-dh)*th.fy,dw,dh);
     gr=g.createLinearGradient(0,0,0,tableY);gr.addColorStop(0,'rgba(12,20,40,.35)');gr.addColorStop(.35,'rgba(12,20,40,.05)');gr.addColorStop(.8,'rgba(255,170,90,.08)');gr.addColorStop(1,'rgba(20,10,0,.35)');g.fillStyle=gr;g.fillRect(0,0,W,tableY);
   }else{
     gr=g.createLinearGradient(0,0,0,hz);gr.addColorStop(0,'#1d2b52');gr.addColorStop(.45,'#5b4a7a');gr.addColorStop(.78,'#d9795a');gr.addColorStop(1,'#f4b56a');g.fillStyle=gr;g.fillRect(0,0,W,hz);
@@ -1549,7 +1686,7 @@ function drawScene(){
   if(BGI.wood){   // real wood planks, tiled
     const im=BGI.wood,k=Math.max(.35,Math.min(.9,Math.max(W,H)/im.width*.8)),pat=g.createPattern(im,'repeat');
     pat.setTransform(new DOMMatrix([k,0,0,k,W/2-im.width*k/2,tableY]));g.fillStyle=pat;g.fillRect(0,tableY,W,H-tableY);
-    g.fillStyle='rgba(60,25,5,.18)';g.fillRect(0,tableY,W,H-tableY);
+    g.fillStyle=THEMES[THEME].wood;g.fillRect(0,tableY,W,H-tableY);
   }else{
     gr=g.createLinearGradient(0,tableY,0,H);gr.addColorStop(0,'#6b4426');gr.addColorStop(1,'#3b2414');g.fillStyle=gr;g.fillRect(0,tableY,W,H-tableY);
     const plank=Math.max(56,(H-tableY)/7);
@@ -1566,15 +1703,15 @@ function drawScene(){
 
 /* ================= start-up ================= */
 drawScene();renderMe();checkResume();
-$('cloudNote').textContent='Povezujem se…';
+$('cloudNote').textContent=TR('Povezujem se…');
 Cloud.ready.then(async uid=>{
   const dot=$('netDot');
-  if(!uid){dot.className='net off';$('cloudNote').textContent='Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.';maybeWelcome();return}
+  if(!uid){dot.className='net off';$('cloudNote').textContent=TR('Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.');maybeWelcome();return}
   dot.className='net on';$('cloudNote').textContent='';
   await syncProfileFromCloud();
   watchMyTournaments();
   if(CUR==='home')checkResume();
-  renderMe();maybeWelcome();
+  renderMe();maybeWelcome();startPresence();
   Cloud.onUser=()=>{syncProfileFromCloud()};
   const h=location.hash;let m;
   if((m=h.match(/soba=([A-Za-z0-9]+)/)))joinRoom(m[1]);

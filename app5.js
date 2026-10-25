@@ -1,9 +1,22 @@
-/* ================= Dalmatian backdrop: a photo of Split above a wooden table ================= */
-// Photo: "Split harbor view", Ryan Matzner and Rachel Pestik, CC BY-SA 3.0 (Wikimedia Commons). Wood: Poly Haven "Wood table large", CC0.
-const BG_SRC={split:window.__BG_SPLIT||'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Split_harbor_view.jpg/1920px-Split_harbor_view.jpg',
-  wood:window.__BG_WOOD||'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Wood_table_large_diff_8k_%28JPG%29.jpg/1280px-Wood_table_large_diff_8k_%28JPG%29.jpg'};
+/* ================= Dalmatian backdrop: a photo above a wooden table; the photo and colours follow the theme ================= */
+// Split: "Split harbor view", Ryan Matzner and Rachel Pestik, CC BY-SA 3.0. Zadar: "Sunset in Zadar 2", PJL, CC BY 2.5 (both Wikimedia Commons).
+// Wood: Poly Haven "Wood table large", CC0.
+const WM='https://upload.wikimedia.org/wikipedia/commons/thumb/';
+const THEMES={
+  split:{photo:WM+'b/bd/Split_harbor_view.jpg/1920px-Split_harbor_view.jpg',thumb:WM+'b/bd/Split_harbor_view.jpg/500px-Split_harbor_view.jpg',fx:.42,fy:.62,meta:'#1d2b52',wood:'rgba(60,25,5,.18)'},
+  zadar:{photo:WM+'5/5a/Sunset_in_Zadar_2.jpg/1920px-Sunset_in_Zadar_2.jpg',thumb:WM+'5/5a/Sunset_in_Zadar_2.jpg/500px-Sunset_in_Zadar_2.jpg',fx:.55,fy:.5,meta:'#4a1a2a',wood:'rgba(80,20,10,.3)'}};
+let THEME=store('brisk-theme');if(!THEMES[THEME])THEME='split';
 const BGI={};
-for(const k in BG_SRC){const i=new Image();i.decoding='async';i.onload=()=>{BGI[k]=i;drawScene()};i.src=BG_SRC[k]}
+function loadThemePhoto(){const t=THEME,i=new Image();i.decoding='async';i.onload=()=>{if(THEME===t){BGI.split=i;drawScene()}};i.src=window.__BG_PHOTO||THEMES[t].photo}
+function applyTheme(t){
+  if(!THEMES[t])t='split';THEME=t;store('brisk-theme',t);
+  document.documentElement.dataset.theme=t;
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=THEMES[t].meta;
+  BGI.split=null;drawScene();loadThemePhoto();
+}
+document.documentElement.dataset.theme=THEME;
+{const i=new Image();i.decoding='async';i.onload=()=>{BGI.wood=i;drawScene()};i.src=window.__BG_WOOD||'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Wood_table_large_diff_8k_%28JPG%29.jpg/1280px-Wood_table_large_diff_8k_%28JPG%29.jpg'}
+loadThemePhoto();
 function drawScene(){
   const cv=$('bg'),dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;
   cv.width=W*dpr;cv.height=H*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
@@ -12,7 +25,7 @@ function drawScene(){
   let gr;
   if(BGI.split){   // the photo, cropped to fill the strip above the table
     const im=BGI.split,s=Math.max(W/im.width,tableY/im.height),dw=im.width*s,dh=im.height*s;
-    g.drawImage(im,(W-dw)*.42,(tableY-dh)*.62,dw,dh);
+    const th=THEMES[THEME];g.drawImage(im,(W-dw)*th.fx,(tableY-dh)*th.fy,dw,dh);
     gr=g.createLinearGradient(0,0,0,tableY);gr.addColorStop(0,'rgba(12,20,40,.35)');gr.addColorStop(.35,'rgba(12,20,40,.05)');gr.addColorStop(.8,'rgba(255,170,90,.08)');gr.addColorStop(1,'rgba(20,10,0,.35)');g.fillStyle=gr;g.fillRect(0,0,W,tableY);
   }else{
     gr=g.createLinearGradient(0,0,0,hz);gr.addColorStop(0,'#1d2b52');gr.addColorStop(.45,'#5b4a7a');gr.addColorStop(.78,'#d9795a');gr.addColorStop(1,'#f4b56a');g.fillStyle=gr;g.fillRect(0,0,W,hz);
@@ -36,7 +49,7 @@ function drawScene(){
   if(BGI.wood){   // real wood planks, tiled
     const im=BGI.wood,k=Math.max(.35,Math.min(.9,Math.max(W,H)/im.width*.8)),pat=g.createPattern(im,'repeat');
     pat.setTransform(new DOMMatrix([k,0,0,k,W/2-im.width*k/2,tableY]));g.fillStyle=pat;g.fillRect(0,tableY,W,H-tableY);
-    g.fillStyle='rgba(60,25,5,.18)';g.fillRect(0,tableY,W,H-tableY);
+    g.fillStyle=THEMES[THEME].wood;g.fillRect(0,tableY,W,H-tableY);
   }else{
     gr=g.createLinearGradient(0,tableY,0,H);gr.addColorStop(0,'#6b4426');gr.addColorStop(1,'#3b2414');g.fillStyle=gr;g.fillRect(0,tableY,W,H-tableY);
     const plank=Math.max(56,(H-tableY)/7);
@@ -53,15 +66,15 @@ function drawScene(){
 
 /* ================= start-up ================= */
 drawScene();renderMe();checkResume();
-$('cloudNote').textContent='Povezujem se…';
+$('cloudNote').textContent=TR('Povezujem se…');
 Cloud.ready.then(async uid=>{
   const dot=$('netDot');
-  if(!uid){dot.className='net off';$('cloudNote').textContent='Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.';maybeWelcome();return}
+  if(!uid){dot.className='net off';$('cloudNote').textContent=TR('Online igra, turniri i rang lista trenutno nisu dostupni. Igra protiv botova radi i bez interneta.');maybeWelcome();return}
   dot.className='net on';$('cloudNote').textContent='';
   await syncProfileFromCloud();
   watchMyTournaments();
   if(CUR==='home')checkResume();
-  renderMe();maybeWelcome();
+  renderMe();maybeWelcome();startPresence();
   Cloud.onUser=()=>{syncProfileFromCloud()};
   const h=location.hash;let m;
   if((m=h.match(/soba=([A-Za-z0-9]+)/)))joinRoom(m[1]);

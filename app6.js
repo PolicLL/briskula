@@ -47,7 +47,7 @@ setInterval(()=>{
   const x=a.sort((p,q)=>p.left-q.left)[0];
   const mine=G.S.N===4&&x.seat%2===G.me%2;
   bar.hidden=false;
-  bar.innerHTML='<b>'+esc(x.name)+'</b> je izašao iz igre. Ima još <b class="cd">'+fmtLeft(x.left)+'</b> da se vrati'+(mine?', inače vaš par gubi.':', inače pobjeđujete.');
+  bar.innerHTML='<b>'+esc(x.name)+TR('</b> je izašao iz igre. Ima još <b class="cd">')+fmtLeft(x.left)+TR('</b> da se vrati')+(mine?TR(', inače vaš par gubi.'):TR(', inače pobjeđujete.'));
   if(x.left<=0&&!G.forfeitSent){G.forfeitSent=true;forfeitSeat(x.seat)}
 },1000);
 async function forfeitSeat(seat){
@@ -87,7 +87,7 @@ async function checkResume(){
   if(L&&L.S&&L.S.phase!=='over'){
     const left=RETURN_MS-(Date.now()-L.ts);
     if(left>0)resumeInfo={kind:'local',L,deadline:L.ts+RETURN_MS};
-    else{store('brisk-localgame',null);addStats({points:1,games:1,wins:0,draws:0});toast('Nedovršena partija protiv botova se računa kao poraz.')}
+    else{store('brisk-localgame',null);addStats({points:1,games:1,wins:0,draws:0});toast(TR('Nedovršena partija protiv botova se računa kao poraz.'))}
   }
   if(!resumeInfo&&Cloud.ok){
     try{
@@ -101,9 +101,9 @@ async function checkResume(){
           if(left>0)resumeInfo={kind:'online',id:me.activeRoom,name:R.name,deadline:since+RETURN_MS};
           else{const humans=R.seats.filter((s,i)=>s&&!s.bot&&i!==seat).length;
             if(!humans){G={mode:'online',roomId:me.activeRoom,R,S,seats:R.seats,me:seat};await forfeitSeat(seat);G=null}
-            Cloud.set('players/'+Cloud.uid,{activeRoom:null},true).catch(()=>{});toast('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.')}
+            Cloud.set('players/'+Cloud.uid,{activeRoom:null},true).catch(()=>{});toast(TR('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.'))}
         }else if(!R||R.status!=='playing'){
-          if(S&&S.forfeit===seat){const done=store('brisk-counted')||[];if(!done.includes(S.gid)){done.push(S.gid);store('brisk-counted',done.slice(-80));addStats({points:0,games:1,wins:0,draws:0});toast('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.')}}
+          if(S&&S.forfeit===seat){const done=store('brisk-counted')||[];if(!done.includes(S.gid)){done.push(S.gid);store('brisk-counted',done.slice(-80));addStats({points:0,games:1,wins:0,draws:0});toast(TR('Nisi se vratio u igru na vrijeme, pa se računa kao poraz.'))}}
           Cloud.set('players/'+Cloud.uid,{activeRoom:null},true).catch(()=>{});
         }
       }
@@ -119,7 +119,7 @@ function renderResume(){
     const left=resumeInfo.deadline-Date.now();
     if(left<=0){el.hidden=true;clearInterval(resumeT);const r=resumeInfo;resumeInfo=null;if(r.kind==='local'){store('brisk-localgame',null);addStats({points:1,games:1,wins:0,draws:0})}return}
     el.hidden=false;
-    el.innerHTML='<span><b>Nedovršena igra'+(resumeInfo.kind==='online'?': '+esc(resumeInfo.name):' protiv botova')+'</b><br><small>Vrati se za <b class="cd">'+fmtLeft(left)+'</b> ili gubiš partiju.</small></span><button class="btn primary small" id="resumeGo">Nastavi igru</button>';
+    el.innerHTML=TR('<span><b>Nedovršena igra')+(resumeInfo.kind==='online'?': '+esc(resumeInfo.name):TR(' protiv botova'))+TR('</b><br><small>Vrati se za <b class="cd">')+fmtLeft(left)+TR('</b> ili gubiš partiju.</small></span><button class="btn primary small" id="resumeGo">Nastavi igru</button>');
     $('resumeGo').onclick=()=>{const r=resumeInfo;resumeInfo=null;clearInterval(resumeT);el.hidden=true;if(r.kind==='local')resumeLocal(r.L);else openRoom(r.id)};
   };
   draw();resumeT=setInterval(draw,1000);

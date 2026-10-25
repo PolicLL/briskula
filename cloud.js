@@ -27,6 +27,7 @@ const Cloud=(()=>{
   C.watch=(p,cb)=>ref(p).onSnapshot(s=>cb(s.exists?s.data():null),()=>cb(undefined));
   C.watchQuery=(c,q,cb)=>{let x=db.collection(c);if(q.where)x=x.where(...q.where);if(q.orderBy)x=x.orderBy(...q.orderBy);if(q.limit)x=x.limit(q.limit);
     return x.onSnapshot(s=>cb(s.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>cb(null))};
+  C.query=async(c,q)=>{let x=db.collection(c);if(q.where)x=x.where(...q.where);if(q.limit)x=x.limit(q.limit);const s=await x.get();return s.docs.map(d=>Object.assign({id:d.id},d.data()))};
   // fn(get,set) — all gets before sets; return value passed through
   C.txn=fn=>db.runTransaction(t=>fn(async p=>{const s=await t.get(ref(p));return s.exists?s.data():null},(p,d)=>t.set(ref(p),d)));
   C.signInGoogle=async()=>{

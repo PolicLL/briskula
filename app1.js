@@ -9,7 +9,7 @@ const IMG=(()=>{const F={S:'Spadi',C:'Kupe',D:'Dinari',B:'Bati'},R={1:'As',10:'F
   for(const s in F)for(const r of [1,2,3,4,5,6,7,10,11,12])o[s+r]=(window.__CARD_BASE||CARD_BASE)+F[s]+'/'+(R[r]||r)+F[s]+'.jpg';
   setTimeout(()=>{for(const k in o){const i=new Image();i.src=o[k]}},300);return o})();
 const BOT_NAMES=['Ante','Mate','Jure','Šime','Frane','Duje','Roko','Ive','Stipe','Toni','Luce','Kate','Zlata','Ivka','Bepo','Nediljko','Marin','Tonći','Jakov','Paško','Vinko','Lovre','Dinko','Mile','Krste','Bariša','Jozo','Grgo','Petar','Dane','Nikša','Joško'];
-const DIFF_N={easy:'lagan',normal:'srednji',hard:'jak'};
+const DIFF_N={easy:TR('lagan'),normal:TR('srednji'),hard:TR('jak')};
 function hashCol(s){let h=0;for(const ch of String(s))h=(h*31+ch.charCodeAt(0))|0;const hues=[200,12,140,35,265,330,170,55];return 'hsl('+hues[Math.abs(h)%hues.length]+' 45% 42%)'}
 function defAvatar(name,bot){
   const ini=bot?'B':(String(name||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?');
@@ -18,15 +18,15 @@ function defAvatar(name,bot){
     '<text x="32" y="41" font-family="Georgia,serif" font-size="26" font-weight="700" fill="#f2e9d4" text-anchor="middle">'+esc(ini)+'</text>')+'</svg>';
   return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
-const avSrc=p=>(p&&p.avatar)||defAvatar(p&&p.name,p&&p.bot);
+const avSrc=p=>(p&&p.avatar&&(AV_URL[p.avatar]||p.avatar))||defAvatar(p&&p.name,p&&p.bot);
 const levelOf=pts=>Math.floor(Math.sqrt(Math.max(0,pts)/10))+1;
 const levelFloor=l=>10*(l-1)*(l-1);
 
 /* ================= profile ================= */
 let P=Object.assign({name:'',avatar:null,points:0,games:0,wins:0,draws:0,tWins:0},store('brisk-profile')||{});
-const GUEST_WORDS=['Galeb','Ribar','Mornar','Težak','Bura','Maestral','Jugo','Fjaka','Feral','Kamenjar','Lanterna','Konoba','Pjat','Gajeta','Pasara','Bodul','Šjor','Barba','Pošip','Plavac','Lantina','Marjan','Riva','Peškafondo'];
+const GUEST_WORDS=[TR('Galeb'),TR('Ribar'),'Mornar','Težak','Bura','Maestral','Jugo','Fjaka','Feral','Kamenjar','Lanterna','Konoba','Pjat',TR('Gajeta'),'Pasara','Bodul','Šjor','Barba','Pošip','Plavac','Lantina','Marjan','Riva','Peškafondo'];
 const randomGuestName=()=>GUEST_WORDS[Math.floor(Math.random()*GUEST_WORDS.length)]+' '+(10+Math.floor(Math.random()*990));
-if(!P.name)P.name=randomGuestName();
+if(!P.name){P.name=randomGuestName();if(!P.avatar)P.avatar='av:'+AVATARS[(Math.random()*AVATARS.length)|0][0]}
 function saveLocalProfile(){store('brisk-profile',P)}
 saveLocalProfile();
 const mySeatInfo=()=>({uid:Cloud.uid||null,name:P.name,avatar:P.avatar||null,level:levelOf(P.points),bot:false});
@@ -48,7 +48,7 @@ async function addStats(d){ // d: {points,games,wins,draws,tWins}
   apply(P);saveLocalProfile();renderMe();
 }
 function renderMe(){
-  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent=(Cloud.ok&&!Cloud.registered?'Gost · ':'')+'Razina '+levelOf(P.points);
+  $('meAv').src=avSrc(P);$('meName').textContent=P.name;$('meLv').textContent=(Cloud.ok&&!Cloud.registered?TR('Gost · '):'')+TR('Razina ')+levelOf(P.points);
 }
 
 /* ================= navigation ================= */
@@ -63,15 +63,15 @@ function show(name){
   CUR=name;document.body.classList.toggle('in-game',name==='game');
   for(const s of SCREENS)$('scr-'+s).hidden=s!==name;
   $('backBtn').hidden=name==='home';
-  const titles={home:'Briškula',local:'Protiv botova',lobby:'Online',tours:'Turniri',tour:'Turnir',lead:'Rang lista',profile:'Profil',rules:'Pravila',game:'Briškula'};
+  const titles={home:'Briškula',local:TR('Protiv botova'),lobby:TR('Online'),tours:TR('Turniri'),tour:TR('Turnir'),lead:TR('Rang lista'),profile:TR('Profil'),rules:TR('Pravila'),game:'Briškula'};
   $('barTitle').textContent=titles[name];
   if(name==='lobby')openLobby();if(name==='tours')openTours();if(name==='lead')openLead();if(name==='profile')openProfile();if(name==='local')buildLocalForm();
   if(name==='game')sizeCards(true);
   if(name==='home')checkResume();
 }
 $('backBtn').onclick=()=>{if(CUR==='tour')show('tours');else if(CUR==='game')confirmLeaveGame();else show('home')};
-$('meChip').onclick=()=>{if(CUR==='game')return toast('Profil je dostupan izvan igre.');show('profile')};
-document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;if(['lobby','tours','lead'].includes(g)&&!Cloud.ok){toast('Online značajke trenutno nisu dostupne. Provjeri internet.');return}show(g)});
+$('meChip').onclick=()=>{if(CUR==='game')return toast(TR('Profil je dostupan izvan igre.'));show('profile')};
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const g=b.dataset.go;if(['lobby','tours','lead'].includes(g)&&!Cloud.ok){toast(TR('Online značajke trenutno nisu dostupne. Provjeri internet.'));return}show(g)});
 
 /* segmented controls */
 function seg(container,key,label,opts,state,onchange){
@@ -83,8 +83,8 @@ function seg(container,key,label,opts,state,onchange){
 }
 function gameOptionsForm(el,st,extra){
   el.innerHTML='';
-  seg(el,'N','Broj igrača',[[2,'2'],[3,'3'],[4,'4 (2 na 2)']],st,()=>{dup.hidden=st.N!==2});
-  const dup=seg(el,'duplo','Način (2 igrača)',[[true,'Na duplo'],[false,'Klasično']],st);dup.hidden=st.N!==2;
-  seg(el,'show','Prikaz bodova',[['always','Uvijek'],['end','Tek pred kraj']],st);
+  seg(el,'N',TR('Broj igrača'),[[2,'2'],[3,'3'],[4,TR('4 (2 na 2)')]],st,()=>{dup.hidden=st.N!==2});
+  const dup=seg(el,'duplo',TR('Način (2 igrača)'),[[true,TR('Na duplo')],[false,TR('Klasično')]],st);dup.hidden=st.N!==2;
+  seg(el,'show',TR('Prikaz bodova'),[['always',TR('Uvijek')],['end',TR('Tek pred kraj')]],st);
   if(extra)extra(el);
 }

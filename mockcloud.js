@@ -17,6 +17,8 @@ window.__CLOUD=(()=>{const C={ok:true,google:false};
    const res=await fn(async p=>{if(wrote)throw new Error('read after write');const r=await call('get',p);reads[p]=r?r.v:0;return r?JSON.parse(r.d):null},(p,d)=>{wrote=true;writes[p]=JSON.stringify(d)});
    const ok=await call('commit',reads,writes);if(ok)return res;await new Promise(r=>setTimeout(r,30+Math.random()*60))}throw new Error('txn failed')};
  C.signInGoogle=async()=>{throw {code:'mock'}};
+ C.query=async(c,q)=>{const ops={'>':(a,b)=>a>b,'==':(a,b)=>a===b};let l=(await call('list',c)).map(x=>Object.assign({id:x.id},JSON.parse(x.d)));
+   if(q.where){const [f,op,v]=q.where;l=l.filter(x=>x[f]!=null&&ops[op](x[f],v))}return q.limit?l.slice(0,q.limit):l};
  C.registered=sessionStorage.getItem('reg')==='1';
  const key=n=>String(n).trim().toLowerCase();
  C.register=async(n,pw)=>{if(await C.get('usernames/'+key(n)))throw {code:'taken'};if(pw.length<6)throw {code:'auth/weak-password'};

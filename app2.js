@@ -6,7 +6,7 @@ const gClear=()=>{gTimers.forEach(clearTimeout);gTimers=[]};
 
 /* ---- local games ---- */
 let localCfg=Object.assign({N:2,duplo:true,show:'always',diff:'hard'},store('brisk-localcfg')||{});
-function buildLocalForm(){gameOptionsForm($('localForm'),localCfg,el=>seg(el,'diff','Botovi',[['easy','Lagani'],['normal','Srednji'],['hard','Jaki']],localCfg))}
+function buildLocalForm(){gameOptionsForm($('localForm'),localCfg,el=>seg(el,'diff',TR('Botovi'),[['easy',TR('Lagani')],['normal',TR('Srednji')],['hard',TR('Jaki')]],localCfg))}
 $('localStart').onclick=()=>{store('brisk-localcfg',localCfg);startLocal(localCfg)};
 function botSeat(i,diff){const used=new Set();let n;do{n=BOT_NAMES[(Math.random()*BOT_NAMES.length)|0]}while(used.has(n));return {uid:null,name:n,avatar:null,bot:true,diff:diff||'hard',level:null}}
 function startLocal(cfg){
@@ -92,24 +92,24 @@ function onGameOver(){
 }
 function showGameEnd(r,award){
   const S=G.S,tp=teamPoints(S),me=G.me;
-  let title=r===1?'Pobjeda!':r===.5?'Neriješeno':'Poraz';
+  let title=r===1?TR('Pobjeda!'):r===.5?TR('Neriješeno'):TR('Poraz');
   let line;
   if(S.N===4){const mt=me%2;line=tp[mt]+' <span>–</span> '+tp[1-mt]}
   else if(S.N===2)line=tp[me]+' <span>–</span> '+tp[1-me];
   else line=S.pts.map((p,i)=>(i===me?'<b>'+p+'</b>':p)).join(' <span>·</span> ');
-  let sub=(S.forfeit!=null?esc(seatName(S.forfeit))+' je napustio igru. ':'')+(award?'+'+award+' bodova na rang listi':'');
+  let sub=(S.forfeit!=null?esc(seatName(S.forfeit))+TR(' je napustio igru. '):'')+(award?'+'+award+TR(' bodova na rang listi'):'');
   const R=G.R,online=G.mode==='online';
   let seriesHtml='';
   if(online&&R){
     const tw=R.wins||[],names=teamNames();
-    seriesHtml='<p>Meč do '+R.target+' '+(R.target===1?'pobjede':'pobjede')+': '+names.map((n,i)=>esc(n)+' '+(tw[i]||0)).join(' · ')+'</p>';
-    if(R.status==='done'){const wt=(R.wins||[]).findIndex(x=>x>=R.target);title=wt===(S.N===4?me%2:me)?'Meč je tvoj!':'Meč je gotov';}
+    seriesHtml=TR('<p>Meč do ')+R.target+' '+(R.target===1?TR('pobjede'):TR('pobjede'))+': '+names.map((n,i)=>esc(n)+' '+(tw[i]||0)).join(' · ')+'</p>';
+    if(R.status==='done'){const wt=(R.wins||[]).findIndex(x=>x>=R.target);title=wt===(S.N===4?me%2:me)?TR('Meč je tvoj!'):TR('Meč je gotov');}
   }
   $('panel').innerHTML='<h2>'+title+'</h2><div class="final">'+line+'</div>'+(sub?'<p>'+sub+'</p>':'')+seriesHtml+
     '<div class="acts">'+
-    (online?(R&&R.status==='playing'?'<button class="btn primary" id="endNext">Sljedeća partija</button>':'')+(R&&R.tour?'<button class="btn" id="endTour">Na turnir</button>':'')
-            :'<button class="btn primary" id="endNext">Nova partija</button>')+
-    '<button class="btn" id="endMenu">Izbornik</button></div>';
+    (online?(R&&R.status==='playing'?TR('<button class="btn primary" id="endNext">Sljedeća partija</button>'):'')+(R&&R.tour?TR('<button class="btn" id="endTour">Na turnir</button>'):'')
+            :TR('<button class="btn primary" id="endNext">Nova partija</button>'))+
+    TR('<button class="btn" id="endMenu">Izbornik</button></div>');
   $('overlay').hidden=false;
   const n=$('endNext');if(n){n.onclick=()=>{if(online)nextGameOnline();else{$('overlay').hidden=true;setState(newDeal(G.cfg,(G.S.starter+1)%G.S.N,1))}};n.focus()}
   const t=$('endTour');if(t)t.onclick=()=>{const tid=G.R.tour.tid;show('tour');openTour(tid)};
@@ -117,8 +117,8 @@ function showGameEnd(r,award){
 }
 function teamNames(){
   const S=G.S||{N:G.R?G.R.N:2},me=Math.max(0,G.me);
-  if(S.N===4)return me%2===0?['Mi','Vi']:['Vi','Mi'];
-  return G.seats.map((s,i)=>i===G.me?'Ti':(s?s.name:'—'));
+  if(S.N===4)return me%2===0?[TR('Mi'),TR('Vi')]:[TR('Vi'),TR('Mi')];
+  return G.seats.map((s,i)=>i===G.me?TR('Ti'):(s?s.name:'—'));
 }
 
 /* ---- sizing & rendering ---- */
@@ -150,8 +150,8 @@ function sizeCards(force){
 }
 addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(()=>{sizeCards(true);drawScene()},120)});
 function relPos(seat){const N=G.S.N,me=Math.max(0,G.me),r=(seat-me+N)%N;if(r===0)return 'b';if(N===2)return 't';if(N===3)return r===1?'r':'l';return ['b','r','t','l'][r]}
-function faceEl(c,tag){const el=document.createElement(tag||'div');el.className='card';el.style.backgroundImage='url("'+IMG[ID[c]]+'")';el.setAttribute('aria-label',NAME[c]);el.title=NAME[c]+(PT[c]?' · '+PT[c]+' bod.':'');return el}
-function seatName(s){if(s===G.me)return 'Ti';const st=G.seats[s];return st?st.name:'—'}
+function faceEl(c,tag){const el=document.createElement(tag||'div');el.className='card';el.style.backgroundImage='url("'+IMG[ID[c]]+'")';el.setAttribute('aria-label',NAME[c]);el.title=NAME[c]+(PT[c]?' · '+PT[c]+TR(' bod.'):'');return el}
+function seatName(s){if(s===G.me)return TR('Ti');const st=G.seats[s];return st?st.name:'—'}
 function render(){
   if(!G||!G.S)return;
   const S=G.S,N=S.N,me=Math.max(0,G.me),vis=pointsVisible(S);
@@ -159,10 +159,10 @@ function render(){
   const ch=$('scoreChips');ch.innerHTML='';
   const tp=teamPoints(S);
   const mk=(label,val,cls)=>{const c=document.createElement('span');c.className='chip '+(cls||'');c.innerHTML=esc(label)+' <b>'+(vis?val:'?')+'</b>';ch.appendChild(c)};
-  if(N===4){const mt=me%2;mk('Mi',tp[mt],mt?'tB':'tA');mk('Vi',tp[1-mt],mt?'tA':'tB')}
-  else for(let i=0;i<N;i++){const s=(me+i)%N;mk(i===0?'Ti':seatName(s),S.pts[s])}
+  if(N===4){const mt=me%2;mk(TR('Mi'),tp[mt],mt?'tB':'tA');mk(TR('Vi'),tp[1-mt],mt?'tA':'tB')}
+  else for(let i=0;i<N;i++){const s=(me+i)%N;mk(i===0?TR('Ti'):seatName(s),S.pts[s])}
   const sc=$('seriesChip');
-  if(G.mode==='online'&&G.R&&G.R.target>1){sc.hidden=false;sc.textContent='Meč '+(G.R.wins||[]).join('–')+' (do '+G.R.target+')'}else sc.hidden=true;
+  if(G.mode==='online'&&G.R&&G.R.target>1){sc.hidden=false;sc.textContent=TR('Meč ')+(G.R.wins||[]).join('–')+TR(' (do ')+G.R.target+')'}else sc.hidden=true;
   // opponents row
   const op=$('opps');op.innerHTML='';op.className='opps n'+N;
   const order=N===2?[(me+1)%2]:N===3?[(me+2)%3,(me+1)%3]:[(me+3)%4,(me+2)%4,(me+1)%4];
@@ -171,7 +171,7 @@ function render(){
     const st=G.seats[s]||{name:'—'},d=document.createElement('div');
     d.className='opp'+(s===toPlay?' turn':'')+(N===4?(s%2===me%2?' tA':' tB'):'');
     const partner=N===4&&s===(me+2)%4;
-    const sub=(partner?'Partner · ':'')+(st.bot?'Bot, '+(DIFF_N[st.diff]||''):(st.level?'Razina '+st.level:''))+(vis&&N!==4?' · '+S.pts[s]+' b.':'');
+    const sub=(partner?TR('Partner · '):'')+(st.bot?TR('Bot, ')+(DIFF_N[st.diff]||''):(st.level?TR('Razina ')+st.level:''))+(vis&&N!==4?' · '+S.pts[s]+' b.':'');
     d.innerHTML='<div class="badge"><img alt="" src="'+avSrc(st)+'"><span class="bt"><b>'+esc(st.name||'—')+'</b><small>'+esc(sub)+'</small></span></div><div class="minis"></div>';
     const mi=d.querySelector('.minis');
     const showFaces=partner&&revealActive(S)&&G.me>=0;
@@ -186,7 +186,7 @@ function render(){
       for(let i=0;i<layers;i++){const b=document.createElement('div');b.className='card back';b.style.transform='translate('+(-i*1.5)+'px,'+(-i*1.5)+'px)';st.appendChild(b)}dz.appendChild(st)}
     const n=document.createElement('div');n.className='deck-count';n.textContent=S.deck.length;dz.appendChild(n);
   }
-  const lab=document.createElement('div');lab.className='trump-label';lab.innerHTML='Briškula: <b>'+SUIT_N[S.ts]+'</b>';dz.appendChild(lab);
+  const lab=document.createElement('div');lab.className='trump-label';lab.innerHTML=TR('Briškula: <b>')+SUIT_N[S.ts]+'</b>';dz.appendChild(lab);
   // table: one fixed slot per card of the trick, so nothing shifts when a card lands
   const tb=$('table'),total=S.N*S.k;
   if(tb.dataset.n!==String(total)){tb.innerHTML='';tb.dataset.n=total;
@@ -219,7 +219,7 @@ function render(){
   want.forEach((c,i)=>{
     let b=have.get(String(c));
     if(!b){b=faceEl(c,'button');b.type='button';b.dataset.c=c;b.onclick=()=>humanPlay(c);
-      if(SUIT[c]===S.ts){b.classList.add('trumpcard');b.title+=' · briškula'}
+      if(SUIT[c]===S.ts){b.classList.add('trumpcard');b.title+=TR(' · briškula')}
       if(G.anim.drawn.has(c))b.classList.add('drawn')}
     b.disabled=!canPlay;
     if(mh.children[i]!==b)mh.insertBefore(b,mh.children[i]||null);
@@ -231,28 +231,28 @@ function render(){
 }
 function statusHTML(toPlay){
   const S=G.S;
-  if(G.mode==='online'&&G.R&&G.R.status==='lobby')return 'Čeka se početak igre.';
-  if(S.phase==='over')return 'Partija je gotova.';
+  if(G.mode==='online'&&G.R&&G.R.status==='lobby')return TR('Čeka se početak igre.');
+  if(S.phase==='over')return TR('Partija je gotova.');
   const T=S.table.map(x=>x.c);
-  const who=s=>s===G.me?'Ti':(S.N===4&&G.me>=0&&s===(G.me+2)%4?'Partner ('+esc(seatName(s))+')':esc(seatName(s)));
-  if(S.phase==='resolve'){const w=trickWinner(S);return (w===G.me?'Nosiš ti':who(w)+' nosi')+' <em>+'+sumPts(T)+'</em>'}
+  const who=s=>s===G.me?TR('Ti'):(S.N===4&&G.me>=0&&s===(G.me+2)%4?TR('Partner (')+esc(seatName(s))+')':esc(seatName(s)));
+  if(S.phase==='resolve'){const w=trickWinner(S);return (w===G.me?TR('Nosiš ti'):who(w)+TR(' nosi'))+' <em>+'+sumPts(T)+'</em>'}
   let s='';
   if(!S.table.length){
-    if(S.last)s+=(S.last.w===G.me?'Ti si nosio':who(S.last.w)+' je nosio')+' <em>+'+S.last.pts+'</em>. ';
-    else s+='Briškula je <em>'+SUIT_N[S.ts]+'</em>. ';
-    if(S.last&&!S.deck.length&&S.hands[toPlay]&&S.hands[toPlay].length===S.hs)s+=(S.N===4?'Špil je prazan, partneri vide karte. ':'Špil je prazan. ');
+    if(S.last)s+=(S.last.w===G.me?TR('Ti si nosio'):who(S.last.w)+TR(' je nosio'))+' <em>+'+S.last.pts+'</em>. ';
+    else s+=TR('Briškula je <em>')+SUIT_N[S.ts]+'</em>. ';
+    if(S.last&&!S.deck.length&&S.hands[toPlay]&&S.hands[toPlay].length===S.hs)s+=(S.N===4?TR('Špil je prazan, partneri vide karte. '):TR('Špil je prazan. '));
   }else{
-    const l=S.table[S.table.length-1];if(l.p!==G.me)s+=who(l.p)+' baca <em>'+NAME[l.c]+'</em>. ';
+    const l=S.table[S.table.length-1];if(l.p!==G.me)s+=who(l.p)+TR(' baca <em>')+NAME[l.c]+'</em>. ';
   }
-  if(toPlay===G.me)s+=S.table.length?'Tvoj potez.':'Ti igraš prvi.';
-  else{const st=G.seats[toPlay];s+=st&&st.bot?'<span class="thinking">'+esc(st.name)+' razmišlja</span>':'Čeka se '+who(toPlay)+'…'}
+  if(toPlay===G.me)s+=S.table.length?TR('Tvoj potez.'):TR('Ti igraš prvi.');
+  else{const st=G.seats[toPlay];s+=st&&st.bot?'<span class="thinking">'+esc(st.name)+TR(' razmišlja</span>'):TR('Čeka se ')+who(toPlay)+'…'}
   return s;
 }
 $('gMenu').onclick=()=>{
   const online=G&&G.mode==='online';
-  $('panel').innerHTML='<h2>Igra</h2><div class="acts">'+
-    (online?'<button class="btn" id="gmLink">Kopiraj poveznicu sobe</button>':'<button class="btn" id="gmNew">Nova partija</button>')+
-    '<button class="btn" id="gmRules">Pravila</button><button class="btn" id="gmLeave">'+(online?'Napusti sobu':'Izađi u izbornik')+'</button><button class="btn primary" id="gmClose">Nastavi igru</button></div>';
+  $('panel').innerHTML=TR('<h2>Igra</h2><div class="acts">')+
+    (online?TR('<button class="btn" id="gmLink">Kopiraj poveznicu sobe</button>'):TR('<button class="btn" id="gmNew">Nova partija</button>'))+
+    TR('<button class="btn" id="gmRules">Pravila</button><button class="btn" id="gmLeave">')+(online?TR('Napusti sobu'):TR('Izađi u izbornik'))+TR('</button><button class="btn primary" id="gmClose">Nastavi igru</button></div>');
   $('overlay').hidden=false;
   $('gmClose').onclick=()=>{$('overlay').hidden=true};
   $('gmRules').onclick=()=>{$('overlay').hidden=true;showRulesPanel()};
@@ -260,6 +260,6 @@ $('gMenu').onclick=()=>{
   if($('gmLink'))$('gmLink').onclick=()=>copyRoomLink();
   $('gmLeave').onclick=()=>{$('overlay').hidden=true;online?leaveRoom():show('home')};
 };
-function showRulesPanel(){$('panel').innerHTML='<h2>Pravila</h2>'+$('scr-rules').querySelector('.rules').outerHTML+'<div class="acts"><button class="btn primary" id="rpClose">Natrag na igru</button></div>';$('overlay').hidden=false;$('rpClose').onclick=()=>{$('overlay').hidden=true}}
+function showRulesPanel(){$('panel').innerHTML=TR('<h2>Pravila</h2>')+$('scr-rules').querySelector('.rules').outerHTML+TR('<div class="acts"><button class="btn primary" id="rpClose">Natrag na igru</button></div>');$('overlay').hidden=false;$('rpClose').onclick=()=>{$('overlay').hidden=true}}
 function confirmLeaveGame(){if(G&&G.mode==='online')$('gMenu').click();else show('home')}
 function leaveGameView(){if(G&&G.mode==='local')saveLocalGame(true);gClear();stopWatch('room');clearInterval(window.__wd);G=null;$('overlay').hidden=true;$('meHand').innerHTML='';$('table').innerHTML='';$('table').dataset.n=''}

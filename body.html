@@ -15,6 +15,7 @@
       <div class="hero">
         <h1>Briškula</h1>
         <p>Karte na stol. Protiv botova, prijatelja ili na turniru.</p>
+        <p class="online" id="onlineNow" hidden><i></i><span></span></p>
       </div>
       <div class="notice" id="resumeNotice" hidden></div>
       <div class="menu">
@@ -25,6 +26,7 @@
         <button class="mbtn" data-go="rules"><span class="mi">?</span><span><b>Pravila</b><small>Kako se igra briškula</small></span></button>
       </div>
       <div class="notice" id="homeNotice" hidden></div>
+      <div class="langs" id="homeLangs" role="group" aria-label="Jezik"></div>
       <p class="fine" id="cloudNote"></p>
     </section>
 
@@ -76,9 +78,12 @@
           <div class="lvl"><div class="lvl-row"><b id="pfLevel">Razina 1</b><span id="pfPts">0 bodova</span></div><div class="lvl-bar"><i id="pfBar"></i></div><small id="pfNext"></small></div>
         </div>
       </div>
+      <p class="fine" style="margin:0 0 8px">Ili odaberi lika:</p>
+      <div class="avpick" id="avPick" role="group" aria-label="Odaberi lika"></div>
       <div class="stats" id="pfStats"></div>
       <button class="btn primary wide" id="pfSave">Spremi</button>
       <div class="card-box" id="pfAccount"></div>
+      <div class="card-box" id="pfSettings"></div>
       <p class="fine">Bodovi: pobjeda online 15, pobjeda protiv botova 4 do 10 (ovisno o težini), neriješeno 4, poraz 1. Pobjednik turnira dobiva 5 bodova po igraču u turniru, finalist 2.</p>
     </section>
 
@@ -96,7 +101,7 @@
         <p><b>Pobjeda:</b> 61 ili više bodova (u paru zbroj para). 60–60 je neriješeno.</p>
         <p><b>Prikaz bodova:</b> uvijek, ili tek kad se špil potroši (pred zadnje ruke).</p>
       </div>
-      <p class="fine">Fotografija Splita: Ryan Matzner i Rachel Pestik, <a href="https://commons.wikimedia.org/wiki/File:Split_harbor_view.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, licenca <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane.</p>
+      <p class="fine">Fotografija Splita: Ryan Matzner i Rachel Pestik, <a href="https://commons.wikimedia.org/wiki/File:Split_harbor_view.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, licenca <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>. <span>Fotografija Zadra: PJL,</span> <a href="https://commons.wikimedia.org/wiki/File:Sunset_in_Zadar_2.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener">CC BY 2.5</a><span>. Tekstura stola: Poly Haven (CC0). Karte: Modiano Trevisane. Likovi: nacrtani za ovu igru.</span></p>
     </section>
 
     <!-- GAME -->
